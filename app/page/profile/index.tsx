@@ -5,8 +5,10 @@ import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 
 interface ProfileProps{
   isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
+  setStateNavbar: (state: boolean) => void;
 }
-const Profile: React.FC<ProfileProps> = ({ isDarkMode }) => {
+const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
       <Text>Profile</Text>

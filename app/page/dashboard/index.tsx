@@ -9,11 +9,12 @@ import Report from './Report';
 import Record from './Record';
 
 
-
 interface DashboardProps{
   isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
+  setStateNavbar: (state: boolean) => void;
 }
-const Dashboard: React.FC<DashboardProps> = ({ isDarkMode }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   const [page, setPage] = useState(0) // 0 = Saving, 1 = Report, 2 = Record
   const indicators = [0, 1, 2];
   const animatedWidth = indicators.map(() => useRef(new Animated.Value(8)).current);
