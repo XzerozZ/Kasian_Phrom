@@ -5,8 +5,10 @@ import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 
 interface AssessmentRiskProps{
   isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
+  setStateNavbar: (state: boolean) => void;
 }
-const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode }) => {
+const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
       <Text>AssessmentRisk</Text>

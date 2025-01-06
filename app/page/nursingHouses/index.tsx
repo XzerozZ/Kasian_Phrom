@@ -5,8 +5,10 @@ import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 
 interface NursingHousesProps{
   isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
+  setStateNavbar: (state: boolean) => void;
 }
-const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode }) => {
+const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
       <Text>NursingHouses</Text>
