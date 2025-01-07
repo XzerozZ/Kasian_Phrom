@@ -6,12 +6,12 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
-interface SignInProps{
+interface SignUpProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
 }
 
-const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
+const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -36,16 +36,16 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
       </TouchableOpacity>
       <Image source={Logo} style={outStyles.image}/>
       <TextF className='text-2xl text-primary mb-5'>สมัครสมาชิก</TextF>
-      <View className='flex w-full items-center'>
+      <View className='flex w-full items-center gap-2'>
         <View style={{position:'relative'}}>
           <TextInput
                 placeholder="ชื่อผู้ใช้"
                 keyboardType='default'
                 value={username}
                 onChangeText={setUsername}
-                className={`h-14 w-96 mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
-          className='w-10 h-14 items-center justify-center mt-5'
+          className='w-10 h-12 items-center justify-center mt-5'
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <FontAwesome6 name='user-large' size={20} color='#C9C9C9'/>
           </View>
@@ -56,9 +56,9 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
                 keyboardType='email-address'
                 value={email}
                 onChangeText={setEmail}
-                className={`h-14 w-96 mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
-          className='w-10 h-14 items-center justify-center mt-5'
+          className='w-10 h-12 items-center justify-center mt-5'
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <Ionicons name='mail' size={25} color='#C9C9C9'/>
           </View>
@@ -71,9 +71,9 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
                 secureTextEntry={!visiblePassword}
                 value={password}
                 onChangeText={setPassword}
-                className={`h-14 w-96 mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
-          className='w-10 h-14 items-center justify-center mt-5 '
+          className='w-10 h-12 items-center justify-center mt-5 '
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <FontAwesome6 name='key' size={20} color='#C9C9C9' />
           </View>
@@ -81,7 +81,7 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
             activeOpacity={1}
             onPress={() => setVisiblePassword(prev => !prev)}
             style={{ position: 'absolute', right: 30, top: 0 }}
-            className='w-10 h-14 items-center justify-center mt-5 '
+            className='w-10 h-12 items-center justify-center mt-5 '
           >
             <FontAwesome6 name={visiblePassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
           </TouchableOpacity>
@@ -94,9 +94,9 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
                 secureTextEntry={!visibleConfirmPassword}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                className={`h-14 w-96 mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
-          className='w-10 h-14 items-center justify-center mt-5 '
+          className='w-10 h-12 items-center justify-center mt-5 '
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <FontAwesome6 name='key' size={20} color='#C9C9C9' />
           </View>
@@ -104,14 +104,14 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
             activeOpacity={1}
             onPress={() => setVisibleConfirmPassword(prev => !prev)}
             style={{ position: 'absolute', right: 30, top: 0 }}
-            className='w-10 h-14 items-center justify-center mt-5 '
+            className='w-10 h-12 items-center justify-center mt-5 '
           >
             <FontAwesome6 name={visibleConfirmPassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
         activeOpacity={1}
-        className={`h-14 w-96 mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
           <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
       </View>
@@ -137,7 +137,7 @@ const SignIn: React.FC<SignInProps> = ({ setStateLogin, setActiveTab }) => {
   )
 }
 
-export default SignIn
+export default SignUp
 
 const outStyles = StyleSheet.create({
   image: {

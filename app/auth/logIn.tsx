@@ -24,7 +24,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
     className='flex-1 mt-14 justify-center items-center'>
       <TouchableOpacity 
         activeOpacity={1}
-
+        onPress={()=>setActiveTab('main')}
         style={{position:'absolute', left:20, top:0}}
         className=' w-16'>
 
@@ -39,9 +39,9 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
                 keyboardType='email-address'
                 value={email}
                 onChangeText={setEmail}
-                className={`h-14 w-96 mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
-          className='w-10 h-14 items-center justify-center mt-5'
+          className='w-10 h-12 items-center justify-center mt-5'
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <Ionicons name='mail' size={25} color='#C9C9C9'/>
           </View>
@@ -54,9 +54,9 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
                 secureTextEntry={!visiblePassword}
                 value={password}
                 onChangeText={setPassword}
-                className={`h-14 w-96 mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+                className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
-          className='w-10 h-14 items-center justify-center mt-5 '
+          className='w-10 h-12 items-center justify-center mt-5 '
           style={{ position: 'absolute', left: 25, top: 0 }}>
             <FontAwesome6 name='key' size={20} color='#C9C9C9' />
           </View>
@@ -64,7 +64,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
             activeOpacity={1}
             onPress={() => setVisiblePassword(prev => !prev)}
             style={{ position: 'absolute', right: 30, top: 0 }}
-            className='w-10 h-14 items-center justify-center mt-5 '
+            className='w-10 h-12 items-center justify-center mt-5 '
           >
             <FontAwesome6 name={visiblePassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
           </TouchableOpacity>
@@ -75,7 +75,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
         <TouchableOpacity
         activeOpacity={1}
         // onPress={handleLogin}
-        className={`h-14 w-96 mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
         </TouchableOpacity>
       </View>

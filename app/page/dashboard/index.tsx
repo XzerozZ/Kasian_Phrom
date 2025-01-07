@@ -19,6 +19,11 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
   const indicators = [0, 1, 2];
   const animatedWidth = indicators.map(() => useRef(new Animated.Value(8)).current);
 
+
+  useEffect(() =>{
+    setStateNavbar(true)
+  },[]);
+
   useEffect(() => {
     indicators.forEach((_, index) => {
       Animated.timing(animatedWidth[index], {

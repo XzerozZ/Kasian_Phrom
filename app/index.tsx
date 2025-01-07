@@ -13,6 +13,8 @@ import Dashboard from './page/dashboard';
 import Finance from './page/finance';
 import Profile from './page/profile';
 
+import Setting from './appSetting';
+
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
@@ -24,7 +26,7 @@ function index() {
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const styles = isDarkMode ? theme.dark : theme.light;
-  const [activeTab, setActiveTab] = useState('auth');
+  const [activeTab, setActiveTab] = useState('profile');
 
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
@@ -32,6 +34,7 @@ function index() {
   const [loaded] = useFonts({
     KanitRegular: require('../assets/fonts/Kanit-Regular.ttf'),
     SarabunRegular: require('../assets/fonts/Sarabun-Regular.ttf'),
+    SarabunBold: require('../assets/fonts/Sarabun-Bold.ttf'),
   });
 
   useEffect(() => {
@@ -49,15 +52,20 @@ function index() {
 
     <View className={`flex-1 justify-between items-center ${styles.container}`}>
 
-      {activeTab =='auth' ? <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>
-      :<View className='w-full pt-10 flex-1'>
+      {/* {activeTab =='auth' ? <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>
+      : */}
+      <View 
+      style={{position:'relative'}}
+      className='w-full pt-10 flex-1'>
         {loading && <LoadingPage stateLoading={stateLoading} setStateLoading={setStateLoading} setLoading={setLoading}/>}
+        {activeTab =='auth' && <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='nursingHouses' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
-      </View>}
+        {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+      </View>
       {stateNavbar && !loading &&
       <View className='w-full'>
         <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab}/>

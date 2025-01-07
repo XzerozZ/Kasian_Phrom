@@ -9,6 +9,11 @@ interface MainProps {
   setStateNavbar: (state: boolean) => void;
 }
 const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+    useEffect(() =>{
+      setStateNavbar(true)
+    },[]);
+  
+    
   return (
     <View className='flex-1'>
       <Text>Main</Text>

@@ -9,6 +9,11 @@ interface NursingHousesProps{
   setStateNavbar: (state: boolean) => void;
 }
 const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+    useEffect(() =>{
+      setStateNavbar(true)
+    },[]);
+  
+    
   return (
     <View className='flex-1'>
       <Text>NursingHouses</Text>
