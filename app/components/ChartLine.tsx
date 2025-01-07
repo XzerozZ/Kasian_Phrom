@@ -116,32 +116,32 @@ const CustomGraph = () => {
         <Text style={{position:'absolute', left:0, top:-30, fontFamily:'SarabunRegular'}} className='text-label'>เงิน(บาท)</Text>
         <View style={{position:'absolute', right:0, top:-30}}>
             <SelectDropdown
-                      data={options}
-                      defaultValueByIndex={0}
-                      onSelect={(selectedItem, index) => {
-                        setSelectedOption(selectedItem.title)
-                        console.log(selectedItem, index);
-                      }}
-                      renderButton={(selectedItem, isOpened) => {
-                        return (
-                          <View className='flex flex-row justify-end items-center w-20'>
-                            <TextF className='pr-1'>
-                              {(selectedItem && selectedItem.title)} 
-                            </TextF>
-                            <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={20}/>
-                          </View>
-                        );
-                      }}
-                      renderItem={(item, index, isSelected) => {
-                        return (
-                          <View className={`flex flex-row justify-between items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
-                            <TextF className='flex justify-center items-center'>{item.title}</TextF>
-                          </View>
-                        );
-                      }}
-                      showsVerticalScrollIndicator={false}
-                      dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
-                    />
+              data={options}
+              defaultValueByIndex={0}
+              onSelect={(selectedItem, index) => {
+                setSelectedOption(selectedItem.title)
+                console.log(selectedItem, index);
+              }}
+              renderButton={(selectedItem, isOpened) => {
+                return (
+                  <View className='flex flex-row justify-end items-center w-20'>
+                    <TextF className='pr-1'>
+                      {(selectedItem && selectedItem.title)} 
+                    </TextF>
+                    <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={20}/>
+                  </View>
+                );
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View className={`flex flex-row justify-center items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
+                    <TextF className='flex justify-center items-center'>{item.title}</TextF>
+                  </View>
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+              dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
+            />
         </View>
       </View>
     );

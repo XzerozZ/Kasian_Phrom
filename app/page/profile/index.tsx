@@ -41,7 +41,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         // onPress={() => router.push('/appSetting')}
         onPress={() => setActiveTab('appSetting')}
         className='mt-10 items-end pr-2 w-14'>
-          <Ionicons name="settings-sharp" size={28} color='#2A4296'/>
+          <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
         </TouchableOpacity>
       </View>
       <View className='flex flex-row justify-center gap-10 items-center h-40'>
@@ -63,7 +63,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           </View>
         </View>
       </View>
-      <View className='w-44 h-10 bg-primary ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2'>
+      <View className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
         <Ionicons name="heart" size={22} color='#fff'/>
         <TextF className=' text-white'>บ้านพักที่ชื่นชอบ</TextF>
       </View>
@@ -84,7 +84,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           key={index}
           className='flex flex-row justify-between border-b h-14 border-banner items-center'>
             <TextF className='text-lg text-normalText'>{data.title}</TextF>
-            <TextF className='text-lg text-normalText'>{data.detail}</TextF>
+            <TextF className='text-lg text-primary'>{data.detail}</TextF>
           </View>
         ))}
       </View>

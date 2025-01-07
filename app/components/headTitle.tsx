@@ -13,12 +13,11 @@ interface headTitleProps{
     route: string;
 }
 const headTitle: React.FC<headTitleProps> = ({ isDarkMode, setActiveTab, setStateNavbar, title, route }) => {
-    useEffect(() =>{
-        setStateNavbar(false)
-    },[]);
+
 
     return (
-        <View className='flex-row mt-5 ml-5 h-14 items-center'>
+        <>
+        <View className='flex-row mt-3 ml-5 h-14 items-center'>
             <TouchableOpacity 
                 activeOpacity={1}
                 onPress={()=>setActiveTab(route)}
@@ -29,6 +28,8 @@ const headTitle: React.FC<headTitleProps> = ({ isDarkMode, setActiveTab, setStat
             style={{ fontFamily: 'SarabunBold'}}
             className=' text-normalText text-2xl ml-3 h-12 pt-2'>{title}</Text>
         </View>
+        <View className='w-full px-5 mt-3 border-b border-unselectMenu'></View>
+        </>
     )
 }
 
