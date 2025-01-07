@@ -1,50 +1,50 @@
-import { Link, useRouter } from 'expo-router';
-import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Button, Image, StyleSheet, Animated, ScrollView } from 'react-native';
 import { theme } from '../globalStyle';
-const Logo = require('../assets/images/logo.png')
+
+import LoadingPage from './loadingPage';
+
+import Navbar from './components/Navbar';
+import Main from './page/main';
+import NursingHouses from './page/nursingHouses';
+import Dashboard from './page/dashboard';
+import Finance from './page/finance';
+import Profile from './page/profile';
 
 
-export default function LoadingPage() {
 
-  const [stateLogo, setStateLogo] = useState(true);
-  const router = useRouter();
-  const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    // Fade out animation
-    setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500, // 1-second fade-out
-        useNativeDriver: true,
-      }).start(() => setStateLogo(false)); // Hide logo after animation
-    }, 2000);
 
-    // Navigate to the main page after 3 seconds
-    setTimeout(() => {
-      router.replace('/mainComponent');
-    }, 2500);
-  }, []);
+function index() {
+
+  const [stateNavbar, setStateNavbar] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const styles = isDarkMode ? theme.dark : theme.light;
+  const [activeTab, setActiveTab] = useState('dashboard');
+
+  const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
+  const [loading, setLoading] = useState(true);
+
+
+
 
   return (
-    <View 
-    className={`flex-1 justify-center items-center h-screen gap-5 bg-bgAuth`}>
-      {/* <View className={stateLogo?'w-full flex items-center gap-5 duration-1000':'w-auto flex items-center gap-5 opacity-0 duration-1000'}>
-        <Image source={Logo} style={outStyles.image}/>
-      </View> */}
-      {stateLogo && (
-        <Animated.View style={{ opacity: fadeAnim }} className="w-full flex items-center gap-5 duration-1000">
-          <Image source={Logo} style={outStyles.image}/>
-        </Animated.View>
-      )}
+
+    <View className={`flex-1 justify-between items-center ${styles.container}`}>
+      <View className='w-full pt-10 flex-1 h-40'>
+        {loading && <LoadingPage stateLoading={stateLoading} setStateLoading={setStateLoading} setLoading={setLoading}/>}
+        {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='nursingHouses' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+      </View>
+      {stateNavbar &&
+      <View className='w-full'>
+        <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      </View>}
     </View>
-  );
+  )
 }
-const outStyles = StyleSheet.create({
-  image: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-});
+
+export default index
