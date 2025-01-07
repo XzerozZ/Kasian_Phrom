@@ -7,18 +7,15 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 
 
+interface HistoryCardProps{
+    data: {statusDeposit: string, name: string, amount: number, time: string, date: string}[];
+}
 
 
-
-const HistoryCard = () => {
-    const [dataHistory, setDataHistory] = useState([
-        {statusDeposit:'Deposit', name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
-        {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
-        {statusDeposit:'Withdraw',name: 'ถอนเงินลงทุน', amount: 5000, time: '20:43 น', date: '17/11/2024'},]);
-
+const HistoryCard: React.FC<HistoryCardProps> = ({data}) => {
     return (
         <>
-    {dataHistory.map((data, index) => (
+    {data.map((data, index) => (
         <View 
         key={index}
         className='flex flex-row justify-between items-center h-28 border-t border-banner'>

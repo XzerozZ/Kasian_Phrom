@@ -2,14 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList, Dimensions } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import ChartLine from '../../components/ChartLine';
-// import {
-//   LineChart,
-//   BarChart,
-//   PieChart,
-//   ProgressChart,
-//   ContributionGraph,
-//   StackedBarChart
-// } from "react-native-chart-kit";
 import { LinearGradient } from 'expo-linear-gradient';
 import HistoryCard from '../../components/HistoryCard';
 
@@ -18,6 +10,32 @@ interface RecordProps{
   isDarkMode: boolean;
 }
 const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
+
+
+
+  const [dataHistory, setDataHistory] = useState([
+      {statusDeposit:'Deposit', name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
+      {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
+      {statusDeposit:'Withdraw',name: 'ถอนเงินลงทุน', amount: 5000, time: '20:43 น', date: '17/11/2024'},]);
+
+
+
+  const [dataHistoryPerMonth, setDataHistoryPerMonth] = useState([
+    {month: '11', amount: 5000, data: dataHistory},
+    {month: '10', amount: 5000},
+    {month: '9', amount: 5000},
+    {month: '8', amount: 5000},
+    {month: '7', amount: 5000},
+    {month: '6', amount: 5000},
+    {month: '5', amount: 5000},
+    {month: '4', amount: 5000},
+    {month: '3', amount: 5000},
+    {month: '2', amount: 5000},
+    {month: '1', amount: 5000},
+    {month: '12', amount: 5000},
+  ]);
+
+
 
 
   return (
@@ -33,18 +51,23 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
           
 
         </View>
+        
         <View className='px-5 mt-5 gap-3'>
-          <View className='flex'>
-            <Text className=' text-normalText text-lg'>ประวัติการออม</Text>
-          </View>
-          <View className='flex flex-row justify-between items-center'>
-            <Text className=' text-normalText'>เดือนนี้</Text>
-            <Text className=' text-normalText'>5,000 บาท</Text>
-          </View>
+          <Text className=' text-normalText text-lg'>ประวัติการออม</Text>
         </View>
-        <View className='px-5 mt-5'>
-          <HistoryCard/>
-        </View>
+        {dataHistoryPerMonth.map((data, index) => (
+          <View 
+          key={index}>
+            <View className='px-5 mt-5 mb-10'>
+              <View className='flex flex-row justify-between items-center mb-5'>
+                <Text className=' text-normalText'>เดือนนี้</Text>
+                <Text className=' text-normalText'>{data.amount}</Text>
+              </View>
+              <HistoryCard data={data.data || []}/>
+            </View>
+          </View>
+        ))}
+        
       </View>
     </ScrollView>
   )
