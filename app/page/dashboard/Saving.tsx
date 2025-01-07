@@ -2,11 +2,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
+import  TextF  from '../../components/TextF';
 
 
 interface SavingProps{
   isDarkMode: boolean;
 }
+
+
 const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
 
 
@@ -35,26 +38,26 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
     <ScrollView ref={scrollViewRef} >
     <View className=' flex'>
       <View className='mt-5 flex justify-center items-center'>
-        <Text className='text-2xl font-bold'>ชื่อแผน</Text>
+        <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
       </View>
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
-          <Text className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</Text>
-          <Text className='text-3xl scale-125'>19,000</Text>
-          <Text>บาท</Text>
+          <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</TextF>
+          <TextF className='text-3xl scale-125'>19,000</TextF>
+          <TextF>บาท</TextF>
         </View>
         <View className='mt-5 w-11/12 h-[2] bg-primary'></View>
         <View className='flex flex-row w-full gap-3 '>
             <View className='flex-1 items-center gap-3 pt-5'>
-            <Text className='text-lg'>จำนวนเงินสุทธิ</Text>
-            <Text className='text-xl'>152,600</Text>
-            <Text>บาท</Text>
+            <TextF className='text-lg'>จำนวนเงินสุทธิ</TextF>
+            <TextF className='text-xl'>152,600</TextF>
+            <TextF>บาท</TextF>
           </View>
           <View className=' w-[2] bg-primary'></View>
           <View className='flex-1 items-center gap-3 pt-5'>
-            <Text className='text-lg'>จำนวนเงินที่ต้องเก็บ</Text>
-            <Text className='text-xl '>49,847,400</Text>
-            <Text>บาท</Text>
+            <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บ</TextF>
+            <TextF className='text-xl '>49,847,400</TextF>
+            <TextF>บาท</TextF>
           </View>
         </View>
       </View>
@@ -64,18 +67,18 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
       activeOpacity={1}
       onPress={() => setIsDiposit(true)}
       className={`flex-1 justify-center items-center mt-5 p-3 rounded-l-xl shadow-sm ${isDiposit?'bg-primary':'bg-unselectInput'}`}>
-        <Text className={`text-lg ${isDiposit?'text-white':'text-primary'}`}>ฝากเงิน</Text>
+        <TextF className={`text-lg ${isDiposit?'text-white':'text-primary'}`}>ฝากเงิน</TextF>
       </TouchableOpacity>
       <TouchableOpacity 
       activeOpacity={1}
       onPress={() => setIsDiposit(false)}
       className={`flex-1 justify-center items-center mt-5 p-3 rounded-r-xl shadow-sm ${!isDiposit?'bg-err':' bg-unselectInput'}`}>
-        <Text className={`text-lg ${!isDiposit?'text-white':'text-primary'}`}>ถอนเงิน</Text>
+        <TextF className={`text-lg ${!isDiposit?'text-white':'text-primary'}`}>ถอนเงิน</TextF>
       </TouchableOpacity>
     </View>
     <View className='flex flex-row justify-center items-s mt-10'>
         <View className='flex-1 items-center'>
-          <Text className='text-lg'>เลือกประเภทการออม</Text>
+          <TextF className='text-lg'>เลือกประเภทการออม</TextF>
         </View>
         <View className='flex-1 '>
         <SelectDropdown
@@ -88,9 +91,9 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
           renderButton={(selectedItem, isOpened) => {
             return (
               <View className='flex flex-row justify-between items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-10/12'>
-                <Text className='text-lg pr-5'>
+                <TextF className='text-lg pr-5'>
                   {(selectedItem && selectedItem.title)} 
-                </Text>
+                </TextF>
                 <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={25}/>
               </View>
             );
@@ -98,7 +101,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
           renderItem={(item, index, isSelected) => {
             return (
               <View className={`flex flex-row justify-between items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
-                <Text className='flex justify-center items-center'>{item.title}</Text>
+                <TextF className='flex justify-center items-center'>{item.title}</TextF>
               </View>
             );
           }}
@@ -126,16 +129,16 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
         activeOpacity={1}
         className={`mt-5 mx-5 p-3 rounded-xl shadow-sm flex justify-center items-center h-14 ${amount == '' ?' bg-unselectMenu' :' bg-primary'}`}
         onPress={handleConfirm} >
-            <Text className='text-white'>ยืนยัน</Text>
+            <TextF className='text-white'>ยืนยัน</TextF>
         </TouchableOpacity>
 
     </View>
     <View className='flex justify-center my-10 px-5'>
-        <Text className=' text-label'>ปรับแผน</Text>
+        <TextF className=' text-label'>ปรับแผน</TextF>
         <View className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-unselectMenu rounded-xl shadow-sm'>
-            <Text className='text-lg'>ปรับแผนการเกษียณ</Text>
+            <TextF className='text-lg'>ปรับแผนการเกษียณ</TextF>
             <View className='flex flex-row gap-1'>
-                <Text className='text-accent'>แก้ไขข้อมูล</Text>
+                <TextF className='text-accent'>แก้ไขข้อมูล</TextF>
                 <FontAwesome6 name="caret-right" size={20} color='#F68D2B'/>
             </View>
         </View>

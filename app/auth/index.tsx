@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
-
+import  TextF  from '../components/TextF';
 
 
 interface AuthProps{
@@ -11,7 +11,7 @@ interface AuthProps{
 const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
-      <Text>Auth</Text>
+      <TextF>Auth</TextF>
     </View>
   )
 }

@@ -5,7 +5,7 @@ import { Svg, Line } from 'react-native-svg'; // เพิ่ม Svg และ L
 import { Dimensions } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-
+import  TextF  from './TextF';
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -112,8 +112,8 @@ const CustomGraph = () => {
             );
           }}
         />
-        <Text style={{position:'absolute', right:0, bottom:0}} className='text-label'>เดือน</Text>
-        <Text style={{position:'absolute', left:0, top:-30}} className='text-label'>เงิน(บาท)</Text>
+        <Text style={{position:'absolute', right:0, bottom:0, fontFamily:'SarabunRegular'}} className='text-label'>เดือน</Text>
+        <Text style={{position:'absolute', left:0, top:-30, fontFamily:'SarabunRegular'}} className='text-label'>เงิน(บาท)</Text>
         <View style={{position:'absolute', right:0, top:-30}}>
             <SelectDropdown
                       data={options}
@@ -125,9 +125,9 @@ const CustomGraph = () => {
                       renderButton={(selectedItem, isOpened) => {
                         return (
                           <View className='flex flex-row justify-end items-center w-20'>
-                            <Text className='pr-1'>
+                            <TextF className='pr-1'>
                               {(selectedItem && selectedItem.title)} 
-                            </Text>
+                            </TextF>
                             <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={20}/>
                           </View>
                         );
@@ -135,7 +135,7 @@ const CustomGraph = () => {
                       renderItem={(item, index, isSelected) => {
                         return (
                           <View className={`flex flex-row justify-between items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
-                            <Text className='flex justify-center items-center'>{item.title}</Text>
+                            <TextF className='flex justify-center items-center'>{item.title}</TextF>
                           </View>
                         );
                       }}

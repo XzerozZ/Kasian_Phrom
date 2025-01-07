@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
-
+import  TextF  from '../components/TextF';
 
 
 interface CalRetirementProps{
@@ -11,7 +11,7 @@ interface CalRetirementProps{
 const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
-      <Text>CalRetirement</Text>
+      <TextF>CalRetirement</TextF>
     </View>
   )
 }

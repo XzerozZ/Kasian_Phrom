@@ -11,8 +11,9 @@ import Dashboard from './page/dashboard';
 import Finance from './page/finance';
 import Profile from './page/profile';
 
-
-
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+SplashScreen.preventAutoHideAsync();
 
 
 function index() {
@@ -25,8 +26,21 @@ function index() {
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
 
+  const [loaded] = useFonts({
+    KanitRegular: require('../assets/fonts/Kanit-Regular.ttf'),
+    SarabunRegular: require('../assets/fonts/Sarabun-Regular.ttf'),
+  });
 
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
 
+  if (!loaded) {
+    return null;
+  }
+  
 
   return (
 
@@ -41,6 +55,7 @@ function index() {
       </View>
       {stateNavbar &&
       <View className='w-full'>
+        <Text style={{ fontFamily: 'SarabunRegular'}}>ดก่หาด้เกหาดเกหา่ด้กดjnsfrldg;ihsgkdkgj0จจ</Text>
         <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab}/>
       </View>}
     </View>

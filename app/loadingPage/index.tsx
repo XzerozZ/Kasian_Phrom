@@ -4,7 +4,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { theme } from '../../globalStyle';
 const Logo = require('../../assets/images/logo.png')
 
-
 interface LoadingPageProps{
   stateLoading: boolean;
   setStateLoading: (state: boolean) => void;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
-
+import  TextF  from '../../components/TextF';
 
 import Saving from './Saving';
 import Report from './Report';
@@ -66,9 +66,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
           <FontAwesome6 name="angle-left" size={25} color={page== 0 ?'#C8D4FF':'#6780D6'}/>
         </TouchableOpacity>
         <View className='gap-2'>
-          <Text className="text-xl font-bold">
+          <TextF  className="text-xl font-bold">
             {page == 0 ? 'บันทึกการออม' : page == 1 ? 'รายงานความคืบหน้า' : 'ประวัติการออม'}
-          </Text>
+          </TextF>
           <View className='flex flex-row items-center justify-center gap-1'>
               {indicators.map((_, index) => (
               <Animated.View

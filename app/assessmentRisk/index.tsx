@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
-
+import  TextF  from '../components/TextF';
 
 
 interface AssessmentRiskProps{
@@ -11,7 +11,7 @@ interface AssessmentRiskProps{
 const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   return (
     <View className='flex-1'>
-      <Text>AssessmentRisk</Text>
+      <TextF>AssessmentRisk</TextF>
     </View>
   )
 }

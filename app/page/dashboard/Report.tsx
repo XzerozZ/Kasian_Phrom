@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList, LayoutAnimation, Platform, UIManager  } from 'react-native';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import ChartCir from '../../components/ChartCir';
+import  TextF  from '../../components/TextF';
 
 interface ReportProps{
   isDarkMode: boolean;
@@ -199,56 +200,56 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
     <ScrollView>
         <View className=' flex'>
           <View className='mt-5 flex justify-center items-center'>
-            <Text className='text-2xl font-bold'>ชื่อแผน</Text>
+            <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
           </View>
           <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm'>
             <View className='flex w-9/12 max-w-96 max-h-96 my-4 items-center justify-center aspect-square'>
               <ChartCir/>
             </View>
             <View className='flex w-full items-end '>
-              <Text className='text-label mr-5 text-sm'>กราฟแสดงสัดส่วนจำนวนเงิน</Text>
+              <TextF className='text-label mr-5 text-sm'>กราฟแสดงสัดส่วนจำนวนเงิน</TextF>
             </View>
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='flex flex-row justify-between items-center'>
-              <Text className='text-label'>สถานะปัจจุบัน</Text>
-              <Text className=' text-normalText'>บาท</Text>
+              <TextF className='text-label'>สถานะปัจจุบัน</TextF>
+              <TextF className=' text-normalText'>บาท</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded'></View>
-                <Text className='text-normalText text-lg'>จำนวนเงินที่ต้องเก็บทั้งหมด</Text>
+                <TextF className='text-normalText text-lg'>จำนวนเงินที่ต้องเก็บทั้งหมด</TextF>
               </View>
-              <Text className=' text-normalText text-lg'>20,000,000,000</Text>
+              <TextF className=' text-normalText text-lg'>20,000,000,000</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded bg-unselectMenu'></View>
-                <Text className='text-normalText text-lg'>ต้องเก็บอีก</Text>
+                <TextF className='text-normalText text-lg'>ต้องเก็บอีก</TextF>
               </View>
-              <Text className=' text-normalText text-lg'>1,999,999,997,500</Text>
+              <TextF className=' text-normalText text-lg'>1,999,999,997,500</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded bg-primary'></View>
-                <Text className='text-normalText text-lg'>เงินออม </Text>
+                <TextF className='text-normalText text-lg'>เงินออม </TextF>
                 <View className='flex flex-row items-center gap-2'>
                   <FontAwesome6 name='caret-up' size={17} color='#30CC30'/>
-                  <Text className=' text-oktext text-sm '>1.5%/ปี</Text>
+                  <TextF className=' text-oktext text-sm '>1.5%/ปี</TextF>
                 </View>
               </View>
-              <Text className=' text-normalText text-lg'>2,000</Text>
+              <TextF className=' text-normalText text-lg'>2,000</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded bg-primary2'></View>
-                <Text className='text-normalText text-lg'>ลงทุน </Text>
+                <TextF className='text-normalText text-lg'>ลงทุน </TextF>
                 <View className='flex flex-row items-center gap-2'>
                   <FontAwesome6 name='caret-up' size={17} color='#30CC30'/>
-                  <Text className=' text-oktext text-sm '>7%/ปี</Text>
+                  <TextF className=' text-oktext text-sm '>7%/ปี</TextF>
                 </View>
               </View>
-              <Text className=' text-normalText text-lg'>500</Text>
+              <TextF className=' text-normalText text-lg'>500</TextF>
             </View>
           </View>
           <View className="px-5 mt-3">
@@ -257,7 +258,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                 onPress={toggleDropdown}
                 activeOpacity={1}
                 className="flex flex-row justify-end items-center gap-2 pl-2 py-2">
-                <Text className="text-label">สัดส่วนเงินเก็บ</Text>
+                <TextF className="text-label">สัดส่วนเงินเก็บ</TextF>
                 {statePart ? (
                   <FontAwesome6 name="angle-up" size={18} color="#B0B0B0" />
                 ) : (
@@ -276,9 +277,9 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                   {dataPart.map((item, index) => (
                     <View key={index} className="flex flex-row justify-between items-center px-5">
                       <View className="flex flex-row items-center gap-2">
-                        <Text className="text-normalText text-lg ml-2">{item.title} </Text>
+                        <TextF className="text-normalText text-lg ml-2">{item.title} </TextF>
                       </View>
-                      <Text className="text-normalText text-lg">{item.amount}</Text>
+                      <TextF className="text-normalText text-lg">{item.amount}</TextF>
                     </View>
                   ))}
                 </View>
@@ -286,14 +287,14 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='flex flex-row items-center'>
-              <Text className='text-label'>รายระเอียด</Text>
+              <TextF className='text-label'>รายระเอียด</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded bg-secondary'></View>
-                <Text className='text-normalText text-lg'>เงินเก็บเพื่อเกษียณ</Text>
+                <TextF className='text-normalText text-lg'>เงินเก็บเพื่อเกษียณ</TextF>
               </View>
-              <Text className=' text-normalText text-lg'>50,000,000</Text>
+              <TextF className=' text-normalText text-lg'>50,000,000</TextF>
             </View>
             {/* ------------------------------------------------------------ */}
             <ScrollView 
@@ -305,20 +306,20 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                     <View className='flex flex-row justify-between items-center'>
                       <View className='flex flex-row gap-2'>
                         <FontAwesome6 name='house-chimney' size={18} color='#070F2D'/>
-                        <Text className='text-normalText text-lg'>{item.title}</Text>
+                        <TextF className='text-normalTextF text-lg'>{item.title}</TextF>
                       </View>
                       <View className='w-5 h-5 rounded bg-accent'></View>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
-                      <Text className='text-normalText text-sm'>ซื้อตอนอายุ {item.useAge} ปี</Text>
+                      <TextF className='text-normalTextF text-sm'>ซื้อตอนอายุ {item.useAge} ปี</TextF>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
-                      <Text className='text-normalText text'>ต้องเก็บ/เดือน</Text>
-                      <Text className=' text-normalText text'>{item.MoneyPerMonth}</Text>
+                      <TextF className='text-normalTextF text'>ต้องเก็บ/เดือน</TextF>
+                      <TextF className=' text-normalTextF text'>{item.MoneyPerMonth}</TextF>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
-                      <Text className='text-normalText text'>ต้องเก็บทั้งหมด</Text>
-                      <Text className=' text-normalText text'>{item.amount}</Text>
+                      <TextF className='text-normalTextF text'>ต้องเก็บทั้งหมด</TextF>
+                      <TextF className=' text-normalTextF text'>{item.amount}</TextF>
                     </View>
                   </View>
                 ))}
@@ -326,7 +327,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='w-full flex flex-row items-center'>
-              <Text className='text-label'>บ้านพักคนชรา</Text>
+              <TextF className='text-label'>บ้านพักคนชรา</TextF>
             </View>
             <View className='flex mx-5 rounded-xl shadow-sm mt-3'>
               <View className='flex w-full h-40 bg-stone-200 rounded-t-xl'>
@@ -341,23 +342,23 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
 
               <View className='flex w-full h-32 bg-neutral rounded-b-xl px-3 justify-around py-2'>
                 <Text
+                  className='text-normalText text-lg'
                   numberOfLines={1}
                   ellipsizeMode='tail'
-                  style={{ width: '100%', overflow: 'hidden', textAlign: 'left' }}
-                  className='text-normalText text-lg'
+                  style={{ width: '100%', overflow: 'hidden', textAlign: 'left', fontFamily: 'SarabunRegular' }}
                 >
                   Myluck Nursinghome ศูนย์ดูแลผู้สูงอายุ และดูแลผู้ป่วย สาขาประชาอุทิศ 45 (บางมด)
                 </Text>
                 <View className='flex flex-row justify-between items-center'>
-                  <Text className='text-normalText text-lg'>ราคา/เดือน</Text>
-                  <Text className=' text-normalText text-lg'>20,000 บาท</Text>
+                  <TextF className='text-normalText text-lg'>ราคา/เดือน</TextF>
+                  <TextF className=' text-normalText text-lg'>20,000 บาท</TextF>
                 </View>
                 <View className='flex flex-row justify-between items-center'>
-                  <Text className='text-normalText text-lg'>เงินที่ต้องเก็บ/เดือน</Text>
-                  <Text className=' text-normalText text-lg'>8,000บาท</Text>
+                  <TextF className='text-normalText text-lg'>เงินที่ต้องเก็บ/เดือน</TextF>
+                  <TextF className=' text-normalText text-lg'>8,000บาท</TextF>
                 </View>
                 <View className='w-full flex flex-row gap-1 justify-end'>
-                    <Text className='text-accent'>ดูรายละเอียด</Text>
+                    <TextF className='text-accent'>ดูรายละเอียด</TextF>
                     <FontAwesome6 name="caret-right" size={18} color='#F68D2B'/>
                 </View>
               </View>
@@ -365,20 +366,20 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
           </View>
           <View className='px-5 mt-8 gap-3'>
             <View className='flex flex-row justify-between items-center'>
-              <Text className='text-label'>แผนปัจจุบัน</Text>
-              <Text className=' text-normalText '>ปี</Text>
+              <TextF className='text-label'>แผนปัจจุบัน</TextF>
+              <TextF className=' text-normalText '>ปี</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
-              <Text className='text-normalText text-lg'>อายุ</Text>
-              <Text className=' text-normalText text-lg'>20</Text>
+              <TextF className='text-normalText text-lg'>อายุ</TextF>
+              <TextF className=' text-normalText text-lg'>20</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
-              <Text className='text-normalText text-lg'>อายุที่ต้องการเกษียณ</Text>
-              <Text className=' text-normalText text-lg'>50</Text>
+              <TextF className='text-normalText text-lg'>อายุที่ต้องการเกษียณ</TextF>
+              <TextF className=' text-normalText text-lg'>50</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
-              <Text className='text-normalText text-lg'>อายุที่คาดว่าจะเสียชีวิต</Text>
-              <Text className=' text-normalText text-lg'>80</Text>
+              <TextF className='text-normalText text-lg'>อายุที่คาดว่าจะเสียชีวิต</TextF>
+              <TextF className=' text-normalText text-lg'>80</TextF>
             </View>
           </View>
           <ScrollView 
@@ -393,7 +394,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                   <View 
                   key={index} 
                   className='flex flex-col justify-center items-center w-20 px-2 h-full'>
-                    <Text className='text-normalText break-words text-center'>{item}</Text>
+                    <TextF className='text-normalText break-words text-center'>{item}</TextF>
                   </View>
                 ))}
               </View>
@@ -401,25 +402,25 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
               {dataTable.map((item, index) => (
                 <View key={index} className={`h-12 flex flex-row justify-between items-center ${index % 2 == 1 ? ' bg-gray-200' : 'bg-neutral'}`}>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.age}</Text>
+                    <TextF className='text-normalText text-center'>{item.age}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.saving}</Text>
+                    <TextF className='text-normalText text-center'>{item.saving}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.retire}</Text>
+                    <TextF className='text-normalText text-center'>{item.retire}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.house}</Text>
+                    <TextF className='text-normalText text-center'>{item.house}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.car}</Text>
+                    <TextF className='text-normalText text-center'>{item.car}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.total}</Text>
+                    <TextF className='text-normalText text-center'>{item.total}</TextF>
                   </View>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
-                    <Text className='text-normalText text-center'>{item.retireUse}</Text>
+                    <TextF className='text-normalText text-center'>{item.retireUse}</TextF>
                   </View>
                 </View>
               ))}
