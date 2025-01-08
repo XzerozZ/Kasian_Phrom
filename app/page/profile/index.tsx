@@ -39,7 +39,9 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         <TouchableOpacity 
         activeOpacity={1}
         // onPress={() => router.push('/appSetting')}
-        onPress={() => setActiveTab('appSetting')}
+        // onPress={() => setActiveTab('appSetting')}
+        onPress={() => setActiveTab('calRetirement')}
+
         className='mt-10 items-end pr-2 w-14'>
           <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
         </TouchableOpacity>

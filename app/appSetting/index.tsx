@@ -3,17 +3,18 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, ScrollView,
 import { FontAwesome6, FontAwesome, MaterialIcons, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import HeadTitle from '../components/headTitle';
 import  TextF  from '../components/TextF';
-import Logo from '../../assets/images/logo.png';
 import SelectDropdown from 'react-native-select-dropdown'
 import CheckBox from '../components/checkBox';
 
-
+const Logo = require('../../assets/images/logo.png')
 interface appSettingProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
 }
+
 const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+    
     useEffect(() =>{
         setStateNavbar(false)
     },[]);
@@ -41,7 +42,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     return (
         <>  
-            <HeadTitle isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} title='ตั้งค่า' route='profile'/>
+            <HeadTitle setActiveTab={setActiveTab} title='ตั้งค่า' route='profile'/>
+            <View className='w-full px-5 mt-3 border-b border-unselectMenu'></View>
             <ScrollView className='flex-1' ref={scrollViewRef} showsVerticalScrollIndicator={false}>
                 
                 <View className='px-5'>
@@ -146,7 +148,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-label'>ตั้งค่าแอป</TextF>
                     </View>
-                    <View className='gap-8 mt-5'>
+                    <View className='gap-5 mt-5'>
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>สกุลเงินหลัก</TextF>
                             <View className='w-2/5 items-end'>

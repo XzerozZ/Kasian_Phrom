@@ -14,6 +14,7 @@ import Finance from './page/finance';
 import Profile from './page/profile';
 
 import Setting from './appSetting';
+import CalRetirement from './calRetirement';
 
 
 import * as SplashScreen from 'expo-splash-screen';
@@ -40,6 +41,7 @@ function index() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+
     }
   }, [loaded]);
 
@@ -65,6 +67,7 @@ function index() {
         {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
       </View>
       {stateNavbar && !loading &&
       <View className='w-full'>
