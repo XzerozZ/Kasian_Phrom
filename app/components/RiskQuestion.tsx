@@ -8,15 +8,37 @@ type RiskQuestionProps = {
     text: string;
     options: string[];
   };
-  onAnswer: (questionId: number, answer: string) => void;
+  onAnswer: (questionId: number, selectedOptions: string[]) => void;
+  isMultiSelect: boolean;
 };
 
-const RiskQuestion: React.FC<RiskQuestionProps> = ({ riskQuestion, onAnswer }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+const RiskQuestion: React.FC<RiskQuestionProps> = ({
+  riskQuestion,
+  onAnswer,
+  isMultiSelect,
+}) => {
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    onAnswer(riskQuestion.id, option);
+    setSelectedOptions((prev) => {
+      if (isMultiSelect) {
+        // multi-select
+        if (prev.includes(option)) {
+          const updatedOptions = prev.filter((o) => o !== option);
+          onAnswer(riskQuestion.id, updatedOptions);
+          return updatedOptions;
+        } else {
+          const updatedOptions = [...prev, option];
+          onAnswer(riskQuestion.id, updatedOptions);
+          return updatedOptions;
+        }
+      } else {
+        // one option
+        const updatedOptions = [option];
+        onAnswer(riskQuestion.id, updatedOptions);
+        return updatedOptions;
+      }
+    });
   };
 
   return (
@@ -27,14 +49,14 @@ const RiskQuestion: React.FC<RiskQuestionProps> = ({ riskQuestion, onAnswer }) =
           key={index}
           onPress={() => handleSelect(option)}
           className={`p-4 border rounded-xl mb-2 mx-3 ${
-            selectedOption === option
+            selectedOptions.includes(option)
               ? 'bg-primary border-primary'
               : 'bg-neutral border-neutral2'
           }`}
         >
           <TextF
             className={`font-medium text-base ${
-              selectedOption === option ? 'text-neutral' : 'text-primary'
+              selectedOptions.includes(option) ? 'text-neutral' : 'text-primary'
             }`}
           >
             {option}

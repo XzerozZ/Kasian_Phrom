@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ScrollView, Text, Button, Image, StyleSheet, Animated } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 import  TextF  from '../components/TextF';
 import RiskForm from './riskForm';
 import RiskResult from './riskResult';
@@ -18,9 +18,9 @@ const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTa
     const [stateAssessed, setStateAssessed] = useState(false);
 
   return (
-    <ScrollView className='flex-1 bg-neutral w-full mt-5'>
-      {stateAssessed?<RiskResult setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>:<RiskForm setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>}
-    </ScrollView>
+    <View className='flex-1 bg-neutral w-full mt-5'>
+      {stateAssessed?<RiskResult isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>:<RiskForm isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>}
+    </View>
   )
 }
 

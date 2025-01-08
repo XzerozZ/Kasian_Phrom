@@ -12,6 +12,7 @@ import NursingHouses from './page/nursingHouses';
 import Dashboard from './page/dashboard';
 import Finance from './page/finance';
 import Profile from './page/profile';
+import AssessmentRisk from './assessmentRisk';
 
 import Setting from './appSetting';
 
@@ -26,7 +27,7 @@ function index() {
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const styles = isDarkMode ? theme.dark : theme.light;
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('assessmentRisk');
 
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
@@ -65,6 +66,7 @@ function index() {
         {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='assessmentRisk' && <AssessmentRisk isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
       </View>
       {stateNavbar && !loading &&
       <View className='w-full'>
