@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
+import { ScrollView, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 import  TextF  from '../components/TextF';
+import RiskForm from './riskForm';
+import RiskResult from './riskResult';
 import RiskForm from './riskForm';
 import RiskResult from './riskResult';
 
@@ -11,6 +13,12 @@ interface AssessmentRiskProps{
   setStateNavbar: (state: boolean) => void;
 }
 const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+  useEffect(() => {
+      setStateNavbar(false)
+    }, [])
+
+    const [stateAssessed, setStateAssessed] = useState(false);
+
   useEffect(() => {
       setStateNavbar(false)
     }, [])
