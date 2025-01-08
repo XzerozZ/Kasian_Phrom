@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 import  TextF  from '../components/TextF';
+import RiskForm from './riskForm';
+import RiskResult from './riskResult';
 
 
 interface AssessmentRiskProps{
@@ -9,9 +11,15 @@ interface AssessmentRiskProps{
   setStateNavbar: (state: boolean) => void;
 }
 const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+  useEffect(() => {
+      setStateNavbar(false)
+    }, [])
+
+    const [stateAssessed, setStateAssessed] = useState(false);
+
   return (
-    <View className='flex-1'>
-      <TextF>AssessmentRisk</TextF>
+    <View className='flex-1 bg-neutral w-full mt-5'>
+      {stateAssessed?<RiskResult isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>:<RiskForm isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>}
     </View>
   )
 }
