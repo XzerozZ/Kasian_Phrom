@@ -4,7 +4,6 @@ import  TextF  from '../components/TextF';
 import RiskForm from './riskForm';
 import RiskResult from './riskResult';
 
-
 interface AssessmentRiskProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -15,10 +14,10 @@ const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTa
       setStateNavbar(false)
     }, [])
 
-    const [stateAssessed, setStateAssessed] = useState(false);
+    const [stateAssessed, setStateAssessed] = useState(true);
 
   return (
-    <View className='flex-1 bg-neutral w-full mt-5'>
+    <View className='flex-1 bg-neutral w-full'>
       {stateAssessed?<RiskResult isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>:<RiskForm isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>}
     </View>
   )
