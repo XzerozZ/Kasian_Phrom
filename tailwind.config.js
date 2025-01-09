@@ -25,6 +25,11 @@ module.exports = {
         banner: "#C8D4FF",
         bgAuth: "#E4ECFF",
         oktext:'#30CC30',
+        bgmenu_Finance:'#d8feb2',
+        bgmenu_Testfinance:'#fecdb2',
+        bgmenu_Change:'#c8e8fe',
+        bgmenu_Money:'#fef5b2',
+        bgmenu_mean:'##feefc4'
       },
     },
   },
