@@ -5,7 +5,7 @@ import { Svg, Line } from 'react-native-svg'; // เพิ่ม Svg และ L
 import { Dimensions } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-
+import  TextF  from './TextF';
 
 interface HistoryCardProps{
     data: {statusDeposit: string, name: string, amount: number, time: string, date: string}[];
@@ -21,11 +21,11 @@ const HistoryCard: React.FC<HistoryCardProps> = ({data}) => {
         className='flex flex-row justify-between items-center h-28 border-t border-banner'>
             <View className={`w-3 h-full ${data.statusDeposit == 'Deposit'?'bg-ok':'bg-err'}`}></View>
             <View className='flex flex-row h-full justify-between items-center flex-1 pl-5'>
-                <Text className='text-normalText text-lg'>{data.name}</Text>
-                <Text className='text-normalText text-lg'>{data.amount}</Text>
+                <TextF className='text-normalText text-lg'>{data.name}</TextF>
+                <TextF className='text-normalText text-lg'>{data.amount}</TextF>
                 <View className='flex flex-col gap-1 items-end'>
-                    <Text className='text-normalText text-lg'>{data.time}</Text>
-                    <Text className='text-normalText'>{data.date}</Text>
+                    <TextF className='text-normalText text-lg'>{data.time}</TextF>
+                    <TextF className='text-normalText'>{data.date}</TextF>
                 </View>
             </View>
             <View className='flex items-center pt-2 h-full'>

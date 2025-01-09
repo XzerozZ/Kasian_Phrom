@@ -3,19 +3,23 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 
+
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
-interface LogInProps{
+interface SignUpProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
 }
-const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
 
+const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
+
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const [visiblePassword, setVisiblePassword] = useState(false)
-
+  const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false)
 
 
   return (
@@ -24,15 +28,28 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
     className='flex-1 mt-14 justify-center items-center'>
       <TouchableOpacity 
         activeOpacity={1}
-        onPress={()=>setActiveTab('main')}
+
         style={{position:'absolute', left:20, top:0}}
         className=' w-16'>
 
           <FontAwesome6 name="angle-left" size={28} color='#6780D6'/>
       </TouchableOpacity>
       <Image source={Logo} style={outStyles.image}/>
-      <TextF className='text-2xl text-primary mt-5 mb-5'>ลงชื่อเข้าใช้</TextF>
-      <View className='flex w-full items-center'>
+      <TextF className='text-2xl text-primary mb-5'>สมัครสมาชิก</TextF>
+      <View className='flex w-full items-center gap-2'>
+        <View style={{position:'relative'}}>
+          <TextInput
+                placeholder="ชื่อผู้ใช้"
+                keyboardType='default'
+                value={username}
+                onChangeText={setUsername}
+                className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+          <View
+          className='w-10 h-12 items-center justify-center mt-5'
+          style={{ position: 'absolute', left: 25, top: 0 }}>
+            <FontAwesome6 name='user-large' size={20} color='#C9C9C9'/>
+          </View>
+        </View>
         <View style={{position:'relative'}}>
           <TextInput
                 placeholder="อีเมล"
@@ -47,7 +64,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
           </View>
         </View>
         <View 
-        className='mt-3'
+        className=''
         style={{position:'relative'}}>
           <TextInput
                 placeholder="รหัสผ่าน"
@@ -69,14 +86,33 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
             <FontAwesome6 name={visiblePassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
           </TouchableOpacity>
         </View>
-        <View className='w-96  items-end px-10 mt-3'>
-          <TextF className='text-primary'>ลืมรหัสผ่าน</TextF>
+        <View 
+        className=''
+        style={{position:'relative'}}>
+          <TextInput
+                placeholder="ยืนยันรหัสผ่าน"
+                secureTextEntry={!visibleConfirmPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+          <View 
+          className='w-10 h-12 items-center justify-center mt-5 '
+          style={{ position: 'absolute', left: 25, top: 0 }}>
+            <FontAwesome6 name='key' size={20} color='#C9C9C9' />
+          </View>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setVisibleConfirmPassword(prev => !prev)}
+            style={{ position: 'absolute', right: 30, top: 0 }}
+            className='w-10 h-12 items-center justify-center mt-5 '
+          >
+            <FontAwesome6 name={visibleConfirmPassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
         activeOpacity={1}
-        // onPress={handleLogin}
-        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
-          <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
+          <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
       </View>
       <View className='w-full items-center px-10 my-5 '>
@@ -89,19 +125,19 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>
       <View className='w-full flex flex-row justify-center items-center px-10 my-5 mb-24'>
-        <TextF className='text-normalText'>ยังไม่มีบัญชี </TextF>
+        <TextF className='text-normalText'>มีบัญชีอยู่แล้ว </TextF>
         <TouchableOpacity
-            activeOpacity={1}
-            onPress={()=>setStateLogin(false)}
-          >
-          <TextF className='text-primary'>สมัครสมาชิก</TextF>
+          activeOpacity={1}
+          onPress={()=>setStateLogin(true)}
+        >
+          <TextF className='text-primary'>ลงชื่อเข้าใช้</TextF>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
 
-export default LogIn
+export default SignUp
 
 const outStyles = StyleSheet.create({
   image: {

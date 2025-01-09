@@ -4,7 +4,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { theme } from '../../globalStyle';
 const Logo = require('../../assets/images/logo.png')
 
-
 interface LoadingPageProps{
   stateLoading: boolean;
   setStateLoading: (state: boolean) => void;
@@ -57,8 +56,8 @@ export default LoadingPage;
 
 const outStyles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200,
+    width: 130,
+    height: 130,
     resizeMode: 'contain',
   },
   loadingPage: {

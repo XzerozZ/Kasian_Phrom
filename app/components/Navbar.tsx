@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity } from 'react-native';
-
+import  TextF  from './TextF';
 
 
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1 active:none">
           <FontAwesome6 name="house" size={23} color={getIconColor('main')} />
-          <Text className={`text-sm ${getTextColor('main')}`}>หน้าหลัก</Text>
+          <TextF className={`text-sm ${getTextColor('main')}`}>หน้าหลัก</TextF>
         </TouchableOpacity>
 
         <TouchableOpacity  
@@ -46,7 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="person-cane" size={25} color={getIconColor('nursingHouses')} />
-          <Text className={`text-sm ${getTextColor('nursingHouses')}`}>บ้านพัก</Text>
+          <TextF className={`text-sm ${getTextColor('nursingHouses')}`}>บ้านพัก</TextF>
         </TouchableOpacity>
 
         <TouchableOpacity  
@@ -54,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <MaterialIcons name="dashboard" size={35} color={getIconColor('dashboard')} />
-          <Text className={`text-sm ${getTextColor('dashboard')}`}>แผนของฉัน</Text>
+          <TextF className={`text-sm ${getTextColor('dashboard')}`}>แผนของฉัน</TextF>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -62,7 +62,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="chart-line" size={23} color={getIconColor('finance')} />
-          <Text className={`text-sm ${getTextColor('finance')}`}>คู่มือการเงิน</Text>
+          <TextF className={`text-sm ${getTextColor('finance')}`}>คู่มือการเงิน</TextF>
         </TouchableOpacity>
 
         <TouchableOpacity  
@@ -70,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="user-large" size={23} color={getIconColor('profile')} />
-          <Text className={`text-sm ${getTextColor('profile')}`}>โปรไฟล์</Text>
+          <TextF className={`text-sm ${getTextColor('profile')}`}>โปรไฟล์</TextF>
         </TouchableOpacity>
 
     </View>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, Text, View } from 'react-native'
 import { Svg, Path, Circle } from 'react-native-svg'
+import  TextF  from './TextF';
 
 export default class TestChart extends Component {
   render() {

@@ -4,6 +4,7 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@
 import ChartLine from '../../components/ChartLine';
 import { LinearGradient } from 'expo-linear-gradient';
 import HistoryCard from '../../components/HistoryCard';
+import  TextF  from '../../components/TextF';
 
 
 interface RecordProps{
@@ -42,7 +43,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
     <ScrollView>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
-          <Text className='text-2xl font-bold'>ชื่อแผน</Text>
+          <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
         </View>
         <View className='mt-5 px-5'>
           <View className='flex justify-center items-center bg-neutral pr-4 pt-7 pl-2 rounded-3xl shadow-sm h-96'>
@@ -53,15 +54,15 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
         </View>
         
         <View className='px-5 mt-5 gap-3'>
-          <Text className=' text-normalText text-lg'>ประวัติการออม</Text>
+          <TextF className=' text-normalText text-lg'>ประวัติการออม</TextF>
         </View>
         {dataHistoryPerMonth.map((data, index) => (
           <View 
           key={index}>
             <View className='px-5 mt-5 mb-10'>
               <View className='flex flex-row justify-between items-center mb-5'>
-                <Text className=' text-normalText'>เดือนนี้</Text>
-                <Text className=' text-normalText'>{data.amount}</Text>
+                <TextF className=' text-normalText'>เดือนนี้</TextF>
+                <TextF className=' text-normalText'>{data.amount}</TextF>
               </View>
               <HistoryCard data={data.data || []}/>
             </View>
