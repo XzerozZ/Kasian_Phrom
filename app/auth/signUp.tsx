@@ -34,7 +34,10 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
 
           <FontAwesome6 name="angle-left" size={28} color='#6780D6'/>
       </TouchableOpacity>
-      <Image source={Logo} style={outStyles.image}/>
+      <Image 
+      source={Logo} 
+      style={{objectFit: 'contain'}}
+      className='w-52 h-52'/>
       <TextF className='text-2xl text-primary mb-5'>สมัครสมาชิก</TextF>
       <View className='flex w-full items-center gap-2'>
         <View style={{position:'relative'}}>
@@ -121,7 +124,10 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
       <TouchableOpacity
         activeOpacity={1}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
-          <Image source={google} style={outStyles.imageGoogle}/>
+          <Image 
+          source={google} 
+          style={{objectFit: 'contain'}}
+          className='h-10 w-10'/>
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>
       <View className='w-full flex flex-row justify-center items-center px-10 my-5 mb-24'>

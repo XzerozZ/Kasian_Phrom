@@ -16,7 +16,7 @@ const headTitle: React.FC<headTitleProps> = ({ setActiveTab, title, route }) => 
     return (
         <>
         <View className='flex-row mt-3 ml-5 h-14 items-center'>
-            <TouchableOpacity 
+            <TouchableOpacity
                 activeOpacity={1}
                 onPress={()=>setActiveTab(route)}
                 className=''>

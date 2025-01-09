@@ -30,6 +30,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   const [box1Width, setBox1Width] = useState(0);
   const [state, setState] = useState(1);
+  const [stateFutureUse, setStateFutureUse] = useState(false);
   const widthAnim = useRef(new Animated.Value(0)).current;
   const colorAnim = useRef(new Animated.Value(0)).current;
   const colorAnim2 = useRef(new Animated.Value(0)).current;
@@ -49,23 +50,23 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
     Animated.timing(widthAnim, {
       toValue: targetWidth,
-      duration: 500, // Animation duration in milliseconds
+      duration: 1000, // Animation duration in milliseconds
       useNativeDriver: false, // We cannot use native driver for width property
     }).start();
 
     Animated.timing(colorAnim, {
       toValue: state === 2 ? 1 : 0, // Interpolate between 0 and 1
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
     Animated.timing(colorAnim2, {
       toValue: state === 3 ? 1 : 0, // Interpolate between 0 and 1
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
     Animated.timing(colorAnim3, {
       toValue: state === 4 ? 1 : 0, // Interpolate between 0 and 1
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
 
@@ -100,30 +101,39 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 const [dataInput, setDataInput] = useState({
   Name: '',
   Birth_date: '',
-  Retirement_age: '',
-  Exp_lifespan: '',
+  Retirement_age: '65',
+  Exp_lifespan: '80',
   Current_savings: '',
-  Current_savings_returns: '',
+  Current_savings_returns: '1.5',
   Monthly_income: '',
   Monthly_expenses: '',
   Current_total_investment: '',
-  Investment_return: '',
-  Expected_inflation: '',
+  Investment_return: '7',
+  Expected_inflation: '3',
   Expected_monthly_expenses: '',
-  Annual_expense_increase: '',
-  Annual_savings_return: '',
+  Annual_expense_increase: '3',
+  Annual_savings_return: '1.25',
+  Annual_investment_return: '5',
 })
 
 
-const [dataAssetInput, setDataAssetInput] = useState({
-  Name: '',
-  Total_money: '',
+const [dataAssetInput, setDataAssetInput] = useState([{
+  Name: 'บ้านแสนสุข',
+  Total_money: '4,500,000',
   Monthly_expenses: '',
-  End_year: '',
+  End_year: '2045',
+  type: 'home',
+},{
+  Name: 'รถแสนสุข2',
+  Total_money: '8,500,000',
+  Monthly_expenses: '',
+  End_year: '2055',
+  type: 'car',
+}
+])
 
-})
 
-
+const scrollViewRef = useRef<ScrollView>(null);
 
 
 
@@ -170,7 +180,7 @@ const [dataAssetInput, setDataAssetInput] = useState({
             <Animated.View 
             style={{overflow:'hidden', position: 'absolute', left: 0, right: 0, width: widthAnim}}
             // className={`${state === 1 ?'w-0':state === 2 ? 'w-4/12' : state === 3 ? 'w-8/12' : 'w-12/12'}`}
-            > 
+            >
 
               <View id='box2' 
               style={{overflow: 'hidden', width: box1Width,}}
@@ -186,14 +196,19 @@ const [dataAssetInput, setDataAssetInput] = useState({
             </Animated.View>
           </View>
         </View>
-        {state === 1 ? <State1 isDarkMode={isDarkMode} dataInput={dataInput} setDataInput={setDataInput}/>
-        :<ScrollView className='flex-1 mt-10 rounded-t-3xl pt-5'>
-          {state === 2 && <State2 isDarkMode={isDarkMode} dataInput={dataInput} setDataInput={setDataInput}/>}
-          {state === 3 && <State3 isDarkMode={isDarkMode} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput}/>}
-          {state === 4 && <State4 isDarkMode={isDarkMode} dataInput={dataInput} setDataInput={setDataInput}/>}
-        </ScrollView>}
+
+        <ScrollView 
+        ref={scrollViewRef} 
+        className='flex-1 mt-10 rounded-t-3xl'>
+          {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
+          {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
+          {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput}/>}
+          {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
+          
+        </ScrollView>
 
       </View>
+      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput}/>}
     </>
   )
 }

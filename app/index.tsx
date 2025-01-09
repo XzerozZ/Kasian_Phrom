@@ -28,7 +28,7 @@ function index() {
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const styles = isDarkMode ? theme.dark : theme.light;
-  const [activeTab, setActiveTab] = useState('assessmentRisk');
+  const [activeTab, setActiveTab] = useState('auth');
 
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);

@@ -54,7 +54,10 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <View 
                         style={{position:'relative', borderWidth: 3}}
                         className='w-32 h-32 rounded-full border-primary'>
-                            <Image source={Logo} style={outStyles.image}/>
+                            <Image 
+                            source={Logo}
+                            style={{objectFit: 'contain'}}
+                            className='w-full h-full rounded-full'/>
                         </View>
                         <View className='h-32 justify-between pr-5 max-w-56'>
                             <View className='flex flex-row w-full'>
@@ -246,12 +249,3 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 }
 
 export default appSetting
-
-const outStyles = StyleSheet.create({
-    image: {
-      width: '100%',
-      height: '100%',
-      borderRadius:'100%',
-      resizeMode: 'contain',
-    },
-  });

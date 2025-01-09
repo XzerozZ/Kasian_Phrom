@@ -59,9 +59,7 @@ const RiskForm: React.FC<RiskFormProps> = ({
   return (
     <>
       <HeadTitle
-        isDarkMode={isDarkMode}
         setActiveTab={setActiveTab}
-        setStateNavbar={setStateNavbar}
         title="แบบประเมินความเสี่ยง"
         route="finance"
       />

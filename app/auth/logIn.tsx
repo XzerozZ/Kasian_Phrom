@@ -30,7 +30,10 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
 
           <FontAwesome6 name="angle-left" size={28} color='#6780D6'/>
       </TouchableOpacity>
-      <Image source={Logo} style={outStyles.image}/>
+      <Image 
+      source={Logo} 
+      style={{objectFit: 'contain'}}
+      className='w-52 h-52'/>
       <TextF className='text-2xl text-primary mt-5 mb-5'>ลงชื่อเข้าใช้</TextF>
       <View className='flex w-full items-center'>
         <View style={{position:'relative'}}>
@@ -85,7 +88,10 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
       <TouchableOpacity
         activeOpacity={1}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
-          <Image source={google} style={outStyles.imageGoogle}/>
+          <Image 
+          source={google} 
+          style={{objectFit: 'contain'}}
+          className='h-10 w-10'/>
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>
       <View className='w-full flex flex-row justify-center items-center px-10 my-5 mb-24'>
@@ -102,16 +108,3 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
 }
 
 export default LogIn
-
-const outStyles = StyleSheet.create({
-  image: {
-    width: 180,
-    height: 180,
-    resizeMode: 'contain',
-  },
-  imageGoogle: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-});

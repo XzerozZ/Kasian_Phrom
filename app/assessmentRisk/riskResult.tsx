@@ -18,7 +18,7 @@ const RiskResult: React.FC<RiskResultProps> = ({ setActiveTab, setStateAssessed 
   }
   return (
     <>
-      <HeadTitle isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} title='ผลการประเมิน' route='finance'/>
+      <HeadTitle setActiveTab={setActiveTab} title='ผลการประเมิน' route='finance'/>
       <ScrollView className='flex-1 bg-neutral w-full' showsVerticalScrollIndicator={false}>
         <TextF className='text-center mt-3 text-primary text-lg'>คุณคือผู้ลงทุนประเภท</TextF>
         <WideBtn

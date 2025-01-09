@@ -9,6 +9,10 @@ interface FinanceProps{
   setStateNavbar: (state: boolean) => void;
 }
 const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+  useEffect(() =>{
+    setStateNavbar(true)
+  },[]);
+    
   return (
     <View className='flex-1'>
       <Text>Finance</Text>

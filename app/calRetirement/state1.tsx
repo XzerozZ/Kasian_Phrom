@@ -3,16 +3,19 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import  TextF  from '../components/TextF';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import WideBtn from '../components/WideBtn';
 
 
 interface stateProps{
   isDarkMode: boolean;
+  setState: (state: number) => void;
   dataInput: any;
   setDataInput: (data: any) => void;
 }
-const state1: React.FC<stateProps> = ({ isDarkMode, dataInput, setDataInput }) => {
+const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput }) => {
 
   const [isPickerVisible, setPickerVisible] = useState(false);
+  const [isFully, setIsFully] = useState(false);
   const [subDate, setSubDate] = useState({
     day: '',
     month: '',
@@ -34,44 +37,56 @@ const state1: React.FC<stateProps> = ({ isDarkMode, dataInput, setDataInput }) =
       month: '2-digit',
       year: 'numeric',
     });
-    setDataInput({ ...dataInput, BirthDate: formattedDate });
+    setDataInput({ ...dataInput, Birth_date: formattedDate });
     setPickerVisible(false);
   };
 
   useEffect(() => {
     if (subDate.day && subDate.month && subDate.year) {
-      // สร้างวันที่จากข้อมูล subDate และแปลงปีไทย (พ.ศ.) เป็นปีสากล (ค.ศ.)
       const selectedDate = new Date(
-        parseInt(subDate.year, 10) - 543, // แปลงปีไทยเป็นปีสากล
-        parseInt(subDate.month, 10) - 1, // เดือนใน JavaScript เริ่มต้นที่ 0
-        parseInt(subDate.day, 10) // วัน
+        parseInt(subDate.year, 10) - 543,
+        parseInt(subDate.month, 10) - 1, 
+        parseInt(subDate.day, 10) 
       );
   
-      // ฟอร์แมตวันที่เป็น วัน/เดือน/ปี ค.ศ.
       const formattedDate = selectedDate.toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
       });
   
-      // อัปเดต state ของ BirthDate
-      setDataInput({ ...dataInput, BirthDate: formattedDate });
+      setDataInput({ ...dataInput, Birth_date: formattedDate });
     }
   }, [subDate]);
   
 
+  useEffect(() => {
+    if (dataInput.Birth_date) {
+      const dateParts = dataInput.Birth_date.split('/');
+      setSubDate({
+        day: dateParts[0],
+        month: dateParts[1],
+        year: String(Number(dateParts[2])+543),
+      });
+    }
 
-console.log(dataInput)
+    setDataInput({ ...dataInput, Birth_date: '' });
+  }, []);
 
-
-
+  useEffect(() => {
+    if (dataInput.Name === '' || dataInput.Birth_date === '' || dataInput.Retirement_age === '' || dataInput.Exp_lifespan === '') {
+      setIsFully(false);
+    } else {
+      setIsFully(true);
+    }
+  }, [dataInput]);
 
 
 
 
   return (
-    <View className='flex-1 mt-10'>
-        <View className='bg-neutral2 rounded-3xl pb-10 px-5'>
+    <View className='flex-1'>
+        <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
           <View className='flex mt-5'>
             <TextF className='text-normalText text-lg mt-5'>ชื่อแผน</TextF>
             <View className='h-16 px-3 mt-5 bg-neutral rounded-xl flex justify-center'>
@@ -94,69 +109,55 @@ console.log(dataInput)
                       keyboardType='numeric'
                       maxLength={2}
                       onChangeText={(text) => {
-                        // กรองเฉพาะตัวเลข
-                        const numericText = text.replace(/[^0-9]/g, ''); 
-                      
-                        // ตรวจสอบค่าที่ใส่ หากเกิน 31 ให้ปัดเป็น 31
+                        const numericText = text.replace(/[^0-9]/g, '');
                         const validatedValue = parseInt(numericText, 10);
                         const finalValue = !isNaN(validatedValue) && validatedValue > 31 ? '31' : numericText;
-                      
-                        // อัปเดต state
                         setSubDate({ ...subDate, day: finalValue });
                       }}
-                      className={` w-8 text-center`}/>
-                      <TextF className='text-lg text-normalText'>/</TextF>
+                      className={` w-8 text-center text-primary`}/>
+                      <TextF className='text-lg text-primary'>/</TextF>
                       <TextInput
                         placeholder="เดือน"
                         value={subDate.month}
                         keyboardType="numeric"
-                        maxLength={2} // จำกัดให้ป้อนได้แค่ 2 ตัวอักษร
+                        maxLength={2}
                         onChangeText={(text) => {
-                          // กรองเฉพาะตัวเลข
                           const numericText = text.replace(/[^0-9]/g, ''); 
                         
-                          // ตรวจสอบค่าที่ใส่ หากเกิน 31 ให้ปัดเป็น 31
                           const validatedValue = parseInt(numericText, 10);
                           const finalValue = !isNaN(validatedValue) && validatedValue > 12 ? '12' : numericText;
                         
-                          // อัปเดต state
                           setSubDate({ ...subDate, month: finalValue });
                         }}
-                        className={` w-10 text-center`}/>
-                      <TextF className='text-lg text-normalText'>/</TextF>
+                        className={` w-10 text-center text-primary`}/>
+                      <TextF className='text-lg text-primary'>/</TextF>
                       <TextInput
                       placeholder="ปี"
                       value={subDate.year}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
-                        // กรองเฉพาะตัวเลข
                         const numericText = text.replace(/[^0-9]/g, ''); 
                       
-                        // ตรวจสอบค่าที่ใส่ หากเกิน 31 ให้ปัดเป็น 31
                         const fullYear = new Date().getFullYear() +543;
                         const validatedValue = parseInt(numericText, 10);
                         const finalValue = !isNaN(validatedValue) && validatedValue > fullYear ? String(fullYear) : numericText;
                       
-                        // อัปเดต state
                         setSubDate({ ...subDate, year: finalValue });
                       }}
-                      className={` w-12 text-center`}/>
-
+                      className={` w-12 text-center text-primary`}/>
                   <TouchableOpacity 
-                  
                   onPress={() => setPickerVisible(true)} className='ml-2 flex justify-center items-center'>
-                    <FontAwesome6 name="calendar-days" size={22} color={`${subDate.day && subDate.month && subDate.year ?'#070F2D':'#B0B0B0'}`}/>
+                    <FontAwesome6 name="calendar-days" size={22} color={`${subDate.day && subDate.month && subDate.year ?'#2A4296':'#B0B0B0'}`}/>
                   </TouchableOpacity>
                   <DateTimePickerModal
                     isVisible={isPickerVisible}
                     mode="date"
                     onConfirm={handleConfirm}
                     onCancel={() => setPickerVisible(false)}
-                    locale="th-TH" // ตั้งค่าภาษาไทย
-                    maximumDate={new Date()} // กำหนดวันที่สูงสุดให้เป็นวันปัจจุบัน
+                    locale="th-TH"
+                    maximumDate={new Date()}
                   />
-
                 </View>
               </View>
 
@@ -169,13 +170,18 @@ console.log(dataInput)
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
-                      placeholder="จำนวน"
+                      defaultValue='65'
                       value={dataInput.Retirement_age}
                       keyboardType='numeric'
                       maxLength={2}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Retirement_age: text });
                       }}
+                      onBlur={() => {
+                        if (!dataInput.Retirement_age) {
+                          setDataInput({ ...dataInput, Retirement_age: '65' });
+                        }}
+                      }
                       className={` text-end text-lg text-primary pr-2`}/>
                       <TextF className={` text-lg text-primary`}>ปี</TextF>
                 </View>
@@ -190,23 +196,32 @@ console.log(dataInput)
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
-                      placeholder="จำนวน"
                       value={dataInput.Exp_lifespan}
                       keyboardType='numeric'
-                      maxLength={2}
+                      maxLength={3}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Exp_lifespan: text });
+                      }}
+                      onBlur={() => {
+                        if (!dataInput.Exp_lifespan) {
+                          setDataInput({ ...dataInput, Exp_lifespan: '80' });
+                        }
                       }}
                       className={` text-end text-lg text-primary pr-2`}/>
                       <TextF className={` text-lg text-primary`}>ปี</TextF>
                 </View>
               </View>
             </View>
-            <View className='h-32'></View>
+            <View className='h-20 '></View>
           </View>
         </View>
+
+        <WideBtn activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={()=>setState(2)}/>
     </View>
   )
 }
 
 export default state1
+
+
+

@@ -39,8 +39,8 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         <TouchableOpacity 
         activeOpacity={1}
         // onPress={() => router.push('/appSetting')}
-        // onPress={() => setActiveTab('appSetting')}
-        onPress={() => setActiveTab('calRetirement')}
+        onPress={() => setActiveTab('appSetting')}
+        // onPress={() => setActiveTab('calRetirement')}
 
         className='mt-10 items-end pr-2 w-14'>
           <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
@@ -50,7 +50,10 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         <View 
         style={{ borderWidth: 3}}
         className='w-36 h-36 rounded-full border-primary'>
-          <Image source={Logo} style={outStyles.image}/>
+          <Image 
+            source={Logo}
+            style={{objectFit: 'contain'}}
+            className='w-full h-full rounded-full'/>
         </View>
         <View className='flex flex-row gap-2 h-32'>
           <View className='flex justify-between'>
@@ -97,12 +100,3 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 }
 
 export default Profile
-
-const outStyles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius:'100%',
-    resizeMode: 'contain',
-  },
-});
