@@ -116,9 +116,4 @@ const RiskResult: React.FC<RiskResultProps> = ({ setActiveTab, setStateAssessed 
   )
 }
 
-const getColorByIndex = (index: number): string => {
-  const colors = ['#2C8C3A', '#89A209', '#ED9A01', '#EF6B0D', '#D4333F'];
-  return colors[index-1 % colors.length];
-};
-
 export default RiskResult
