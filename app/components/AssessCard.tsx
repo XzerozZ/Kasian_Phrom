@@ -19,7 +19,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ riskId, setActiveTab }) => {
             {selectedRisk ? (
                 <>  
                     <TextF className='text-center mt-3 text-primary2 text-lg'>คุณคือผู้ลงทุนประเภท</TextF>
-                    <Text className={`text-center text-2xl mt-2 mb-8`} style={{ color: selectedRisk.textColor, fontFamily: 'SarabunBold' }}>
+                    <Text className={`text-center text-2xl mt-2 mb-8 h-10`} style={{ color: selectedRisk.textColor, fontFamily: 'SarabunBold' }}>
                         {selectedRisk.label}
                     </Text>
                     <Pressable className='flex-row items-center bg-neutral2 pr-4' onPress={() => setActiveTab('assessmentRisk')}> 

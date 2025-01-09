@@ -13,7 +13,6 @@ import Dashboard from './page/dashboard';
 import Finance from './page/finance';
 import Profile from './page/profile';
 import AssessmentRisk from './assessmentRisk';
-
 import Setting from './appSetting';
 
 
