@@ -13,13 +13,13 @@ import Dashboard from './page/dashboard';
 import Finance from './page/finance';
 import Profile from './page/profile';
 import AssessmentRisk from './assessmentRisk';
-
 import Setting from './appSetting';
 import CalRetirement from './calRetirement';
 
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
+import FinanceDetail from './financeDetail';
 SplashScreen.preventAutoHideAsync();
 
 
@@ -70,6 +70,7 @@ function index() {
         {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='assessmentRisk' && <AssessmentRisk isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='financeDetail' && <FinanceDetail isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
       </View>
       {stateNavbar && !loading &&
       <View className='w-full'>

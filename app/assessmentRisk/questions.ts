@@ -1,4 +1,10 @@
-const riskQuestions = [
+type QuestionData = {
+  id: number;
+  text: string;
+  options: string[];
+};
+
+const riskQuestions:QuestionData[] = [
   {
     id: 1,
     text: 'ข้อที่ 1. ปัจจุบันคุณอายุ',
