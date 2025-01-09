@@ -4,6 +4,7 @@ import  TextF  from '../components/TextF';
 import RiskForm from './riskForm';
 import RiskResult from './riskResult';
 
+
 interface AssessmentRiskProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
