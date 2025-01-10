@@ -197,7 +197,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
         <View className=' flex'>
           <View className='mt-5 flex justify-center items-center'>
             <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
@@ -429,6 +429,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
               
           </ScrollView>
         </View>
+        <View className='h-32'></View>
       </ScrollView>
 
   )

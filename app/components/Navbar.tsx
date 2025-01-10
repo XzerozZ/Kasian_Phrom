@@ -30,8 +30,9 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
 
   return (
-    <View className={`w-full h-28 rounded-t-3xl flex flex-row justify-around items-end shadow pb-8
-      ${styles.container}`}>
+    <View 
+    style={{ position: 'absolute', bottom: 0, zIndex: 1000 }}
+    className={`w-full h-28 rounded-t-3xl flex flex-row justify-around items-end shadow pb-8 ${styles.container}`}>
 
         <TouchableOpacity  
         onPress={() => setActiveTab('main')}

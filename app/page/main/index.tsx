@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import  TextF  from '../../components/TextF';
-import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Logo = require('../../../assets/images/logo.png');
@@ -16,15 +16,28 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
     useEffect(() =>{
       setStateNavbar(true)
     },[]);
+
+
+    const [menu, setMenu] = useState([
+      { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
+      { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
+      { tag: '', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
+      { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
+      { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินที่ใช้หลังเกษียณ", bg: "bg-bgmenu_Money" },
+      { tag: '', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+    ])
+
   
     
   return (
     <View className='justify-between flex-1'>
-      <ScrollView className="flex h-screen gap-5 pb-28">
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      className="flex-1">
         <View
           style={{
-            borderBottomLeftRadius: 40,
-            borderBottomRightRadius: 40,
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
@@ -37,8 +50,8 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
             colors={['#FFFFFF', '#C8D4FF']}
             style={{
               flex: 1,
-              borderBottomLeftRadius: 40,
-              borderBottomRightRadius: 40,
+              borderBottomLeftRadius: 30,
+              borderBottomRightRadius: 30,
             }}
           >
             <View className='flex-row justify-between mt-10 ml-9'>
@@ -57,65 +70,72 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
             <TextF className='justify-center ml-7 pt-3 text-2xl text-normalText'> 20,000,000,000    บาท </TextF>
           </LinearGradient>
         </View>
-        <View>
-          <TextF className='ml-7 mt-6 text-normalText'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
-
-          <View className='rounded-xl border border-banner h-32 ml-7 mr-7 mt-8'>
-            <TextF className='m-4 ml-6 text-normalText'>จำนวนเงินที่ต้องเก็บในเดือนนี้</TextF>
-            <View>
-              <TextF className='text-3xl ml-6 text-normalText'>19,000 บาท</TextF>
-              <TextF className='text-right mr-5 text-normalText'>ดูแผนของฉัน <AntDesign name="caretright" size={12} color="#F68D2B"/></TextF>
+        <TextF className='pl-5 mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
+        <View className='flex px-5'>
+          <View className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
+            <TextF className=' ml-6 text-normalText text-lg'>จำนวนเงินที่ต้องเก็บในเดือนนี้</TextF>
+            <View className='flex-row justify-between items-end'>
+              <View className='flex-row gap-2 items-end'>
+                <TextF className='text-3xl ml-6 text-primary'>19,000</TextF>
+                <TextF className='text-lg text-normalText'>บาท</TextF>
+              </View>
+              <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setActiveTab('dashboard')}>
+                <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน 
+                  <AntDesign name="caretright" size={12} color="#F68D2B"/>
+                </TextF>
+              </TouchableOpacity>
             </View>
           </View>
 
-          <TextF className='ml-7 mt-6'>บริการที่น่าสนใจ </TextF>
-          <View className='flex-wrap flex-row px-5 gap-8 mt-5'>
-          <TouchableOpacity 
-            activeOpacity={1} 
-            onPress={() => setActiveTab('nursingHouses')}
-            style={{ alignItems: 'center' }} // จัดตำแหน่งให้อยู่กลาง
-          >
-            <View className="bg-banner h-20 w-20 rounded-3xl justify-center items-center">
-              <FontAwesome6 name="person-cane" size={40} color="#2a4296" />
-            </View>
-            <Text className="pt-3 text-normalText">บ้านพักคนชรา</Text>
-          </TouchableOpacity>
+          <TextF className=' mt-6 text-label'>บริการที่น่าสนใจ </TextF>
 
-            <View className='items-center'>
-              <View className='bg-bgmenu_Finance h-20 w-20 rounded-3xl justify-center items-center '><Ionicons name="document-outline" size={30} color="#38b62d"/></View>
-              <TextF className='pt-3 text-normalText'>คู่มือการเงิน</TextF>
-            </View>
-            <View className='items-center'>
-              <View className='bg-bgmenu_Change h-20 w-20 rounded-3xl justify-center items-center'><Ionicons name="sync-circle-outline" size={40} color="#19a4ca"/></View>
-              <TextF className='pt-3 text-normalText'>ปรับแผน</TextF>
-            </View>
-            <View className='items-center'>
-              <View className='bg-bgmenu_Testfinance h-20 w-20 rounded-3xl justify-center items-center'><FontAwesome name="line-chart" size={25} color="#f04545"/></View>
-              <TextF className='break-words w-24 text-center pt-3 text-normalText'>วัดความเสี่ยงการลงทุน</TextF>
-            </View>
-            <View className='items-center'>
-              <View className='bg-bgmenu_Money h-20 w-20 rounded-3xl justify-center items-center'><FontAwesome name="money" size={25} color="#da9e1d"/></View>
-              <TextF className='break-words w-24 text-center pt-3 text-normalText'>เงินที่ใช้หลังเกษียณ</TextF>
-            </View>
-            <View className='items-center'>
-              <View className='bg-orange-100 h-20 w-20 rounded-3xl justify-center items-center'><AntDesign name="questioncircleo" size={30} color="#da9e1d"/></View>
-              <TextF className='break-words w-20 text-center pt-3 text-normalText'>เกษียณพร้อมคืออะไร?</TextF>
-            </View>
+          <View className=" flex-row justify-between mt-5">
+            {menu.slice(0, 4).map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                activeOpacity={1}
+                className="w-[25%] items-center"
+                onPress={() => setActiveTab(item.tag)}
+              >
+                <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
+                  {item.icon}
+                </View>
+                <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
+              </TouchableOpacity>
+            ))}
           </View>
-          <View className='flex-row justify-between ml-7 mt-7'>
-            <TextF className='text-normalText'>บ้านพักคนชราแนะนำ</TextF>
+          <View className=" flex-row mt-5">
+            {menu.slice(4).map((item, index) => (
+              <TouchableOpacity
+                key={index + 4}
+                activeOpacity={1}
+                className="w-[25%] items-center"
+                onPress={() => setActiveTab(item.tag)}
+              >
+                <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
+                  {item.icon}
+                </View>
+                <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View className='flex-row justify-between mt-8'>
+            <TextF className='text-normalText text-lg'>บ้านพักคนชราแนะนำ</TextF>
             <TouchableOpacity 
               activeOpacity={1} 
               onPress={() => setActiveTab('nursingHouses')}
-              style={{ flexDirection: 'row', alignItems: 'center' }} // ใช้สำหรับจัดการตำแหน่งของ text ให้อยู่ในแนวนอน
-            >
-              <Text className="mr-7 text-normalText">ดูทั้งหมด</Text>
+              className='flex-row items-center'>
+              <TextF className=" text-primary">ดูทั้งหมด</TextF>
             </TouchableOpacity>
 
           </View>
           <View className='flex-row'>
-            <ScrollView horizontal className='w-11/12'> 
-              <View className='flex-row'>
+            <ScrollView 
+            horizontal={true}
+            className='mt-5 h-[130]'> 
                 <Image
                 source={{ uri: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg" }}
                 style={styles_pic.image}
@@ -127,12 +147,11 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
                 <Image
                 source={{ uri: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg" }}
                 style={styles_pic.image}
-                />
-              </View>  
+                /> 
             </ScrollView>
           </View>
         </View>
-        
+        <View className='h-52'></View>
       </ScrollView>
   </View>
   )
@@ -142,12 +161,12 @@ export default Main
 
 const styles_pic = StyleSheet.create({
   image: {
-    width: 170,
+    width: 180,
     height: 120,
-    borderRadius: 20,
+    borderRadius: 15,
     borderWidth: 2,
     borderColor: "#3498db",
-    margin: 7
+    marginRight: 15,
   },
   logo: {
     width: 70,

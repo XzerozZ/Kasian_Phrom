@@ -24,7 +24,9 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
 
   return (
     <>
-      <ScrollView className='flex-1 bg-neutral w-full'>
+      <ScrollView 
+      showsVerticalScrollIndicator={false}
+      className='flex-1 bg-neutral w-full'>
         <View className='flex-row mt-3 ml-5 h-14 items-center'>
         <Text 
           style={{ fontFamily: 'SarabunBold'}}
@@ -47,6 +49,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           />
         ))}
         </View>
+        <View className='h-40'></View>
       </ScrollView>
     </>
   )

@@ -40,7 +40,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
 
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
           <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
@@ -70,6 +70,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
         ))}
         
       </View>
+      <View className='h-32'></View>
     </ScrollView>
   )
 }

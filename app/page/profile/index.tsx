@@ -34,7 +34,9 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 
   
   return (
-    <ScrollView className='flex-1 px-5'>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    className='flex-1 px-5'>
       <View className='flex items-end'>
         <TouchableOpacity 
         activeOpacity={1}
@@ -94,7 +96,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         ))}
       </View>
         
-      
+      <View className='h-32'></View>
     </ScrollView>
   )
 }

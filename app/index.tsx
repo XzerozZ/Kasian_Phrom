@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, Animated, ScrollView } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, Animated, ScrollView, StatusBar } from 'react-native';
 import { theme } from '../globalStyle';
 
 import LoadingPage from './loadingPage';
@@ -22,6 +22,8 @@ import DetailNursingHouses from './detailnursingHouses';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import FinanceDetail from './financeDetail';
+
+
 SplashScreen.preventAutoHideAsync();
 
 
@@ -30,7 +32,7 @@ function index() {
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const styles = isDarkMode ? theme.dark : theme.light;
-  const [activeTab, setActiveTab] = useState('auth');
+  const [activeTab, setActiveTab] = useState('main');
 
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
@@ -60,8 +62,6 @@ function index() {
 
     <View className={`flex-1 justify-between items-center ${styles.container}`}>
 
-      {/* {activeTab =='auth' ? <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>
-      : */}
       <View 
       style={{position:'relative'}}
       className='w-full pt-10 flex-1'>
@@ -88,3 +88,18 @@ function index() {
 }
 
 export default index
+
+const styless = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  absolute: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex:1000
+  }
+});

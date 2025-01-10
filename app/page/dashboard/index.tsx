@@ -100,6 +100,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       
 
       <ScrollView
+      showsVerticalScrollIndicator={false}
       ref={scrollViewRef}
       horizontal={true}
       pagingEnabled={true}
@@ -120,12 +121,6 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       </View>
     </ScrollView>
       
-
-
-
-
-
-
 
     </View>
   )

@@ -35,7 +35,9 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
 
 
   return (
-    <ScrollView ref={scrollViewRef} >
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    ref={scrollViewRef} >
     <View className=' flex'>
       <View className='mt-5 flex justify-center items-center'>
         <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
@@ -151,7 +153,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
 
 
     
-
+    <View className='h-32'></View>
   </ScrollView>
   )
 }

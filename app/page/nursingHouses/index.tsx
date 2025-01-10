@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import  TextF  from '../../components/TextF';
-import SearchBar from '../../components/SearchBar';
 import NursingHomeCard from '../../components/NursingHousesCard';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 
 
+  interface Home {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+    location: string;
+    imageUrl: string;
+  }
 
 interface NursingHousesProps{
   isDarkMode: boolean;
@@ -18,11 +25,6 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     setStateNavbar(true);
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query.trim().toLowerCase()); // เก็บข้อความค้นหาในรูปแบบตัวพิมพ์เล็ก
-  };
 
   const favoriteHomes = [
     {
@@ -61,33 +63,61 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       imageUrl: "https://www.thaielder.com/datas/nursinghome/47/preview__ittara_ursing_ome_inklao_ranch_65f2d50dc9df4.jpg",
     },
   ];
+  
+  const [searchQuery, setSearchQuery] = useState<Home[]>([]);
 
-  // ฟังก์ชันกรองข้อมูลตาม searchQuery
-  const filterHomes = (homes: any[]) =>
-    homes.filter((home) => home.name.toLowerCase().includes(searchQuery));
+  const [query, setQuery] = useState('');
 
+
+  useEffect(() => {
+
+    if (query === '') {
+      setSearchQuery(recommendedHomes);
+      return;
+    }else{
+      const filteredHomes = recommendedHomes.filter((home) =>
+      home.name.toLowerCase().includes(query.toLowerCase()) // เปรียบเทียบข้อความแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+    );
+    setSearchQuery(filteredHomes);
+  }
+
+  }, [query]);
+
+  
   return (
-    <View className="flex-1">
-      <View className="flex-row mt-5 ml-5 h-14 items-center">
-        <Text
-          style={{ fontFamily: 'SarabunBold' }}
-          className="text-normalText text-2xl ml-3 h-12 pt-2"
-        >
-          บ้านพักคนชรา
-        </Text>
+    <View className="flex-1 px-5">
+      <View className='flex-row my-3 h-14 items-center'>
+          <Text 
+          style={{ fontFamily: 'SarabunBold'}}
+          className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
       </View>
-      <View className="w-full h-20 mt-4">
-        <SearchBar
-          placeholder="ค้นหาบ้านพักคนชรา"
-          onSearch={handleSearch}
-          isDarkMode={false}
-        />
-      </View>
-      <ScrollView>
-        <View className="mx-5 justify-between flex-row">
-          <TextF className="mt-3 pt-4 text-normalText text-lg">บ้านพักคนชราในแผนของคุณ</TextF>
+      <View className="h-16 mt-4">
+        <View className={`flex flex-row items-center px-4 py-2 rounded-full bg-neutral2 h-14`}>
+          <View 
+          className="mr-2">
+            <Ionicons name="search" size={24} color="#6780D6" />
+          </View>
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder='ค้นหาบ้านพักคนชรา'
+            placeholderTextColor="#6780D6"
+            className="flex-1 text-lg text-normalText pl-2 h-14"
+          />
         </View>
-        {filterHomes(favoriteHomes).map((home, index) => (
+      </View>
+      <ScrollView
+      showsVerticalScrollIndicator={false}>
+        {query === '' &&
+        <>
+        <View className='flex flex-row justify-between items-center'>
+          <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">บ้านพักคนชราในแผนของคุณ</TextF>
+          <View className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
+            <Ionicons name="heart" size={22} color='#fff'/>
+            <TextF className=' text-white'>บ้านพักที่ชื่นชอบ</TextF>
+          </View>
+        </View>
+        {favoriteHomes.map((home, index) => (
           <TouchableOpacity key={index} activeOpacity={1} onPress={() => setActiveTab('detailnursingHouses')}>
             <NursingHomeCard
               id={home.id}
@@ -99,9 +129,10 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
             />
           </TouchableOpacity>
         ))}
-
-        <TextF className="ml-5 mt-8 text-lg text-normalText">บ้านพักคนชราแนะนำ</TextF>
-        {filterHomes(recommendedHomes).map((home, index) => (
+        </>}
+        {query === '' && <TextF className="mt-8 text-lg text-normalText">บ้านพักคนชราแนะนำ</TextF>}
+        <View className='h-8'></View>
+        {searchQuery.map((home, index) => (
           <TouchableOpacity
             key={index}
             activeOpacity={1}
@@ -118,9 +149,10 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               location={home.location}
               imageUrl={home.imageUrl}
             />
-            <View className="flex flex-row items-center px-4 py-4 border-b border-gray-300" />
+            <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
           </TouchableOpacity>
         ))}
+        <View className='h-40'></View>
       </ScrollView>
     </View>
   );
