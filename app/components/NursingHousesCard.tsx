@@ -25,7 +25,7 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
       <View className="w-1/2 aspect-video max-w-52">
         <Image
           source={{ uri: imageUrl }}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-md"
         />
       </View>
       <View className="flex-1 pl-3 justify-between">

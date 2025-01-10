@@ -18,7 +18,8 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
     <>
       <HeadTitle
       setActiveTab={setActiveTab} 
-      title='บทความการเงิน' route='finance'/>
+      title='บทความการเงิน' 
+      onPress={()=>setActiveTab('finance')}/>
       <ScrollView className='flex-1 bg-neutral w-full'>
         <Image 
         source={{ uri: 'https://www.bam.co.th/uploads/images/241011113820rJjr.png' }}

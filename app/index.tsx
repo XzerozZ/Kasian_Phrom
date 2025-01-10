@@ -60,7 +60,7 @@ function index() {
 
   return (
 
-    <View className={`flex-1 justify-between items-center ${styles.container}`}>
+    <>
 
       <View 
       style={{position:'relative'}}
@@ -83,7 +83,7 @@ function index() {
       <View className='w-full'>
         <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab}/>
       </View>}
-    </View>
+    </>
   )
 }
 

@@ -41,8 +41,8 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         <TouchableOpacity 
         activeOpacity={1}
         // onPress={() => router.push('/appSetting')}
-        onPress={() => setActiveTab('appSetting')}
-        // onPress={() => setActiveTab('calRetirement')}
+        // onPress={() => setActiveTab('appSetting')}
+        onPress={() => setActiveTab('calRetirement')}
 
         className='mt-10 items-end pr-2 w-14'>
           <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
@@ -54,8 +54,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         className='w-36 h-36 rounded-full border-primary'>
           <Image 
             source={Logo}
-            style={{objectFit: 'contain'}}
-            className='w-full h-full rounded-full'/>
+            style={{objectFit: 'cover', width: '100%', height: '100%', borderRadius:'100%'}}/>
         </View>
         <View className='flex flex-row gap-2 h-32'>
           <View className='flex justify-between'>
@@ -72,7 +71,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       </View>
       <View className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
         <Ionicons name="heart" size={22} color='#fff'/>
-        <TextF className=' text-white'>บ้านพักที่ชื่นชอบ</TextF>
+        <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
       </View>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className='text-lg text-normalText'>จำนวนเงินสุทธิ</TextF>
@@ -85,7 +84,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>ข้อมูล</TextF>
       </View>
-      <View className='mb-10'>
+      <View className='mb-10 mt-2'>
         {dataProfile.map((data, index) => (
           <View 
           key={index}

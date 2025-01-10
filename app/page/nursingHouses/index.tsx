@@ -86,7 +86,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
   
   return (
     <View className="flex-1 px-5">
-      <View className='flex-row my-3 h-14 items-center'>
+      <View className='flex-row my-3 h-14 items-center '>
           <Text 
           style={{ fontFamily: 'SarabunBold'}}
           className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
@@ -107,6 +107,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         </View>
       </View>
       <ScrollView
+      className='bg-primary'
       showsVerticalScrollIndicator={false}>
         {query === '' &&
         <>
@@ -114,7 +115,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">บ้านพักคนชราในแผนของคุณ</TextF>
           <View className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
             <Ionicons name="heart" size={22} color='#fff'/>
-            <TextF className=' text-white'>บ้านพักที่ชื่นชอบ</TextF>
+            <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
           </View>
         </View>
         {favoriteHomes.map((home, index) => (

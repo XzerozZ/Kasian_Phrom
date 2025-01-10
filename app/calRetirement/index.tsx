@@ -36,9 +36,9 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
   const colorAnim2 = useRef(new Animated.Value(0)).current;
   const colorAnim3 = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    setStateNavbar(false);
-  }, [])
+  // useEffect(() => {
+  //   setStateNavbar(false);
+  // }, [])
 
   useEffect(() => {
     // Animate width whenever the state changes
@@ -141,18 +141,10 @@ const scrollViewRef = useRef<ScrollView>(null);
 
   return (
     <>
-      {state === 1?<HeadTitle setActiveTab={setActiveTab} title='วางแผนชีวิตวัยเกษียณ' route='main'/>
-      :<View className='flex-row mt-3 ml-5 h-14 items-center'>
-          <TouchableOpacity 
-              activeOpacity={1}
-              onPress={()=>setState(state-1)}
-              className=''>
-              <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
-          </TouchableOpacity>
-          <Text 
-          style={{ fontFamily: 'SarabunBold'}}
-          className=' text-normalText text-2xl ml-3 h-12 pt-2'>วางแผนชีวิตวัยเกษียณ</Text>
-      </View>}
+      <HeadTitle 
+      setActiveTab={setActiveTab} 
+      title='วางแผนชีวิตวัยเกษียณ' 
+      onPress={()=> state === 1 ?setActiveTab('main') : setState(state-1) }/>
       <View className='flex-1'>
         <View className='flex mt-5 items-center px-5'>
           {/* <View className='flex flex-row justify-center items-center'> */}

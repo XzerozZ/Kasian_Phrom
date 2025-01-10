@@ -15,12 +15,13 @@ const FinanceCard: React.FC<FinanceCardProps> = ({ id, imgUrl, title, date, onPr
   
   return (
   <>
-    <TouchableOpacity 
-    className="flex-row bg-neutral border border-neutral border-b-neutral2 py-3"
+    <TouchableOpacity
+    activeOpacity={1}
+    className="flex-row bg-neutral py-5"
     onPress={onPress}>
       <Image
         source={{ uri: imgUrl }}
-        className="w-52 h-40 rounded-md border border-neutral2"
+        className="max-w-52 w-1/2 aspect-video rounded-md"
         resizeMode="cover"
       />
       <View className="flex-1 ml-3">
@@ -28,6 +29,7 @@ const FinanceCard: React.FC<FinanceCardProps> = ({ id, imgUrl, title, date, onPr
         <TextF className="text-sm self-end ml-auto text-label mt-auto">{date}</TextF>
       </View>
     </TouchableOpacity>
+    <View className="flex px-4 h-[1] bg-unselectInput" />
   </>
   );
 };

@@ -30,10 +30,10 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
   
     
   return (
-    <View className='justify-between flex-1'>
+    <View className='flex-1 h-screen'>
       <ScrollView 
       showsVerticalScrollIndicator={false}
-      className="flex-1">
+      className="flex-1 bg-primary">
         <View
           style={{
             borderBottomLeftRadius: 30,

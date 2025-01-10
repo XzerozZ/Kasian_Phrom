@@ -61,7 +61,7 @@ const RiskForm: React.FC<RiskFormProps> = ({
       <HeadTitle
         setActiveTab={setActiveTab}
         title="แบบประเมินความเสี่ยง"
-        route="finance"
+        onPress={()=>setActiveTab('finance')}
       />
       <ScrollView
         className="flex-1 bg-neutral w-full"
