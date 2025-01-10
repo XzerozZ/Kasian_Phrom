@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons';
+import TextF from './TextF';
 
 interface NursingHousesCard {
   id: string;
@@ -21,22 +22,21 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
 }) => {
   return (
     <View className="flex flex-row bg-neutral">
-      <Image
-        source={{ uri: imageUrl }}
-        className="w-52 h-32 object-cover"
-        resizeMode="cover"
-      />
-      <View className="flex-1 px-4 justify-between">
-        <View>
-          <Text className="text font-bold text-black">{name}</Text>
-          <Text className="text-xs text-gray-500">{description}</Text>
+      <View className="w-1/2 aspect-video max-w-52">
+        <Image
+          source={{ uri: imageUrl }}
+          className="w-full h-full object-cover"
+        />
+      </View>
+      <View className="flex-1 pl-3 justify-between">
+        <View className=' h-16'>
+          <TextF className="text font-bold text-black">{name}</TextF>
+          <TextF className="text-xs text-gray-500">{description}</TextF>
         </View>
-        <View className="flex-row justify-between items-center pt-2">
-          <Text className="text-green-600 font-semibold">{price}</Text>
-          <View className="flex-row items-center">
-            <Text className="text-sm text-gray-400 ml-1">{location}</Text>
-            <FontAwesome5 name="map-marker-alt" size={12} color="#888" />
-          </View>
+        <TextF className="text-oktext items-center">{price}</TextF>
+        <View className="flex-row items-center w-full justify-end">
+          <TextF className="text-sm text-gray-400 ml-1 ">{location}</TextF>
+          <FontAwesome5 name="map-marker-alt" size={12} color="#888" />
         </View>
       </View>
     </View>
@@ -44,3 +44,4 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
 };
 
 export default NursingHomeCard;
+

@@ -102,3 +102,6 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 }
 
 export default Profile
+
+
+

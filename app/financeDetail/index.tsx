@@ -16,9 +16,8 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
 
   return (
     <>
-      <HeadTitle isDarkMode={isDarkMode} 
+      <HeadTitle
       setActiveTab={setActiveTab} 
-      setStateNavbar={setStateNavbar} 
       title='บทความการเงิน' route='finance'/>
       <ScrollView className='flex-1 bg-neutral w-full'>
         <Image 

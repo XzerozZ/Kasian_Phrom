@@ -118,7 +118,10 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           </View>
         </View>
         {favoriteHomes.map((home, index) => (
-          <TouchableOpacity key={index} activeOpacity={1} onPress={() => setActiveTab('detailnursingHouses')}>
+          <TouchableOpacity 
+          key={index} 
+          activeOpacity={1}
+          onPress={() => setActiveTab('detailnursingHouses')}>
             <NursingHomeCard
               id={home.id}
               name={home.name}
