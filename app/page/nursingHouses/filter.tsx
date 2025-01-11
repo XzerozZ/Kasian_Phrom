@@ -21,8 +21,6 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
     const screenWidth = Dimensions.get('window').width;
     const [search, setSearch] = useState('');
     const [location, setLocation] = useState<string[]>(Province.map((province) => province.Province));
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(100);
     const [stateUp, setStateUp] = useState(true);
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -51,9 +49,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                 useNativeDriver: true,
             }).start();
         }
-        setTimeout(() => {
-            setStateUp(true);
-        }, 1000);
+
     }, [stateFilter]);
 
     useEffect(() => {
@@ -124,7 +120,9 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                     <View className="w-4/5 max-w-[500] h-full bg-neutral shadow flex px-5 ">
                         <View className='mt-10'>
                             <View className='flex-row justify-between items-center'>
-                                <TextF className='text-lg'>เลือกจังหวัดที่คุณต้องการ</TextF>
+                                <Text  
+                                style={{ fontFamily: 'SarabunBold'}}
+                                className='text-lg text-normalText'>เลือกจังหวัดที่คุณต้องการ</Text>
                                 <TouchableOpacity 
                                 id='BtnClearFilter'
                                 activeOpacity={0.8}
@@ -187,7 +185,9 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                             </Animated.View>
                         </View>
                         <View className='mt-10'>
-                            <TextF className='text-lg'>เลือกช่วงราคาที่คุณต้องการ</TextF>
+                            <Text
+                            style={{ fontFamily: 'SarabunBold'}}
+                            className='text-lg text-normalText'>เลือกช่วงราคาที่คุณต้องการ</Text>
                             <View>
                                 <View className='flex mt-4'>
                                     <TextF className='text-lg'>ราคาเริ่มต้น</TextF>
@@ -195,18 +195,19 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                         <TextInput
                                             id='startPrice'
                                             keyboardType='numeric'
-                                            value={minValue.toString()}
-                                            onChangeText={(text) => setMinValue(text === '' ? 0 : parseInt(text))}
+                                            placeholder='ไม่มี'
+                                            value={queryFilter.startPrice}
+                                            onChangeText={(text) => setQueryFilter({ ...queryFilter, startPrice: text })}
                                             onBlur={() => {
                                                 setStateUp(true);
-                                                if (minValue > maxValue) {
-                                                    setMaxValue(minValue);
+                                                if (queryFilter.startPrice > queryFilter.endPrice && queryFilter.endPrice !== '') {
+                                                    setQueryFilter({ ...queryFilter, endPrice : queryFilter.startPrice.toString() });
                                                 }
                                             }}
                                             onFocus={() => {
                                                 setStateUp(false);
                                             }}
-                                            className='w-full h-12 px-3 bg-neutral border border-neutral2 rounded-full'/>
+                                            className='w-full h-12 px-3 bg-neutral border border-neutral2 rounded-full text-center'/>
                                         
                                     </View>
                                 </View>
@@ -216,18 +217,19 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                         <TextInput
                                             id='endPrice'
                                             keyboardType='numeric'
-                                            value={maxValue.toString()}
-                                            onChangeText={(text) => setMaxValue(text === '' ? 0 : parseInt(text))}
+                                            placeholder='ไม่มี'
+                                            value={queryFilter.endPrice}
+                                            onChangeText={(text) => setQueryFilter({ ...queryFilter, endPrice: text })}
                                             onBlur={() => {
                                                 setStateUp(true);
-                                                if (maxValue < minValue) {
-                                                    setMinValue(maxValue);
+                                                if (queryFilter.endPrice < queryFilter.startPrice && queryFilter.startPrice !== '') {
+                                                    setQueryFilter({ ...queryFilter, startPrice : queryFilter.endPrice.toString() });
                                                 }
                                             }}
                                             onFocus={() => {
                                                 setStateUp(false);
                                             }}
-                                            className='w-full h-12 px-3 bg-neutral border border-neutral2 rounded-full'/>
+                                            className='w-full h-12 px-3 bg-neutral border border-neutral2 rounded-full text-center'/>
                                     </View>
                                 </View>
                                 

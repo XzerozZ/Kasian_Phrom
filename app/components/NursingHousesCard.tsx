@@ -35,7 +35,7 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
           <TextF className="text font-bold text-black">{name}</TextF>
           <TextF className="text-xs text-label pb-2">{description}</TextF>
         </View>
-        <TextF className="text-oktext items-center mt-3">{price}</TextF>
+        <TextF className="text-oktext items-center mt-3">{price} บาท/เดือน</TextF>
         <View className="flex-row items-center w-full justify-end">
           <TextF className="text-sm text-label ml-1 ">{location}</TextF>
           <FontAwesome5 name="map-marker-alt" size={12} color="#979797" />
