@@ -45,7 +45,9 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
 
 
   return (
-    <View className='flex-1'>
+    <View 
+    id='CalRetirementState3'
+    className='flex-1'>
       <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
         <View 
         style={{minHeight: 450}}
@@ -56,6 +58,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
           {dataAssetInput.map((data: any, index: number) => {
             return (
               <TouchableOpacity
+                id='AssetCard'
                 activeOpacity={1}
                 key={index}
                 className="flex"
@@ -91,6 +94,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
 
         </View>
         <TouchableWithoutFeedback
+        id='AddAsset'
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={() => setStateFutureUse(true)}
@@ -110,7 +114,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
       </View>
     </View>
 
-    <WideBtn activeOpacity={1} text='ถัดไป' disabled={false} onPress={()=>setState(4)}/>
+    <WideBtn id='BtnNextToState4' activeOpacity={1} text='ถัดไป' disabled={false} onPress={()=>setState(4)}/>
 </View>
   )
 }

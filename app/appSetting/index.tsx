@@ -41,10 +41,16 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
 
     return (
-        <>  
-            <HeadTitle setActiveTab={setActiveTab} title='ตั้งค่า' route='profile'/>
-            <View className='w-full px-5 mt-3 border-b border-unselectMenu'></View>
-            <ScrollView className='flex-1' ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+        <> 
+            <HeadTitle 
+            id='HeadTitleSetting'
+            setActiveTab={setActiveTab} 
+            onPress={() => setActiveTab('profile')}
+            title='ตั้งค่า'/>
+            <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
+            <ScrollView 
+            id='ProfileContainer'
+            className='flex-1' ref={scrollViewRef} showsVerticalScrollIndicator={false}>
                 
                 <View className='px-5'>
                     <View className='flex flex-row justify-between mt-5'>
@@ -52,6 +58,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='flex flex-row mt-8 items-center gap-8'>
                         <View 
+                        id=' BtnSettingChangeImg'
                         style={{position:'relative', borderWidth: 3}}
                         className='w-32 h-32 rounded-full border-primary'>
                             <Image 
@@ -62,6 +69,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <View className='h-32 justify-between pr-5 max-w-56'>
                             <View className='flex flex-row w-full'>
                                 <TextInput
+                                id=' EditInputUserName'
                                 placeholder="ชื่อผู้ใช้"
                                 keyboardType='default'
                                 value={userName}
@@ -73,6 +81,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             </View>
                             <View className='flex flex-row'>
                                 <TextInput
+                                id=' EditInputFristName'
                                 placeholder="ชื่อจริง"
                                 keyboardType='default'
                                 value={fristName}
@@ -84,6 +93,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             </View>
                             <View className='flex flex-row'>
                                 <TextInput
+                                id=' EditInputLastName'
                                 placeholder="สกุล"
                                 keyboardType='default'
                                 value={lastName}
@@ -97,6 +107,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='flex items-end mt-5'>
                         <TouchableOpacity 
+                        id=' BtnSaveProfile'
                         activeOpacity={1}
                         className='w-40 h-10 bg-primary ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2'>
                             <TextF className=' text-white'>บันทึก</TextF>
@@ -115,6 +126,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <TextF className=' text-normalText text-lg'>รีเซ็ตรหัสผ่าน</TextF>
                         <View className='flex gap-8 w-8/12'>
                             <TextInput
+                                id=' EditInputOldPassword'
                                 onFocus={() => {
                                     scrollViewRef.current?.scrollTo({
                                         y: 200,
@@ -127,6 +139,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 onChangeText={setLastName}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                             <TextInput
+                                id=' EditInputNewPassword'
                                 onFocus={() => {
                                     scrollViewRef.current?.scrollTo({
                                         y: 200,
@@ -142,6 +155,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='flex items-end mt-5'>
                         <TouchableOpacity 
+                        id=' BtnChangePassword'
                         activeOpacity={1}
                         className='w-40 h-10 bg-unselectMenu ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2'>
                             <TextF className=' text-white'>เปลี่ยน</TextF>
@@ -164,7 +178,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     }}
                                     renderButton={(selectedItem, isOpened) => {
                                         return (
-                                        <View className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
+                                        <View 
+                                        id='BtnSelectCurrency'
+                                        className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
                                             <TextF className='text-lg pl-5'>
                                             {(selectedItem && selectedItem.title)} 
                                             </TextF>
@@ -196,7 +212,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     }}
                                     renderButton={(selectedItem, isOpened) => {
                                         return (
-                                        <View className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
+                                        <View 
+                                        id='BtnSelectLanguage'
+                                        className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
                                             <TextF className='text-lg pl-5'>
                                             {(selectedItem && selectedItem.title)} 
                                             </TextF>
@@ -220,7 +238,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             <TextF className=' text-normalText text-lg'>ธีม</TextF>
                             <View className='flex flex-row gap-5'>
                                 <TextF className='text-normalText text-lg w-14 text-center'>มืด</TextF>
-                                <View className='flex flex-row gap-5 justify-center items-center'>
+                                <View 
+                                id='BtnChangeTheme'
+                                className='flex flex-row gap-5 justify-center items-center'>
                                     <CheckBox toggle={isDark} setToggle={setIsDark}/>
                                 </View>
                                 <TextF className='text-normalText text-lg w-14 text-center'>สว่าง</TextF>
@@ -230,7 +250,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             <TextF className=' text-normalText text-lg'>แจ้งเตือน</TextF>
                             <View className='flex flex-row gap-5'>
                                 <TextF className='text-normalText text-lg w-14 text-center'>ปิด</TextF>
-                                <View className='flex flex-row gap-5 justify-center items-center'>
+                                <View 
+                                id='BtnChangeNotification'
+                                className='flex flex-row gap-5 justify-center items-center'>
                                     <CheckBox toggle={isNotification} setToggle={setIsNotification}/>
                                 </View>
                                 <TextF className='text-normalText text-lg w-14 text-center'>เปิด</TextF>
@@ -238,7 +260,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         </View>
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
-                    <View className='flex flex-row justify-between my-10 mb-14'>
+                    <View 
+                    id='BtnLogout'
+                    className='flex flex-row justify-between my-10 mb-14'>
                         <TextF className='text-lg text-err'>ออกจากระบบ</TextF>
                     </View>
                 </View>

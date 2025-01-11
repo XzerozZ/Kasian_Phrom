@@ -40,7 +40,9 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView 
+    id='DashboardRecordContainer'
+    showsVerticalScrollIndicator={false}>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
           <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
@@ -58,6 +60,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
         </View>
         {dataHistoryPerMonth.map((data, index) => (
           <View 
+          id='HistoryCard'
           key={index}>
             <View className='px-5 mt-5 mb-10'>
               <View className='flex flex-row justify-between items-center mb-5'>

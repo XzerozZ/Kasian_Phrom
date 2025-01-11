@@ -31,7 +31,9 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
 
 
   return (
-    <View className='flex-1'>
+    <View 
+    id='CalRetirementState2'
+    className='flex-1'>
         <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
           <View className='flex mt-5'>
             <TextF className='text-normalText text-lg mt-5'>เงินออมในปัจจุบัน</TextF>
@@ -42,6 +44,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Current_savingsInput'
                       placeholder='ใส่จำนวนเงิน'
                       value={dataInput.Current_savings}
                       keyboardType="decimal-pad"
@@ -62,6 +65,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Current_savings_returnsInput'
                       value={dataInput.Current_savings_returns}
                       keyboardType='numeric'
                       maxLength={4}
@@ -104,6 +108,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Monthly_incomeInput'
                       placeholder='ใส่จำนวนเงิน'
                       value={dataInput.Monthly_income}
                       keyboardType='numeric'
@@ -128,6 +133,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Monthly_expensesInput'
                       placeholder='ใส่จำนวนเงิน'
                       value={dataInput.Monthly_expenses}
                       keyboardType='numeric'
@@ -159,6 +165,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Current_total_investmentInput'
                       placeholder='ใส่จำนวนเงิน'
                       value={dataInput.Current_total_investment}
                       keyboardType='numeric'
@@ -185,6 +192,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Investment_returnInput'
                       value={dataInput.Investment_return}
                       keyboardType='numeric'
                       maxLength={4}
@@ -233,6 +241,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='Expected_inflationInput'
                       value={dataInput.Expected_inflation}
                       keyboardType='numeric'
                       maxLength={4}
@@ -265,7 +274,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
           </View>
         </View>
 
-        <WideBtn activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={()=>setState(3)}/>
+        <WideBtn id='BtnNextToState3' activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={()=>setState(3)}/>
         <View className='h-20 '></View>
     </View>
   )

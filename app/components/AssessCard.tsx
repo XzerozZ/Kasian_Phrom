@@ -15,15 +15,20 @@ const AssessCard: React.FC<AssessCardProps> = ({ riskId, setActiveTab }) => {
     
     return (
         <>
-        <View className='bg-neutral pb-0 rounded-2xl border border-banner mt-5 mx-5 overflow-hidden'>
+        <View 
+        id='AssessCardContainer'
+        className='bg-neutral pb-0 rounded-2xl border border-banner mt-5 mx-5 overflow-hidden'>
             {selectedRisk ? (
                 <>  
                     <TouchableOpacity 
+                    id='BtnCardSelectedRisk'
                     activeOpacity={1}
                     onPress={() => setActiveTab('assessmentRisk')}>
                         <View className='flex h-32 justify-center gap-1'>
                             <TextF className='text-center text-primary2 text-lg mt-2'>คุณคือผู้ลงทุนประเภท</TextF>
-                            <View className='h-14 justify-center items-center'>
+                            <View 
+                            id=' AssessCardSelectedRisk'
+                            className='h-14 justify-center items-center'>
                                 <Text className={`text-2xl h-14 flex justify-center items-center pt-2`} style={{ color: selectedRisk.textColor, fontFamily: 'SarabunBold' }}>
                                     {selectedRisk.label}
                                 </Text>
@@ -37,6 +42,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ riskId, setActiveTab }) => {
                     </TouchableOpacity>
                  </>):(<>
                     <TouchableOpacity  
+                    id='BtnCardNoRisk'
                     activeOpacity={1}
                         onPress={() => setActiveTab('assessmentRisk')}>
                         <View className='flex h-32 justify-center gap-1 px-5'>

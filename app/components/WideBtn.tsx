@@ -15,6 +15,7 @@ const WideBtn: React.FC<WideBtnProps> = ({ text, disabled, ...props }) => {
 
   return (
     <TouchableOpacity
+      id='WideBtn'
       {...props}
       disabled={disabled} // กำหนด disabled
       className={buttonStyle}

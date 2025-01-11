@@ -36,6 +36,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
 
   return (
     <ScrollView 
+    id='DashboardSavingContainer'
     showsVerticalScrollIndicator={false}
     ref={scrollViewRef} >
     <View className=' flex'>
@@ -66,12 +67,14 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
     </View>
     <View className='flex flex-row justify-center items-center mt-3 w-full px-5'>
       <TouchableOpacity 
+      id='BtnDeposit'
       activeOpacity={1}
       onPress={() => setIsDiposit(true)}
       className={`flex-1 justify-center items-center mt-5 p-3 rounded-l-xl shadow-sm ${isDiposit?'bg-primary':'bg-unselectInput'}`}>
         <TextF className={`text-lg ${isDiposit?'text-white':'text-primary'}`}>ฝากเงิน</TextF>
       </TouchableOpacity>
       <TouchableOpacity 
+      id='BtnWithdraw'
       activeOpacity={1}
       onPress={() => setIsDiposit(false)}
       className={`flex-1 justify-center items-center mt-5 p-3 rounded-r-xl shadow-sm ${!isDiposit?'bg-err':' bg-unselectInput'}`}>
@@ -92,7 +95,9 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
           }}
           renderButton={(selectedItem, isOpened) => {
             return (
-              <View className='flex flex-row justify-between items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-10/12'>
+              <View 
+              id='BtnSelectSavingType'
+              className='flex flex-row justify-between items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-10/12'>
                 <TextF className='text-lg pr-5'>
                   {(selectedItem && selectedItem.title)} 
                 </TextF>
@@ -114,6 +119,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
     </View>
     <View>
         <TextInput
+            id='InputAmount'
             onFocus={() => {
               scrollViewRef.current?.scrollTo({
                   y: 300,
@@ -128,6 +134,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
 
 
         <TouchableOpacity 
+        id='BtnConfirm'
         activeOpacity={1}
         className={`mt-5 mx-5 p-3 rounded-xl shadow-sm flex justify-center items-center h-14 ${amount == '' ?' bg-unselectMenu' :' bg-primary'}`}
         onPress={handleConfirm} >
@@ -137,13 +144,15 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
     </View>
     <View className='flex justify-center my-10 px-5'>
         <TextF className=' text-label'>ปรับแผน</TextF>
-        <View className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-unselectMenu rounded-xl shadow-sm'>
+        <TouchableOpacity 
+        id='BtnAdjustPlan'
+        className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-unselectMenu rounded-xl shadow-sm'>
             <TextF className='text-lg'>ปรับแผนการเกษียณ</TextF>
             <View className='flex flex-row gap-1'>
                 <TextF className='text-accent'>แก้ไขข้อมูล</TextF>
                 <FontAwesome6 name="caret-right" size={20} color='#F68D2B'/>
             </View>
-        </View>
+        </TouchableOpacity>
     </View>
 
 

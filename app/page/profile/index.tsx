@@ -35,14 +35,16 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
   
   return (
     <ScrollView 
+    id='ProfileContainer'
     showsVerticalScrollIndicator={false}
     className='flex-1 px-5'>
       <View className='flex items-end'>
         <TouchableOpacity 
+        id='BtnSetting'
         activeOpacity={1}
         // onPress={() => router.push('/appSetting')}
-        // onPress={() => setActiveTab('appSetting')}
-        onPress={() => setActiveTab('calRetirement')}
+        onPress={() => setActiveTab('appSetting')}
+        // onPress={() => setActiveTab('calRetirement')}
 
         className='mt-10 items-end pr-2 w-14'>
           <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
@@ -69,10 +71,14 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           </View>
         </View>
       </View>
-      <View className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
+      <TouchableOpacity 
+      id='BtnFavorite'
+      activeOpacity={1}
+      // onPress={() => router.push('/favorite')}
+      className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
         <Ionicons name="heart" size={22} color='#fff'/>
         <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
-      </View>
+      </TouchableOpacity>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className='text-lg text-normalText'>จำนวนเงินสุทธิ</TextF>
         <TextF className='text-lg text-normalText'>152,600 บาท</TextF>

@@ -197,7 +197,9 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView 
+    id='DashboardReportContainer'
+    showsVerticalScrollIndicator={false}>
         <View className=' flex'>
           <View className='mt-5 flex justify-center items-center'>
             <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
@@ -255,6 +257,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
           <View className="px-5 mt-3">
             <View className="flex flex-row justify-end items-center">
               <TouchableOpacity
+                id='BtnPartOfMoney'
                 onPress={toggleDropdown}
                 activeOpacity={1}
                 className="flex flex-row justify-end items-center gap-2 pl-2 py-2">
@@ -275,7 +278,10 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                 <View className="mt-1 gap-3">
                   {/* <View className="border-t border-unselectInput mb-3"></View> */}
                   {dataPart.map((item, index) => (
-                    <View key={index} className="flex flex-row justify-between items-center px-5">
+                    <View 
+                    id={'PartOfMoney'+item.title}
+                    key={index} 
+                    className="flex flex-row justify-between items-center px-5">
                       <View className="flex flex-row items-center gap-2">
                         <TextF className="text-normalText text-lg ml-2">{item.title} </TextF>
                       </View>
@@ -298,11 +304,15 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
             </View>
             {/* ------------------------------------------------------------ */}
             <ScrollView 
+              id='ScrollViewDetail'
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               className='flex flex-row h-36 mt-3'>
                 {dataDetail.map((item, index) => (
-                  <View key={index} className='flex w-52 h-32 rounded-xl border border-neutral2 shadow-sm bg-neutral p-3 justify-between mr-3'>
+                  <View 
+                  id={'Detail'+item.title}
+                  key={index} 
+                  className='flex w-52 h-32 rounded-xl border border-neutral2 shadow-sm bg-neutral p-3 justify-between mr-3'>
                     <View className='flex flex-row justify-between items-center'>
                       <View className='flex flex-row gap-2'>
                         <FontAwesome6 name='house-chimney' size={18} color='#070F2D'/>
@@ -330,16 +340,17 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
               <TextF className='text-label'>บ้านพักคนชรา</TextF>
             </View>
             <View className='flex mx-5 rounded-xl shadow-sm mt-3'>
-              <View className='flex w-full h-40 bg-stone-200 rounded-t-xl'>
+              <View 
+              id='NursingHouseSelect'
+              className='flex w-full h-40 bg-stone-200 rounded-t-xl overflow-hidden'>
                   {/* รูปบ้านพัก */}
                   <Image
                     source={{
                       uri: 'https://www.mylucknursinghome.com/media/cache/strip/202410/image-gallery/fffd2aab123267ff6a989b5051540d81.jpeg',
                     }}
-                    className='w-full h-full rounded-t-xl'
+                    className='w-full h-full '
                   />
               </View>
-
               <View className='flex w-full h-32 bg-neutral rounded-b-xl px-3 justify-around py-2'>
                 <Text
                   className='text-normalText text-lg'
@@ -398,9 +409,12 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
                   </View>
                 ))}
               </View>
-              <View>
+              <View id='TableContainer' >
               {dataTable.map((item, index) => (
-                <View key={index} className={`h-12 flex flex-row justify-between items-center ${index % 2 == 1 ? ' bg-gray-200' : 'bg-neutral'}`}>
+                <View 
+                id={'Table'+item.age + item.saving + item.retire + item.house + item.car + item.total + item.retireUse}
+                key={index} 
+                className={`h-12 flex flex-row justify-between items-center ${index % 2 == 1 ? ' bg-gray-200' : 'bg-neutral'}`}>
                   <View className='flex flex-col justify-center items-center w-20 px-2'>
                     <TextF className='text-normalText text-center'>{item.age}</TextF>
                   </View>

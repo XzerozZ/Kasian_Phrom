@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import  TextF  from '../../components/TextF';
 import NursingHomeCard from '../../components/NursingHousesCard';
-import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import Filter from './filter';
 
 
   interface Home {
@@ -68,6 +69,12 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
 
   const [query, setQuery] = useState('');
 
+  const [stateFilter, setStateFilter] = useState(false);
+  const [queryFilter, setQueryFilter] = useState({
+    startPrice: '',
+    endPrice: '',
+    location: [] as string[],
+  });
 
   useEffect(() => {
 
@@ -85,80 +92,98 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
 
   
   return (
-    <View className="flex-1 px-5">
-      <View className='flex-row my-3 h-14 items-center '>
-          <Text 
-          style={{ fontFamily: 'SarabunBold'}}
-          className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
-      </View>
-      <View className="h-16 mt-4">
-        <View className={`flex flex-row items-center px-4 py-2 rounded-full bg-neutral2 h-14`}>
-          <View 
-          className="mr-2">
-            <Ionicons name="search" size={24} color="#6780D6" />
-          </View>
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder='ค้นหาบ้านพักคนชรา'
-            placeholderTextColor="#6780D6"
-            className="flex-1 text-lg text-normalText pl-2 h-14"
-          />
-        </View>
-      </View>
-      <ScrollView
-      className='bg-primary'
-      showsVerticalScrollIndicator={false}>
-        {query === '' &&
-        <>
-        <View className='flex flex-row justify-between items-center'>
-          <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">บ้านพักคนชราในแผนของคุณ</TextF>
-          <View className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
-            <Ionicons name="heart" size={22} color='#fff'/>
-            <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
-          </View>
-        </View>
-        {favoriteHomes.map((home, index) => (
-          <TouchableOpacity 
-          key={index} 
-          activeOpacity={1}
-          onPress={() => setActiveTab('detailnursingHouses')}>
-            <NursingHomeCard
-              id={home.id}
-              name={home.name}
-              description={home.description}
-              price={home.price}
-              location={home.location}
-              imageUrl={home.imageUrl}
-            />
-          </TouchableOpacity>
-        ))}
-        </>}
-        {query === '' && <TextF className="mt-8 text-lg text-normalText">บ้านพักคนชราแนะนำ</TextF>}
-        <View className='h-8'></View>
-        {searchQuery.map((home, index) => (
-          <TouchableOpacity
-            key={index}
+    <View 
+    style={{position: 'relative'}}
+    id='NursingHousesContainer'
+    className="flex-1">
+      {stateFilter && <Filter stateFilter={stateFilter} setStateFilter={setStateFilter} queryFilter={queryFilter} setQueryFilter={setQueryFilter}/>}
+      <View className="flex-1 px-5">
+        <View className='flex-row my-3 h-14 items-center justify-between'>
+            <Text 
+            style={{ fontFamily: 'SarabunBold'}}
+            className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
+            <TouchableOpacity
+            id='BtnFilter'
             activeOpacity={1}
-            onPress={() => {
-              setActiveTab('detailnursingHouses');
-              setSelectedHome(home.id);
-            }}
-          >
-            <NursingHomeCard
-              id={home.id}
-              name={home.name}
-              description={home.description}
-              price={home.price}
-              location={home.location}
-              imageUrl={home.imageUrl}
+            onPress={() => setStateFilter(!stateFilter)}
+            className='w-14 h-14 items-center justify-center'>
+              <Feather name="sliders" size={32} color='#B0B0B0'/>
+            </TouchableOpacity>
+        </View>
+        <View className="h-16 mt-4">
+          <View className={`flex flex-row items-center px-4 py-2 rounded-full bg-neutral2 h-14`}>
+            <View 
+            className="mr-2">
+              <Ionicons name="search" size={24} color="#6780D6" />
+            </View>
+            <TextInput
+              id='searchInputNursingHouses'
+              value={query}
+              onChangeText={setQuery}
+              placeholder='ค้นหาบ้านพักคนชรา'
+              placeholderTextColor="#6780D6"
+              className="flex-1 text-lg text-normalText pl-2 h-14"
             />
-            <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
-          </TouchableOpacity>
-        ))}
-        <View className='h-40'></View>
-      </ScrollView>
+          </View>
+        </View>
+        <ScrollView
+        showsVerticalScrollIndicator={false}>
+          {query === '' &&
+          <>
+          <View className='flex flex-row justify-between items-center'>
+            <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">บ้านพักคนชราในแผนของคุณ</TextF>
+            <TouchableOpacity 
+            id='BtnFavorite'
+            className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
+              <Ionicons name="heart" size={22} color='#fff'/>
+              <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
+            </TouchableOpacity>
+          </View>
+          {favoriteHomes.map((home, index) => (
+            <TouchableOpacity 
+            id='favoriteNursingHomes'
+            key={index} 
+            activeOpacity={1}
+            onPress={() => setActiveTab('detailnursingHouses')}>
+              <NursingHomeCard
+                id={home.id}
+                name={home.name}
+                description={home.description}
+                price={home.price}
+                location={home.location}
+                imageUrl={home.imageUrl}
+              />
+            </TouchableOpacity>
+          ))}
+          </>}
+          {query === '' && <TextF className="mt-8 text-lg text-normalText">บ้านพักคนชราแนะนำ</TextF>}
+          <View className='h-8'></View>
+          {searchQuery.map((home, index) => (
+            <TouchableOpacity
+              id='recommendNursingHomes'
+              key={index}
+              activeOpacity={1}
+              onPress={() => {
+                setActiveTab('detailnursingHouses');
+                setSelectedHome(home.id);
+              }}
+            >
+              <NursingHomeCard
+                id={home.id}
+                name={home.name}
+                description={home.description}
+                price={home.price}
+                location={home.location}
+                imageUrl={home.imageUrl}
+              />
+              <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
+            </TouchableOpacity>
+          ))}
+          <View className='h-40'></View>
+        </ScrollView>
+      </View>
     </View>
+    
   );
 };
 

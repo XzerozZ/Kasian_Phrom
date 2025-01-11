@@ -82,7 +82,9 @@ const CustomGraph = () => {
 
 
     return (
-      <View className='flex justify-center items-center rounded-3xl' style={{position: 'relative'}}>
+      <View 
+      id='CustomGraphContainer'
+      className='flex justify-center items-center rounded-3xl' style={{position: 'relative'}}>
         <LineChart
         
           data={data}
@@ -124,7 +126,9 @@ const CustomGraph = () => {
               }}
               renderButton={(selectedItem, isOpened) => {
                 return (
-                  <View className='flex flex-row justify-end items-center w-20'>
+                  <View 
+                  id='SelectYear'
+                  className='flex flex-row justify-end items-center w-20'>
                     <TextF className='pr-1'>
                       {(selectedItem && selectedItem.title)} 
                     </TextF>

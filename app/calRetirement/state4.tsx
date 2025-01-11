@@ -62,7 +62,9 @@ const handelSaveData = () => {
 
 
   return (
-    <View className='flex-1'>
+    <View 
+    id='CalRetirementState4'
+    className='flex-1'>
       <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
           <View className='flex mt-5'>
             <TextF className='text-normalText text-lg mt-5'>ข้อมูลการเงินที่คาดหวังในอนาคต</TextF>
@@ -73,6 +75,7 @@ const handelSaveData = () => {
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='ExpectedMonthlyExpensesInput'
                       placeholder='ใส่จำนวนเงิน'
                       value={dataInput.Expected_monthly_expenses}
                       keyboardType='numeric'
@@ -93,6 +96,7 @@ const handelSaveData = () => {
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='AnnualExpenseIncreaseInput'
                       value={dataInput.Annual_expense_increase}
                       keyboardType='numeric'
                       maxLength={4}
@@ -124,6 +128,7 @@ const handelSaveData = () => {
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='AnnualSavingsReturnInput'
                       value={dataInput.Annual_savings_return}
                       keyboardType='numeric'
                       maxLength={4}
@@ -155,6 +160,7 @@ const handelSaveData = () => {
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='AnnualInvestmentReturnInput'
                       value={dataInput.Annual_investment_return}
                       keyboardType='numeric'
                       maxLength={4}
@@ -184,6 +190,7 @@ const handelSaveData = () => {
             <View
             className=' h-14 flex flex-row justify-center items-center mb-5 gap-5 mt-5'>
               <TouchableOpacity
+              id='OwnHouseBtn'
               activeOpacity={1}
               onPress={() => setFutureHouses('ownHouse')}
               className={`flex-1 h-14 rounded-lg justify-center items-center flex-row gap-3 ${futureHouses == 'ownHouse' ? 'bg-primary':'bg-neutral'}`}>
@@ -191,6 +198,7 @@ const handelSaveData = () => {
                 <TextF className={`text-lg ${futureHouses  == 'ownHouse' ? 'text-neutral':'text-primary'}`}>บ้านตนเอง</TextF>
               </TouchableOpacity>
               <TouchableOpacity 
+              id='NursingHousesBtn'
               activeOpacity={1}
               onPress={() => setFutureHouses('nursingHouses')}
               className={`flex-1 h-14 rounded-lg justify-center items-center flex-row gap-3 ${futureHouses == 'nursingHouses' ? 'bg-primary':'bg-neutral'}`}>
@@ -202,7 +210,7 @@ const handelSaveData = () => {
           {futureHouses == 'nursingHouses' && <View className='h-20 '></View>}
     </View>
     <View className='h-5 '></View>
-    <WideBtn activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={handelSaveData}/>
+    <WideBtn id='saveCalRetirementData' activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={handelSaveData}/>
   </View>
   )
 }

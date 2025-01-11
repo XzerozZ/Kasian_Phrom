@@ -16,6 +16,7 @@ const FinanceCard: React.FC<FinanceCardProps> = ({ id, imgUrl, title, date, onPr
   return (
   <>
     <TouchableOpacity
+    id='FinanceCard'
     activeOpacity={1}
     className="flex-row bg-neutral py-5"
     onPress={onPress}>

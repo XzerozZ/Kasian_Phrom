@@ -21,7 +21,9 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
   imageUrl,
 }) => {
   return (
-    <View className="flex flex-row bg-neutral">
+    <View 
+    id={'NursingHomeCardContainer'+id}
+    className="flex flex-row bg-neutral">
       <View className="w-1/2 aspect-video max-w-52">
         <Image
           source={{ uri: imageUrl }}
@@ -31,12 +33,12 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
       <View className="flex-1 pl-3 justify-between">
         <View className=' h-16'>
           <TextF className="text font-bold text-black">{name}</TextF>
-          <TextF className="text-xs text-gray-500">{description}</TextF>
+          <TextF className="text-xs text-label pb-2">{description}</TextF>
         </View>
-        <TextF className="text-oktext items-center">{price}</TextF>
+        <TextF className="text-oktext items-center mt-3">{price}</TextF>
         <View className="flex-row items-center w-full justify-end">
-          <TextF className="text-sm text-gray-400 ml-1 ">{location}</TextF>
-          <FontAwesome5 name="map-marker-alt" size={12} color="#888" />
+          <TextF className="text-sm text-label ml-1 ">{location}</TextF>
+          <FontAwesome5 name="map-marker-alt" size={12} color="#979797" />
         </View>
       </View>
     </View>

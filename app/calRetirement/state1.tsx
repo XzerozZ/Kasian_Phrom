@@ -85,12 +85,15 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
 
 
   return (
-    <View className='flex-1'>
+    <View 
+    id='CalRetirementState1'
+    className='flex-1'>
         <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
           <View className='flex mt-5'>
             <TextF className='text-normalText text-lg mt-5'>ชื่อแผน</TextF>
             <View className='h-16 px-3 mt-5 bg-neutral rounded-xl flex justify-center'>
               <TextInput
+              id='NameInput' 
               placeholder="ชื่อแผน"
               value={dataInput.Name}
               onChangeText={(text) => setDataInput({ ...dataInput, Name: text })}
@@ -104,6 +107,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <TextF className='text-lg text-normalText'>วัน/เดือน/ปีเกิดของคุณ</TextF>
                 <View className=' flex flex-row justify-center items-center'>
                     <TextInput
+                      id='BirthDateInput' 
                       placeholder="วัน"
                       value={subDate.day}
                       keyboardType='numeric'
@@ -117,6 +121,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       className={` w-8 text-center text-primary`}/>
                       <TextF className='text-lg text-primary'>/</TextF>
                       <TextInput
+                        id='BirthMonthInput' 
                         placeholder="เดือน"
                         value={subDate.month}
                         keyboardType="numeric"
@@ -132,6 +137,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                         className={` w-10 text-center text-primary`}/>
                       <TextF className='text-lg text-primary'>/</TextF>
                       <TextInput
+                      id='BirthYearInput'
                       placeholder="ปี"
                       value={subDate.year}
                       keyboardType='numeric'
@@ -147,10 +153,12 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       }}
                       className={` w-12 text-center text-primary`}/>
                   <TouchableOpacity 
+                    id='BtnDatePicker'
                   onPress={() => setPickerVisible(true)} className='ml-2 flex justify-center items-center'>
                     <FontAwesome6 name="calendar-days" size={22} color={`${subDate.day && subDate.month && subDate.year ?'#2A4296':'#B0B0B0'}`}/>
                   </TouchableOpacity>
                   <DateTimePickerModal
+                    id='DatePicker' 
                     isVisible={isPickerVisible}
                     mode="date"
                     onConfirm={handleConfirm}
@@ -170,6 +178,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='RetirementAgeInput'
                       defaultValue='65'
                       value={dataInput.Retirement_age}
                       keyboardType='numeric'
@@ -196,6 +205,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
+                      id='ExpLifespanInput'
                       value={dataInput.Exp_lifespan}
                       keyboardType='numeric'
                       maxLength={3}
@@ -216,7 +226,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
           </View>
         </View>
 
-        <WideBtn activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={()=>setState(2)}/>
+        <WideBtn id='BtnNextToState2' activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={()=>setState(2)}/>
     </View>
   )
 }

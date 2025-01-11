@@ -61,16 +61,21 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
 
 
   return (
-    <View className='flex-1'>
+    <View 
+    id='DashboardContainer'
+    className='flex-1'>
       <View className="w-full flex flex-row justify-between items-center h-24 px-6 border-b border-neutral2">
         <TouchableOpacity 
+        id='BtnLeftDashboard'
         onPress={handleChangePageL}
         activeOpacity={1}
         className=' w-20'>
 
           <FontAwesome6 name="angle-left" size={25} color={page== 0 ?'#C8D4FF':'#6780D6'}/>
         </TouchableOpacity>
-        <View className='gap-2'>
+        <View 
+        id='DashboardTitle'
+        className='gap-2'>
           <TextF  className="text-xl font-bold">
             {page == 0 ? 'บันทึกการออม' : page == 1 ? 'รายงานความคืบหน้า' : 'ประวัติการออม'}
           </TextF>
@@ -89,6 +94,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
           </View>
         </View>
         <TouchableOpacity
+        id='BtnRightDashboard'
         onPress={handleChangePageR}
         activeOpacity={1}
         className=' w-20 flex items-end'>

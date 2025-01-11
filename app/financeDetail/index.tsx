@@ -17,15 +17,21 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
   return (
     <>
       <HeadTitle
+      id='FinanceDetailHeadTitle'
       setActiveTab={setActiveTab} 
       title='บทความการเงิน' 
       onPress={()=>setActiveTab('finance')}/>
-      <ScrollView className='flex-1 bg-neutral w-full'>
-        <Image 
-        source={{ uri: 'https://www.bam.co.th/uploads/images/241011113820rJjr.png' }}
-        className="self-center rounded-md border border-neutral2"
-        style={{width: 372, height: 206}}
-        resizeMode="cover"/>
+      <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
+      <ScrollView 
+      id='FinanceDetailContainer'
+      className='flex-1 bg-neutral pb-10'>
+        <View className='flex items-center justify-center'>
+          <Image 
+          source={{ uri: 'https://www.bam.co.th/uploads/images/2410111103296Axh.png' }}
+          className='w-full aspect-video object-cover'/>
+        </View>
+
+
         <Text className='text-2xl text-normalText mt-5 mx-8' style={{fontFamily: 'SarabunBold'}}>วิเคราะห์การสร้างเข็มทิศการลงทุนด้วย Goal Based Investing</Text>
         <TextF className='text-label mx-8 mt-2 mb-5'>12/10/2567</TextF>
         <TextF className='text-lg text-normalText mx-8'>      เมื่อสนใจเริ่มต้นลงทุน แต่อาจมีคำถามว่า “เราจะลงทุนใน

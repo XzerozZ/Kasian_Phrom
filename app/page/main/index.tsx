@@ -30,10 +30,12 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
   
     
   return (
-    <View className='flex-1 h-screen'>
+    <View 
+    id='mainContainer'
+    className='flex-1'>
       <ScrollView 
       showsVerticalScrollIndicator={false}
-      className="flex-1 bg-primary">
+      className="flex-1">
         <View
           style={{
             borderBottomLeftRadius: 30,
@@ -58,6 +60,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
               <Image source={Logo} style={styles_pic.logo} />
               <View className='mr-7 mt-3'>
                 <TouchableOpacity 
+                  id='BtnNotification'
                   activeOpacity={1}
                   onPress={()=>setActiveTab('notification')}
                   className=''>
@@ -80,6 +83,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
                 <TextF className='text-lg text-normalText'>บาท</TextF>
               </View>
               <TouchableOpacity
+              id='BtnDashboard'
               activeOpacity={1}
               onPress={() => setActiveTab('dashboard')}>
                 <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน 
@@ -94,6 +98,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
           <View className=" flex-row justify-between mt-5">
             {menu.slice(0, 4).map((item, index) => (
               <TouchableOpacity
+                id={'Btn'+item.tag} // BtnnursingHouses Btnfinance BtnassessmentRisk BtncalRetirement
                 key={index}
                 activeOpacity={1}
                 className="w-[25%] items-center"
@@ -109,6 +114,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
           <View className=" flex-row mt-5">
             {menu.slice(4).map((item, index) => (
               <TouchableOpacity
+                id={'Btn'+item.tag}
                 key={index + 4}
                 activeOpacity={1}
                 className="w-[25%] items-center"
@@ -123,16 +129,19 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
           </View>
 
           <View className='flex-row justify-between mt-8'>
-            <TextF className='text-normalText text-lg'>บ้านพักคนชราแนะนำ</TextF>
+            <TextF className='text-normalText text-lg pt-1'>บ้านพักคนชราแนะนำ</TextF>
             <TouchableOpacity 
+              id='BtnAllNursingHouses'
               activeOpacity={1} 
               onPress={() => setActiveTab('nursingHouses')}
               className='flex-row items-center'>
-              <TextF className=" text-primary">ดูทั้งหมด</TextF>
+              <TextF className=" text-primary h-10 pt-2">ดูทั้งหมด</TextF>
             </TouchableOpacity>
 
           </View>
-          <View className='flex-row'>
+          <View 
+          id='recommendNursingHouses'
+          className='flex-row'>
             <ScrollView 
             horizontal={true}
             className='mt-5 h-[130]'> 
@@ -163,9 +172,7 @@ const styles_pic = StyleSheet.create({
   image: {
     width: 180,
     height: 120,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "#3498db",
+    borderRadius: 13,
     marginRight: 15,
   },
   logo: {

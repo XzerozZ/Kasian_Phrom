@@ -38,6 +38,7 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
 
   return (
     <View 
+    id=' LoadingPageContainer'
     style={outStyles.loadingPage}
     className={`flex-1 justify-center items-center h-screen gap-5 bg-bgAuth`}>
       {/* <View className={stateLogo?'w-full flex items-center gap-5 duration-1000':'w-auto flex items-center gap-5 opacity-0 duration-1000'}>

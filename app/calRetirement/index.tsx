@@ -24,9 +24,10 @@ import FutureUse from './futureUse';
 interface CalRetirementProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
+  activeTab: string;
   setStateNavbar: (state: boolean) => void;
 }
-const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar }) => {
 
   const [box1Width, setBox1Width] = useState(0);
   const [state, setState] = useState(1);
@@ -36,9 +37,9 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
   const colorAnim2 = useRef(new Animated.Value(0)).current;
   const colorAnim3 = useRef(new Animated.Value(0)).current;
 
-  // useEffect(() => {
-  //   setStateNavbar(false);
-  // }, [])
+  useEffect(() => {
+    setStateNavbar(false);
+  }, [])
 
   useEffect(() => {
     // Animate width whenever the state changes
@@ -136,23 +137,30 @@ const [dataAssetInput, setDataAssetInput] = useState([{
 const scrollViewRef = useRef<ScrollView>(null);
 
 
-
-
+const handleBack = () => {
+  if(state === 1){
+    setActiveTab('main')
+  }else{
+    setState(state-1)
+  }
+}
+const isRounded = (activeTab === 'calRetirement'); 
 
   return (
     <>
       <HeadTitle 
+      id='CalRetirementHeadTitle'
       setActiveTab={setActiveTab} 
       title='วางแผนชีวิตวัยเกษียณ' 
-      onPress={()=> state === 1 ?setActiveTab('main') : setState(state-1) }/>
+      onPress={handleBack}/>
       <View className='flex-1'>
         <View className='flex mt-5 items-center px-5'>
           {/* <View className='flex flex-row justify-center items-center'> */}
           <View 
+          id='CalRetirementStep' 
           style={{position: 'relative'}}
           className='flex w-10/12'>
             <View 
-            id='box1' 
             onLayout={handleLayout}
             className='flex flex-row justify-between items-center w-full'>
               <View 
@@ -174,7 +182,7 @@ const scrollViewRef = useRef<ScrollView>(null);
             // className={`${state === 1 ?'w-0':state === 2 ? 'w-4/12' : state === 3 ? 'w-8/12' : 'w-12/12'}`}
             >
 
-              <View id='box2' 
+              <View 
               style={{overflow: 'hidden', width: box1Width,}}
               className='flex flex-row justify-between items-center w-full shrink-0'>
                 <View 
@@ -189,16 +197,18 @@ const scrollViewRef = useRef<ScrollView>(null);
           </View>
         </View>
 
-        <ScrollView 
-        ref={scrollViewRef} 
-        className='flex-1 mt-10 rounded-t-3xl'>
-          {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
-          {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
-          {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput}/>}
-          {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
-          
-        </ScrollView>
-
+        <View className='flex-1 mt-10 rounded-t-3xl overflow-hidden'>
+          <ScrollView
+          id='CalRetirementContainer' 
+          ref={scrollViewRef}
+          className={`flex-1`}>
+            {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
+            {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
+            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput}/>}
+            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
+            
+          </ScrollView>
+        </View>
       </View>
       {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput}/>}
     </>

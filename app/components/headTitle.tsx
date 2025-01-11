@@ -14,8 +14,11 @@ const headTitle: React.FC<headTitleProps> = ({ setActiveTab, title, ...prop }) =
 
     return (
         <>
-        <View className='flex-row mt-3 ml-5 h-14 items-center'>
+        <View 
+        id=' headTitleContainer'
+        className='flex-row mt-3 ml-5 h-14 items-center'>
             <TouchableOpacity
+                id='BtnBack'
                 activeOpacity={1}
                 {...prop}
                 className=''>

@@ -70,10 +70,12 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
   return (
     <View 
+    id='CalRetirementFutureUse'
     style={{ position : 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'white' }}
     className='flex-1 pt-10'>
       <View className='flex-row mt-3 ml-5 h-14 items-center'>
           <TouchableOpacity
+              id='BtnBackToCalRetirementState3'
               activeOpacity={1}
               onPress={()=>setStateFutureUse(false)}
               className=''>
@@ -87,13 +89,16 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
 
 
-      <ScrollView ref={scrollViewRef} >
+      <ScrollView 
+      id='ScrollViewFutureUse'
+      ref={scrollViewRef} >
         <View className='flex px-5 mt-8 items-center'>
           <TextF className='text-primary'>วางแผนว่าในอนาคตจะใช้เงินกับอะไรเท่าไหร่?</TextF>
         </View>
         <View className='flex px-8 mt-5'>
           <View className='w-18 flex flex-row items-center'>
               <TextInput
+                id='InputNameFutureUse'
                 placeholder="ชื่อทรัพย์สิน"
                 value={newDataAssetInput.Name}
                 onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Name: text})}
@@ -113,6 +118,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
                   <TextInput
+                    id='InputTotalMoneyFutureUse'
                     placeholder='จำนวนเงิน'
                     keyboardType='numeric'
                     value={newDataAssetInput.Total_money}
@@ -134,6 +140,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
                 <TextInput
+                  id='InputEndYearFutureUse'
                   placeholder="ใส่ปีที่จะใช้"
                   maxLength={4}
                   keyboardType="numeric"
@@ -178,6 +185,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
               {categories.slice(0, 6).map((category) => (
                 <TouchableOpacity
+                  id={'BtnCategory'+category.tag}
                   key={category.id}
                   activeOpacity={1}
                   onPress={() => setNewDataAssetInput({ ...newDataAssetInput, type: category.tag })}
@@ -199,6 +207,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
               ))}
 
               <TouchableOpacity 
+                id='BtnCategoryMore'
                 activeOpacity={1}
                 onPress={() => setNewDataAssetInput({ ...newDataAssetInput, type: type})}
                 className="flex-row items-center p-2 w-full h-[60]  pl-5">
@@ -206,6 +215,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                   {isMore && <View className="w-[10] h-[10] rounded-full bg-accent" />}
                 </View>
                 <TextInput
+                  id='InputCategoryMore'
                   placeholder="อื่นๆ"
                   className="ml-2 border-b-[1px] border-neutral2 flex-1 h-10 mr-5"
                   value={type}
@@ -227,11 +237,13 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
         <View
         className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none'>
           <TouchableOpacity
+          id='BtnCancelFutureUse'
           onPress={()=>setStateFutureUse(false)}
           className='flex-1 h-14 rounded-lg border border-err justify-center items-center'>
             <TextF className='text-err text-lg'>ยกเลิก</TextF>
           </TouchableOpacity>
           <TouchableOpacity 
+          id='BtnSaveFutureUse'
           onPress={ isFully ? handleSave : () => {}}
           className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>บันทึก</TextF>

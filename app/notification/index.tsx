@@ -30,14 +30,19 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
         setStateNavbar(false)
       },[]);
   return (
-    <View className="flex-1">
+    <View 
+    id='NotificationContainer'
+    className="flex-1">
       {/* Header */}
-      <View className="flex flex-row items-center px-4 py-4 mt-6 border-b border-gray-300">
+      <View 
+      id='NotificationHeader'
+      className="flex flex-row items-center px-4 py-4 mt-6 border-b border-gray-300">
         <TouchableOpacity 
-                        activeOpacity={1}
-                        onPress={()=>setActiveTab('main')}
-                        className=''>
-                        <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
+          id='BtnNotiBack'
+          activeOpacity={1}
+          onPress={()=>setActiveTab('main')}
+          className=''>
+          <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
         </TouchableOpacity>
         <Text
         style={{ fontFamily: 'SarabunBold' }}
@@ -50,7 +55,7 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
         {notifications.map((notification) => (
           <View
             key={notification.id}
-            className={`flex flex-row p-4 mb-4 rounded-lg border border-neutral2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]`}>
+            className={`flex flex-row p-4 mb-4 rounded-lg border border-neutral2 bg-neutral shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]`}>
             <View
               className="w-3 h-3 rounded-full mr-4 mt-2"
               style={{
