@@ -46,6 +46,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
                 keyboardType='default'
                 value={username}
                 onChangeText={setUsername}
+                // placeholderTextColor='#C9C9C9'
                 className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
           className='w-10 h-12 items-center justify-center mt-5'

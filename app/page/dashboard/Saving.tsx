@@ -125,12 +125,12 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
                   y: 300,
                   animated: true,
               });
-          }}
+            }}
             placeholder="ใส่จำนวนเงิน"
             keyboardType="numeric"
             value={amount}
             onChangeText={setAmount}
-            className={`h-10 mx-5 px-3 mt-5 bg-neutral border-b  ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
+            className={`h-10 mx-5 px-3 mt-5 bg-neutral border-b text-primary ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
 
 
         <TouchableOpacity 
