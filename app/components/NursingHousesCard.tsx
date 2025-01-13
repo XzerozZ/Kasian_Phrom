@@ -10,6 +10,7 @@ interface NursingHousesCard {
   price: string;
   location: string;
   imageUrl: string;
+  mapLink: string;
 }
 
 const NursingHomeCard: React.FC<NursingHousesCard> = ({
@@ -19,6 +20,7 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
   price,
   location,
   imageUrl,
+  mapLink,
 }) => {
   return (
     <View 

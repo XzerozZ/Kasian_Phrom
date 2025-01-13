@@ -6,6 +6,7 @@ import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDe
 import Filter from './filter';
 
 
+
   interface Home {
     id: string;
     name: string;
@@ -13,6 +14,7 @@ import Filter from './filter';
     price: string;
     location: string;
     imageUrl: string;
+    mapLink: string;
   }
 
 interface NursingHousesProps{
@@ -27,7 +29,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     setShowData(recommendedHomes);
   }, []);
 
-
+  const [state, setState] = useState(false);
   const favoriteHomes = [
     {
       id: "1",
@@ -37,6 +39,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       location: "กทม.",
       fullLocation: "กรุงเทพมหานคร",
       imageUrl: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg",
+      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
     },
   ];
 
@@ -49,6 +52,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       location: "กทม.",
       fullLocation: "กรุงเทพมหานคร",
       imageUrl: "https://udeemeesuk.com/cdn/shop/articles/A1-087-1_grande.jpg?v=1713762079",
+      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
     },
     {
       id: "3",
@@ -58,6 +62,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       location: "กทม.",
       fullLocation: "กรุงเทพมหานคร",
       imageUrl: "https://scontent.fbkk24-1.fna.fbcdn.net/v/t39.30808-6/348224569_270374295358366_1042483928026436489_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=KCmmWiMJyNsQ7kNvgGcg4dw&_nc_oc=AdhQ1hLX8LetQH1oV8kAxwZKso6CaTNzNUWlCiSJV1mTQwK0gKfJHez6FGfohg2YTZTYv-frqtUgQ2D15pH5OG4Y&_nc_zt=23&_nc_ht=scontent.fbkk24-1.fna&_nc_gid=AWiAyex7p-vKSz2sBmvgwTI&oh=00_AYDfWV5Y2fO2Ql47qIk5fspoXO71eJNB4G4NASh8wQtUWg&oe=678538AF",
+      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
     },
     {
       id: "4",
@@ -67,6 +72,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       location: "กทม.",
       fullLocation: "กรุงเทพมหานคร",
       imageUrl: "https://www.thaielder.com/datas/nursinghome/47/preview__ittara_ursing_ome_inklao_ranch_65f2d50dc9df4.jpg",
+      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
     },
   ];
   
@@ -87,6 +93,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     price: "",
     location: "",
     imageUrl: "",
+    mapLink: "",
   }]);
 
   useEffect(() => {
@@ -195,10 +202,12 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         <ScrollView
         showsVerticalScrollIndicator={false}>
 
+
           <View className='flex flex-row justify-between items-center'>
             <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">{query === '' &&  isNoFilter ? 'บ้านพักคนชราในแผนของคุณ' : 'ผลลัพธ์การค้นหา' }</TextF>
             <TouchableOpacity 
             id='BtnFavorite'
+            onPress={() => setActiveTab('favnursingHouses')}
             className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
               <Ionicons name="heart" size={22} color='#fff'/>
               <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
@@ -218,6 +227,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
                   price={home.price}
                   location={home.location}
                   imageUrl={home.imageUrl}
+                  mapLink={home.mapLink}
                 />
               </TouchableOpacity>
           ))}
@@ -240,6 +250,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
                 price={home.price}
                 location={home.location}
                 imageUrl={home.imageUrl}
+                mapLink={home.mapLink}
               />
               <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
             </TouchableOpacity>
