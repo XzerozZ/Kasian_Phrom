@@ -5,9 +5,6 @@ import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign,
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Logo = require('../../../assets/images/logo.png');
-// web 788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com
-// ios 788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com
-// android 788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com
 
 interface MainProps {
   isDarkMode: boolean;

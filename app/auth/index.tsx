@@ -4,7 +4,6 @@ import  TextF  from '../components/TextF';
 import LogIn from './logIn'
 import SignUp from './signUp'
 
-
 interface AuthProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -21,7 +20,9 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
     <View 
     style={outStyles.authPage}
     className='flex-1 bg-bgAuth w-full pt-10'>
-      {stateLogin?<LogIn setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>:<SignUp setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>}
+      {stateLogin
+      ?<LogIn setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>
+      :<SignUp setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>}
     </View>
   )
 }
