@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "KasianPhrom"
+      "bundleIdentifier": "com.anonymous.Kasian-phrom"
     },
     "android": {
       "adaptiveIcon": {

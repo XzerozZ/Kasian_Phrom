@@ -5,6 +5,8 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -32,14 +34,6 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab }) => {
     iosClientId: '788619682273-jih87ufg9fpk2ul960tbcnvc36sn667t.apps.googleusercontent.com',
 
   });
-
-
-
-
-
-
-
-
 
 
 
