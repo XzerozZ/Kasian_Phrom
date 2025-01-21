@@ -37,15 +37,15 @@ const DropdownCustom: React.FC<DropdownCustomProps> = ({options, selectedOption,
             </View>
         ))}
     </Animated.View>
-    <TouchableOpacity 
+    <TouchableOpacity
     id='BtnSelectSavingType'
     activeOpacity={1}
     onPress={()=>setSelectIsOpen(!selectIsOpen)}
     className=' absolute z-30 flex flex-row justify-between items-center bg-neutral border border-primary rounded py-2 pr-1 w-full'>
         <TextF className='text-lg pl-5 pr-5'>
-            {selectedOption} 
+            {selectedOption}
         </TextF>
-        <MaterialCommunityIcons name={selectIsOpen ? 'chevron-up' : 'chevron-down'}size={25}/> 
+        <MaterialCommunityIcons name={selectIsOpen ? 'chevron-up' : 'chevron-down'}size={25}/>
         
     </TouchableOpacity>
     

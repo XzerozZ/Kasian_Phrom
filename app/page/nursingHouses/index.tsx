@@ -207,6 +207,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
             <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">{query === '' &&  isNoFilter ? 'บ้านพักคนชราในแผนของคุณ' : 'ผลลัพธ์การค้นหา' }</TextF>
             <TouchableOpacity 
             id='BtnFavorite'
+            activeOpacity={1}
             onPress={() => setActiveTab('favnursingHouses')}
             className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
               <Ionicons name="heart" size={22} color='#fff'/>
