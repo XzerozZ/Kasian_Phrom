@@ -5,6 +5,7 @@ import HeadTitle from '../components/headTitle';
 import  TextF  from '../components/TextF';
 import SelectDropdown from 'react-native-select-dropdown'
 import CheckBox from '../components/checkBox';
+import DropdownCustom from '../components/DropdownCustom';
 
 const Logo = require('../../assets/images/logo.png')
 interface appSettingProps{
@@ -54,7 +55,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                 
                 <View className='px-5'>
                     <View className='flex flex-row justify-between mt-5'>
-                        <TextF className=' text-label'>ตั้งค่าโปรไฟล์</TextF>
+                        <TextF className=' text-label pt-2'>ตั้งค่าโปรไฟล์</TextF>
                     </View>
                     <View className='flex flex-row mt-8 items-center gap-8'>
                         <View 
@@ -116,7 +117,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
                     <View className='flex flex-row justify-between mt-5'>
-                        <TextF className=' text-label'>ตั้งค่าบัญชี</TextF>
+                        <TextF className=' text-label pt-2'>ตั้งค่าบัญชี</TextF>
                     </View>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>อีเมล</TextF>
@@ -163,75 +164,21 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
                     <View className='flex flex-row justify-between mt-5'>
-                        <TextF className=' text-label'>ตั้งค่าแอป</TextF>
+                        <TextF className=' text-label pt-2'>ตั้งค่าแอป</TextF>
                     </View>
                     <View className='gap-5 mt-5'>
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>สกุลเงินหลัก</TextF>
-                            <View className='w-2/5 items-end'>
-                                <SelectDropdown
-                                    data={options}
-                                    defaultValueByIndex={0}
-                                    onSelect={(selectedItem, index) => {
-                                        setSelectedOption(selectedItem.title)
-                                        console.log(selectedItem, index);
-                                    }}
-                                    renderButton={(selectedItem, isOpened) => {
-                                        return (
-                                        <View 
-                                        id='BtnSelectCurrency'
-                                        className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
-                                            <TextF className='text-lg pl-5'>
-                                            {(selectedItem && selectedItem.title)} 
-                                            </TextF>
-                                            <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={25} color={'#2A4296'}/>
-                                        </View>
-                                        );
-                                    }}
-                                    renderItem={(item, index, isSelected) => {
-                                        return (
-                                        <View className={`flex justify-center items-end bg-neutral h-12 ${isSelected ? ' bg-neutral2' : ''}`}>
-                                            <TextF className='flex justify-center items-center px-3 py-1'>{item.title}</TextF>
-                                        </View>
-                                        );
-                                    }}
-                                    showsVerticalScrollIndicator={false}
-                                    dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
-                                    />
+                            <View className='w-1/2'>
+                                <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
                             </View>
                         </View>
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>ภาษา</TextF>
-                            <View className='w-2/5 items-end'>
-                                <SelectDropdown
-                                    data={optionsLanguage}
-                                    defaultValueByIndex={0}
-                                    onSelect={(selectedItem, index) => {
-                                        setSelectedLanguage(selectedItem.title)
-                                        console.log(selectedItem, index);
-                                    }}
-                                    renderButton={(selectedItem, isOpened) => {
-                                        return (
-                                        <View 
-                                        id='BtnSelectLanguage'
-                                        className='flex flex-row justify-end items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-full'>
-                                            <TextF className='text-lg pl-5'>
-                                            {(selectedItem && selectedItem.title)} 
-                                            </TextF>
-                                            <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={25} color={'#2A4296'}/>
-                                        </View>
-                                        );
-                                    }}
-                                    renderItem={(item, index, isSelected) => {
-                                        return (
-                                        <View className={`flex justify-center items-end bg-neutral h-12 ${isSelected ? ' bg-neutral2' : ''}`}>
-                                            <TextF className='flex justify-center items-center px-3 py-1'>{item.title}</TextF>
-                                        </View>
-                                        );
-                                    }}
-                                    showsVerticalScrollIndicator={false}
-                                    dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
-                                    />
+                            <View 
+                            style={{right: 0, zIndex: 10}}
+                            className=' absolute w-1/2'>
+                                <DropdownCustom options={optionsLanguage} selectedOption={selectedLanguage} setSelectedOption={setSelectedLanguage}/>
                             </View>
                         </View>
                         <View className='flex flex-row justify-between mt-5'>

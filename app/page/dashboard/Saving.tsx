@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import SelectDropdown from 'react-native-select-dropdown'
-import  TextF  from '../../components/TextF';
+import TextF from '../../components/TextF';
+import DropdownCustom from '../../components/DropdownCustom';
 
 
 interface SavingProps{
@@ -81,43 +82,15 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
         <TextF className={`text-lg ${!isDiposit?'text-white':'text-primary'}`}>ถอนเงิน</TextF>
       </TouchableOpacity>
     </View>
-    <View className='flex flex-row justify-center items-s mt-10'>
+    <View className='flex flex-row justify-between items-start mt-10 h-12'>
         <View className='flex-1 items-center'>
           <TextF className='text-lg'>เลือกประเภทการออม</TextF>
         </View>
-        <View className='flex-1 '>
-        <SelectDropdown
-          data={options}
-          defaultValueByIndex={0}
-          onSelect={(selectedItem, index) => {
-            setSelectedOption(selectedItem.title)
-            console.log(selectedItem, index);
-          }}
-          renderButton={(selectedItem, isOpened) => {
-            return (
-              <View 
-              id='BtnSelectSavingType'
-              className='flex flex-row justify-between items-center bg-neutral border border-primary rounded py-2 pl-5 pr-1 w-10/12'>
-                <TextF className='text-lg pr-5'>
-                  {(selectedItem && selectedItem.title)} 
-                </TextF>
-                <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={25}/>
-              </View>
-            );
-          }}
-          renderItem={(item, index, isSelected) => {
-            return (
-              <View className={`flex flex-row justify-between items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
-                <TextF className='flex justify-center items-center'>{item.title}</TextF>
-              </View>
-            );
-          }}
-          showsVerticalScrollIndicator={false}
-          dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
-        />
+        <View className='flex-1 items-end pr-5'>
+          <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
         </View>
     </View>
-    <View>
+    <View className=''>
         <TextInput
             id='InputAmount'
             onFocus={() => {

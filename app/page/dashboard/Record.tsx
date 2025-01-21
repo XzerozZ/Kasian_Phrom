@@ -6,7 +6,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import HistoryCard from '../../components/HistoryCard';
 import  TextF  from '../../components/TextF';
 
-
 interface RecordProps{
   isDarkMode: boolean;
 }

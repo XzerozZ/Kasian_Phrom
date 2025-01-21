@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import  TextF  from './TextF';
-
+import DropdownYearCustom from './DropdownYearCustom';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -57,21 +57,21 @@ const CustomGraph = () => {
         {title:'2023'},
         {title:'2022'},
         {title:'2021'},
-        {title:'2020'},
-        {title:'2019'},
-        {title:'2018'},
-        {title:'2017'},
-        {title:'2016'},
-        {title:'2015'},
-        {title:'2014'},
-        {title:'2013'},
-        {title:'2012'},
-        {title:'2011'},
-        {title:'2010'},
-        {title:'2009'},
-        {title:'2008'},
-        {title:'2007'},
-        {title:'2006'},
+        // {title:'2020'},
+        // {title:'2019'},
+        // {title:'2018'},
+        // {title:'2017'},
+        // {title:'2016'},
+        // {title:'2015'},
+        // {title:'2014'},
+        // {title:'2013'},
+        // {title:'2012'},
+        // {title:'2011'},
+        // {title:'2010'},
+        // {title:'2009'},
+        // {title:'2008'},
+        // {title:'2007'},
+        // {title:'2006'},
     ];
     const [selectedOption, setSelectedOption] = useState('2025');
 
@@ -117,35 +117,7 @@ const CustomGraph = () => {
         <Text style={{position:'absolute', right:0, bottom:0, fontFamily:'SarabunRegular'}} className='text-label'>เดือน</Text>
         <Text style={{position:'absolute', left:0, top:-30, fontFamily:'SarabunRegular'}} className='text-label'>เงิน(บาท)</Text>
         <View style={{position:'absolute', right:0, top:-30}}>
-            <SelectDropdown
-              data={options}
-              defaultValueByIndex={0}
-              onSelect={(selectedItem, index) => {
-                setSelectedOption(selectedItem.title)
-                console.log(selectedItem, index);
-              }}
-              renderButton={(selectedItem, isOpened) => {
-                return (
-                  <View 
-                  id='SelectYear'
-                  className='flex flex-row justify-end items-center w-20'>
-                    <TextF className='pr-1'>
-                      {(selectedItem && selectedItem.title)} 
-                    </TextF>
-                    <MaterialCommunityIcons name={isOpened ? 'chevron-up' : 'chevron-down'} size={20}/>
-                  </View>
-                );
-              }}
-              renderItem={(item, index, isSelected) => {
-                return (
-                  <View className={`flex flex-row justify-center items-center bg-neutral h-10 px-5 ${isSelected ? ' bg-neutral2' : ''}`}>
-                    <TextF className='flex justify-center items-center'>{item.title}</TextF>
-                  </View>
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              dropdownStyle={{backgroundColor: '#FCFCFC', borderRadius: 6}}
-            />
+          <DropdownYearCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
         </View>
       </View>
     );
