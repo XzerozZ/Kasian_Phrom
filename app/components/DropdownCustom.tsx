@@ -27,13 +27,13 @@ const DropdownCustom: React.FC<DropdownCustomProps> = ({options, selectedOption,
         className={`absolute w-full top-11 bg-neutral rounded-b-lg z-20 overflow-hidden ${selectIsOpen ?' border border-t-0 border-neutral2':''}`}>
         {options.map((option, index) => (
             <View key={index}>
-                <TouchableOpacity 
-                activeOpacity={1}
-                onPress={()=>{setSelectedOption(option.title); setSelectIsOpen(false)}}
-                className='flex flex-row justify-between items-center h-12 px-5 active:bg-unselectInput'>
-                <TextF className='flex justify-center items-center'>{option.title}</TextF>
-                </TouchableOpacity>
-                {index !== options.length-1 &&<View className=' border-b border-neutral2 w-11/12 mx-auto'></View>}
+            <TouchableOpacity 
+            activeOpacity={1}
+            onPress={()=>{setSelectedOption(option.title); setSelectIsOpen(false)}}
+            className={`flex flex-row justify-between items-center h-12 px-5 active:bg-unselectInput`}>
+            <TextF className='flex justify-center items-center'>{option.title}</TextF>
+            </TouchableOpacity>
+            {index !== options.length-1 &&<View className=' border-b border-neutral2 w-11/12 mx-auto'></View>}
             </View>
         ))}
     </Animated.View>

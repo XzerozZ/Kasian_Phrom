@@ -18,11 +18,13 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
       {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
       {statusDeposit:'Withdraw',name: 'ถอนเงินลงทุน', amount: 5000, time: '20:43 น', date: '17/11/2024'},]);
 
-
+  const [dataHistory2, setDataHistory2] = useState([
+    {statusDeposit:'Deposit', name: 'เงินออม', amount: 8000, time: '20:43 น', date: '18/10/2024'},
+    {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '12/10/2024'},]);
 
   const [dataHistoryPerMonth, setDataHistoryPerMonth] = useState([
     {month: '11', amount: 5000, data: dataHistory},
-    {month: '10', amount: 5000},
+    {month: '10', amount: 18000, data: dataHistory2},
     {month: '9', amount: 5000},
     {month: '8', amount: 5000},
     {month: '7', amount: 5000},
@@ -35,6 +37,36 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
     {month: '12', amount: 5000},
   ]);
 
+  const toThaiMonth = (month: string) => {
+    switch (month) {
+      case '1':
+        return 'มกราคม';
+      case '2':
+        return 'กุมภาพันธ์';
+      case '3':
+        return 'มีนาคม';
+      case '4':
+        return 'เมษายน';
+      case '5':
+        return 'พฤษภาคม';
+      case '6':
+        return 'มิถุนายน';
+      case '7':
+        return 'กรกฎาคม';
+      case '8':
+        return 'สิงหาคม';
+      case '9':
+        return 'กันยายน';
+      case '10':
+        return 'ตุลาคม';
+      case '11':
+        return 'พฤศจิกายน';
+      case '12':
+        return 'ธันวาคม';
+      default:
+        return '';
+    }
+  }
 
 
 
@@ -58,13 +90,18 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
           <TextF className=' text-normalText text-lg'>ประวัติการออม</TextF>
         </View>
         {dataHistoryPerMonth.map((data, index) => (
+          data.data && data.data.length > 0 &&
           <View 
           id='HistoryCard'
           key={index}>
-            <View className='px-5 mt-5 mb-10'>
+            <View className='px-5 mt-5 mb-2'>
               <View className='flex flex-row justify-between items-center mb-5'>
-                <TextF className=' text-normalText'>เดือนนี้</TextF>
-                <TextF className=' text-normalText'>{data.amount}</TextF>
+                {index === 0
+                ? <TextF className=' text-label text-lg'>เดือนนี้ {toThaiMonth(data.month)}</TextF>
+                : <TextF className=' text-label text-lg'>เดือน {toThaiMonth(data.month)}</TextF>
+                }
+                
+                <TextF className=' text-oktext text-lg'>+ {data.amount}</TextF>
               </View>
               <HistoryCard data={data.data || []}/>
             </View>

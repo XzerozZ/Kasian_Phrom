@@ -47,20 +47,20 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
           <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</TextF>
-          <TextF className='text-3xl scale-125'>19,000</TextF>
+          <TextF className='text-3xl scale-125'>39,903</TextF>
           <TextF>บาท</TextF>
         </View>
         <View className='mt-5 w-11/12 h-[2] bg-primary'></View>
         <View className='flex flex-row w-full gap-3 '>
             <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินสุทธิ</TextF>
-            <TextF className='text-xl'>152,600</TextF>
+            <TextF className='text-xl'>100,000</TextF>
             <TextF>บาท</TextF>
           </View>
           <View className=' w-[2] bg-primary'></View>
           <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บ</TextF>
-            <TextF className='text-xl '>49,847,400</TextF>
+            <TextF className='text-xl '>7,661,431</TextF>
             <TextF>บาท</TextF>
           </View>
         </View>

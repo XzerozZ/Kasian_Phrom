@@ -12,7 +12,7 @@ interface futureUseProps{
   dataAssetInput: any;
   setDataAssetInput: (data: any) => void;
 }
-const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput }) => {
+const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput}) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
 

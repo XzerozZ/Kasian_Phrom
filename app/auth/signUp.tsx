@@ -9,9 +9,11 @@ const google = require('../../assets/images/googleIcon.png')
 interface SignUpProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
+  isAuth: boolean;
+  setIsAuth: (state: boolean) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
+const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, setIsAuth  }) => {
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -115,6 +117,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
         </View>
         <TouchableOpacity
         activeOpacity={1}
+        onPress={()=>setStateLogin(true)}
         className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
           <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>

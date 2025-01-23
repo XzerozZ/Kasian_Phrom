@@ -3,6 +3,8 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 
+import AssessCard from '@/app/components/AssessCard';
+
 import  TextF  from '../../components/TextF';
 const Logo = require('../../../assets/images/logo.png')
 
@@ -19,12 +21,12 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 
 
     const [dataProfile, setDataProfile] = useState([
-      {title:'อายุที่ต้องการเกษียณ', detail:'65'},
+      {title:'อายุที่ต้องการเกษียณ', detail:'60'},
       {title:'อายุที่คาดว่าจะเสียชีวิต', detail:'80'},
       {title:'รายรับต่อเดือน', detail:'30,000'},
       {title:'รายจ่ายต่อเดือน', detail:'15,000'},
       {title:'เงินเฟ้อ', detail:'3%'},
-      {title:'รายจ่ายหลังเกษียณ/เดือน', detail:'50,000'},
+      {title:'รายจ่ายหลังเกษียณ/เดือน', detail:'30,000'},
       {title:'การเพิ่มขึ้นของรายจ่าย/ปี', detail:'3%'},
       {title:'ผลตอบแทนจากการออม/ปี', detail:'1.25%'},
       {title:'ผลตอบแทนจากการลงทุน/ปี', detail:'5%'},
@@ -81,12 +83,12 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       </TouchableOpacity>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className='text-lg text-normalText'>จำนวนเงินสุทธิ</TextF>
-        <TextF className='text-lg text-normalText'>152,600 บาท</TextF>
+        <TextF className='text-lg text-normalText'>100,000 บาท</TextF>
       </View>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>การลงทุนที่เหมาะกับคุณ</TextF>
       </View>
-      <View className=' bg-unselectInput w-full h-36 mt-5 rounded-lg'></View>
+      <AssessCard setActiveTab={setActiveTab} riskId={4} />
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>ข้อมูล</TextF>
       </View>

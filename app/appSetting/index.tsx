@@ -23,6 +23,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [userName, setUserName] = useState('');
     const [fristName, setFristName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const scrollViewRef = useRef<ScrollView>(null);
 
     const [selectedOption, setSelectedOption] = useState('ไทย (บาท ฿)');
@@ -77,7 +79,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 onChangeText={setUserName}
                                 className={`text-lg border-b border-unselectInput w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color='#C9C9C9'/>
+                                    <FontAwesome6 name='pen' size={12} color={userName ? '#2A4296' : '#C9C9C9' }/>
                                 </View>
                             </View>
                             <View className='flex flex-row'>
@@ -89,7 +91,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 onChangeText={setFristName}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color='#C9C9C9'/>
+                                    <FontAwesome6 name='pen' size={12} color={fristName ? '#2A4296' : '#C9C9C9' }/>
                                 </View>
                             </View>
                             <View className='flex flex-row'>
@@ -101,7 +103,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 onChangeText={setLastName}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color='#C9C9C9'/>
+                                    <FontAwesome6 name='pen' size={12} color={lastName ? '#2A4296' : '#C9C9C9' }/>
                                 </View>
                             </View>
                         </View>
@@ -110,7 +112,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <TouchableOpacity 
                         id=' BtnSaveProfile'
                         activeOpacity={1}
-                        className='w-40 h-10 bg-primary ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2'>
+                        className={`w-40 h-10  ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${userName || fristName || lastName ?'bg-primary':'bg-unselectMenu'}`}>
+                            {/* ต้องเช็คว่าต่างจากเดิมไหมด้วย */}
                             <TextF className=' text-white'>บันทึก</TextF>
                             <MaterialIcons name="save-alt" size={22} color='#fff'/>
                         </TouchableOpacity>
@@ -136,8 +139,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 }}
                                 placeholder="รหัสผ่านเก่า"
                                 keyboardType='default'
-                                value={lastName}
-                                onChangeText={setLastName}
+                                value={oldPassword}
+                                onChangeText={setOldPassword}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                             <TextInput
                                 id=' EditInputNewPassword'
@@ -149,8 +152,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 }}
                                 placeholder="รหัสผ่านใหม่"
                                 keyboardType='default'
-                                value={lastName}
-                                onChangeText={setLastName}
+                                value={newPassword}
+                                onChangeText={setNewPassword}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                         </View>
                     </View>
@@ -158,7 +161,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <TouchableOpacity 
                         id=' BtnChangePassword'
                         activeOpacity={1}
-                        className='w-40 h-10 bg-unselectMenu ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2'>
+                        className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${newPassword && oldPassword ?'bg-primary':'bg-unselectMenu'}`}>
                             <TextF className=' text-white'>เปลี่ยน</TextF>
                         </TouchableOpacity>
                     </View>

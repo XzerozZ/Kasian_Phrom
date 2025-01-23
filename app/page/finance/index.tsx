@@ -35,7 +35,9 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           </Text>
           
         </View>
-      <AssessCard setActiveTab={setActiveTab} riskId={4} />
+        <View className='mx-5'>
+          <AssessCard setActiveTab={setActiveTab} riskId={4} />
+        </View>
         <View className='px-5 mt-8'>
           <TextF className='text-label'>
             บทความการเงิน

@@ -17,7 +17,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ riskId, setActiveTab }) => {
         <>
         <View 
         id='AssessCardContainer'
-        className='bg-neutral pb-0 rounded-2xl border border-banner mt-5 mx-5 overflow-hidden'>
+        className='bg-neutral pb-0 rounded-2xl border border-banner mt-5 overflow-hidden'>
             {selectedRisk ? (
                 <>  
                     <TouchableOpacity 

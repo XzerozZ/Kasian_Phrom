@@ -10,8 +10,11 @@ interface stateProps{
   setState: (state: number) => void
   dataInput: any;
   setDataInput: (data: any) => void;
+  setActiveTab: (tab: string) => void;
+  havePlant: boolean;
+  setHavePlant: (state: boolean) => void;
 }
-const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput  }) => {
+const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput, setActiveTab, havePlant, setHavePlant }) => {
   
   const [futureHouses, setFutureHouses] = useState('') 
 
@@ -49,6 +52,9 @@ useEffect(() => {
 const handelSaveData = () => {
   // Save data 
   console.log(dataInput);
+  setHavePlant(true);
+  setActiveTab('main');
+  
 }
 
 
@@ -210,7 +216,7 @@ const handelSaveData = () => {
           {futureHouses == 'nursingHouses' && <View className='h-20 '></View>}
     </View>
     <View className='h-5 '></View>
-    <WideBtn id='saveCalRetirementData' activeOpacity={1} text='ถัดไป' disabled={!isFully} onPress={handelSaveData}/>
+    <WideBtn id='saveCalRetirementData' activeOpacity={1} text='บันทึก' disabled={!isFully} onPress={handelSaveData}/>
   </View>
   )
 }

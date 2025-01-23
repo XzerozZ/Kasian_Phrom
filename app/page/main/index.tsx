@@ -11,13 +11,15 @@ interface MainProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  isAuth: boolean; 
+  setIsAuth: (state: boolean) => void;
+  havePlant: boolean;
+  setHavePlant: (state: boolean) => void;
 }
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth, havePlant, setHavePlant }) => {
   
   
-  // const [isAuth, setIsAuth] = useState(true);
-  const [isAuth, setIsAuth] = useState(false);
-  const [havePlant, setHavePlant] = useState(false);
+  
   
   
   

@@ -26,8 +26,10 @@ interface CalRetirementProps{
   setActiveTab: (tab: string) => void;
   activeTab: string;
   setStateNavbar: (state: boolean) => void;
+  havePlant: boolean;
+  setHavePlant: (state: boolean) => void;
 }
-const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar }) => {
+const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar, havePlant, setHavePlant }) => {
 
   const [box1Width, setBox1Width] = useState(0);
   const [state, setState] = useState(1);
@@ -205,7 +207,7 @@ const isRounded = (activeTab === 'calRetirement');
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
             {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
             {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput}/>}
-            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
+            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} havePlant={havePlant} setHavePlant={setHavePlant}/>}
             
           </ScrollView>
         </View>
