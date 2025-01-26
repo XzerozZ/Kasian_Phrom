@@ -30,10 +30,13 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
 
   return (
-    <View className={`w-full h-28 rounded-t-3xl flex flex-row justify-around items-end shadow pb-8
-      ${styles.container}`}>
+    <View 
+    id='NavbarContainer'
+    style={{ position: 'absolute', bottom: 0, zIndex: 1000 }}
+    className={`w-full h-28 rounded-t-3xl flex flex-row justify-around items-end shadow pb-8 ${styles.container}`}>
 
         <TouchableOpacity  
+        id='NavBtnGoMain'
         onPress={() => setActiveTab('main')}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1 active:none">
@@ -42,6 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         </TouchableOpacity>
 
         <TouchableOpacity  
+        id='NavBtnGoNursingHouses'
         onPress={() => setActiveTab('nursingHouses')}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
@@ -50,6 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         </TouchableOpacity>
 
         <TouchableOpacity  
+        id='NavBtnGoDashboard'
         onPress={() => setActiveTab('dashboard')}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
@@ -58,6 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         </TouchableOpacity>
 
         <TouchableOpacity 
+        id='NavBtnGoFinance'
         onPress={() => setActiveTab('finance')} 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
@@ -66,6 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
         </TouchableOpacity>
 
         <TouchableOpacity  
+        id='NavBtnGoProfile'
         onPress={() => setActiveTab('profile')}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">

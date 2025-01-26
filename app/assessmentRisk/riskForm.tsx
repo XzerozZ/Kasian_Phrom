@@ -59,13 +59,12 @@ const RiskForm: React.FC<RiskFormProps> = ({
   return (
     <>
       <HeadTitle
-        isDarkMode={isDarkMode}
         setActiveTab={setActiveTab}
-        setStateNavbar={setStateNavbar}
         title="แบบประเมินความเสี่ยง"
-        route="finance"
+        onPress={()=>setActiveTab('finance')}
       />
       <ScrollView
+        id='RiskFormContainer'
         className="flex-1 bg-neutral w-full"
         showsVerticalScrollIndicator={false}
       >
@@ -80,6 +79,7 @@ const RiskForm: React.FC<RiskFormProps> = ({
           ))}
         </View>
         <WideBtn
+          id='RiskFormSubmitBtn'
           text="ประเมินความเสี่ยง"
           disabled={!isComplete}
           onPress={handleSubmit}

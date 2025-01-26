@@ -9,8 +9,10 @@ interface AuthProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  isAuth: boolean;
+  setIsAuth: (state: boolean) => void;
 }
-const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth }) => {
   useEffect(() => {
     setStateNavbar(false)
   }, [])
@@ -21,7 +23,7 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar })
     <View 
     style={outStyles.authPage}
     className='flex-1 bg-bgAuth w-full pt-10'>
-      {stateLogin?<LogIn setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>:<SignUp setStateLogin={setStateLogin} setActiveTab={setActiveTab}/>}
+      {stateLogin?<LogIn setStateLogin={setStateLogin} setActiveTab={setActiveTab} isAuth={isAuth} setIsAuth={setIsAuth}/>:<SignUp setStateLogin={setStateLogin} setActiveTab={setActiveTab} isAuth={isAuth} setIsAuth={setIsAuth}/>}
     </View>
   )
 }

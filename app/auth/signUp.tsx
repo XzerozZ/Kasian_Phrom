@@ -9,9 +9,11 @@ const google = require('../../assets/images/googleIcon.png')
 interface SignUpProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
+  isAuth: boolean;
+  setIsAuth: (state: boolean) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
+const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, setIsAuth  }) => {
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -34,7 +36,10 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
 
           <FontAwesome6 name="angle-left" size={28} color='#6780D6'/>
       </TouchableOpacity>
-      <Image source={Logo} style={outStyles.image}/>
+      <Image 
+      source={Logo} 
+      style={{objectFit: 'contain'}}
+      className='w-52 h-52'/>
       <TextF className='text-2xl text-primary mb-5'>สมัครสมาชิก</TextF>
       <View className='flex w-full items-center gap-2'>
         <View style={{position:'relative'}}>
@@ -43,6 +48,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
                 keyboardType='default'
                 value={username}
                 onChangeText={setUsername}
+                // placeholderTextColor='#C9C9C9'
                 className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
           className='w-10 h-12 items-center justify-center mt-5'
@@ -111,6 +117,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
         </View>
         <TouchableOpacity
         activeOpacity={1}
+        onPress={()=>setStateLogin(true)}
         className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
           <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
@@ -121,7 +128,10 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab }) => {
       <TouchableOpacity
         activeOpacity={1}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
-          <Image source={google} style={outStyles.imageGoogle}/>
+          <Image 
+          source={google} 
+          style={{objectFit: 'contain'}}
+          className='h-10 w-10'/>
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>
       <View className='w-full flex flex-row justify-center items-center px-10 my-5 mb-24'>

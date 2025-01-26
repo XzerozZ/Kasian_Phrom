@@ -3,6 +3,8 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 
+import AssessCard from '@/app/components/AssessCard';
+
 import  TextF  from '../../components/TextF';
 const Logo = require('../../../assets/images/logo.png')
 
@@ -19,12 +21,12 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 
 
     const [dataProfile, setDataProfile] = useState([
-      {title:'อายุที่ต้องการเกษียณ', detail:'65'},
+      {title:'อายุที่ต้องการเกษียณ', detail:'60'},
       {title:'อายุที่คาดว่าจะเสียชีวิต', detail:'80'},
       {title:'รายรับต่อเดือน', detail:'30,000'},
       {title:'รายจ่ายต่อเดือน', detail:'15,000'},
       {title:'เงินเฟ้อ', detail:'3%'},
-      {title:'รายจ่ายหลังเกษียณ/เดือน', detail:'50,000'},
+      {title:'รายจ่ายหลังเกษียณ/เดือน', detail:'30,000'},
       {title:'การเพิ่มขึ้นของรายจ่าย/ปี', detail:'3%'},
       {title:'ผลตอบแทนจากการออม/ปี', detail:'1.25%'},
       {title:'ผลตอบแทนจากการลงทุน/ปี', detail:'5%'},
@@ -34,12 +36,18 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 
   
   return (
-    <ScrollView className='flex-1 px-5'>
+    <ScrollView 
+    id='ProfileContainer'
+    showsVerticalScrollIndicator={false}
+    className='flex-1 px-5'>
       <View className='flex items-end'>
         <TouchableOpacity 
+        id='BtnSetting'
         activeOpacity={1}
         // onPress={() => router.push('/appSetting')}
         onPress={() => setActiveTab('appSetting')}
+        // onPress={() => setActiveTab('calRetirement')}
+
         className='mt-10 items-end pr-2 w-14'>
           <Ionicons name="settings-sharp" size={27} color='#2A4296'/>
         </TouchableOpacity>
@@ -48,7 +56,9 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         <View 
         style={{ borderWidth: 3}}
         className='w-36 h-36 rounded-full border-primary'>
-          <Image source={Logo} style={outStyles.image}/>
+          <Image 
+            source={Logo}
+            style={{objectFit: 'cover', width: '100%', height: '100%', borderRadius:'100%'}}/>
         </View>
         <View className='flex flex-row gap-2 h-32'>
           <View className='flex justify-between'>
@@ -63,22 +73,26 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           </View>
         </View>
       </View>
-      <View className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
+      <TouchableOpacity 
+      id='BtnFavorite'
+      activeOpacity={1}
+      // onPress={() => router.push('/favorite')}
+      className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
         <Ionicons name="heart" size={22} color='#fff'/>
-        <TextF className=' text-white'>บ้านพักที่ชื่นชอบ</TextF>
-      </View>
+        <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
+      </TouchableOpacity>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className='text-lg text-normalText'>จำนวนเงินสุทธิ</TextF>
-        <TextF className='text-lg text-normalText'>152,600 บาท</TextF>
+        <TextF className='text-lg text-normalText'>100,000 บาท</TextF>
       </View>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>การลงทุนที่เหมาะกับคุณ</TextF>
       </View>
-      <View className=' bg-unselectInput w-full h-36 mt-5 rounded-lg'></View>
+      <AssessCard setActiveTab={setActiveTab} riskId={4} />
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>ข้อมูล</TextF>
       </View>
-      <View className='mb-10'>
+      <View className='mb-10 mt-2'>
         {dataProfile.map((data, index) => (
           <View 
           key={index}
@@ -89,18 +103,12 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
         ))}
       </View>
         
-      
+      <View className='h-32'></View>
     </ScrollView>
   )
 }
 
 export default Profile
 
-const outStyles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius:'100%',
-    resizeMode: 'contain',
-  },
-});
+
+

@@ -18,7 +18,9 @@ const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTa
     const [stateAssessed, setStateAssessed] = useState(true);
 
   return (
-    <View className='flex-1 bg-neutral w-full'>
+    <View 
+    id='AssessmentRiskContainer'
+    className='flex-1 bg-neutral w-full'>
       {stateAssessed?<RiskResult isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>:<RiskForm isDarkMode={isDarkMode} setStateNavbar={setStateNavbar} setStateAssessed={setStateAssessed} setActiveTab={setActiveTab}/>}
     </View>
   )

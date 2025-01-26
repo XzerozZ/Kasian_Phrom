@@ -42,10 +42,13 @@ const RiskQuestion: React.FC<RiskQuestionProps> = ({
   };
 
   return (
-    <View className="mb-4">
+    <View 
+    id='RiskQuestionContainer'
+    className="mb-4">
       <TextF className="text-lg font-bold mb-2 mx-3">{riskQuestion.text}</TextF>
       {riskQuestion.options.map((option, index) => (
         <TouchableOpacity
+          id='RiskQuestionOption'
           key={index}
           onPress={() => handleSelect(option)}
           className={`p-4 border rounded-xl mb-2 mx-3 ${
