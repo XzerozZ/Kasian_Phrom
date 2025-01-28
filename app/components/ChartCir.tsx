@@ -28,7 +28,9 @@ export default class TestChart extends Component {
     let startAngle = -90
 
     return (
-      <View className = 'flex items-center justify-center' style={{position: 'relative'}}>
+      <View 
+      id='CirChartContainer'
+      className = 'flex items-center justify-center' style={{position: 'relative'}}>
         <View className='flex flex-row'>
             <Svg width={widthAndHeight} height={widthAndHeight} >
             

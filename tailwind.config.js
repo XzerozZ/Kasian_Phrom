@@ -20,11 +20,18 @@ module.exports = {
         unselectMenu: "#B0B0B0",
         lightBgChart: "#C9C9C9",
         unselectInput: "#DBDFEC",
+        lowUnselectInput: "#E4E8F5",
         ok: "#83FF83",
         err: "#FF5449",
         banner: "#C8D4FF",
         bgAuth: "#E4ECFF",
         oktext:'#30CC30',
+        bgmenu_Finance:'#d8feb2',
+        bgmenu_Testfinance:'#fecdb2',
+        bgmenu_Change:'#c8e8fe',
+        bgmenu_Money:'#fef5b2',
+        bgmenu_mean:'##feefc4'
+
       },
     },
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import TextF from './TextF';
 
@@ -10,14 +10,23 @@ type RiskQuestionProps = {
   };
   onAnswer: (questionId: number, selectedOptions: string[]) => void;
   isMultiSelect: boolean;
+  savedOptions?: string[];
 };
 
 const RiskQuestion: React.FC<RiskQuestionProps> = ({
   riskQuestion,
   onAnswer,
   isMultiSelect,
+  savedOptions = [],
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(savedOptions);
+
+  useEffect(() => {
+    // Initialize selected options with saved options
+    if (savedOptions.length > 0) {
+      setSelectedOptions(savedOptions);
+    }
+  }, [savedOptions]);
 
   const handleSelect = (option: string) => {
     setSelectedOptions((prev) => {
@@ -42,10 +51,13 @@ const RiskQuestion: React.FC<RiskQuestionProps> = ({
   };
 
   return (
-    <View className="mb-4">
+    <View 
+    id='RiskQuestionContainer'
+    className="mb-4">
       <TextF className="text-lg font-bold mb-2 mx-3">{riskQuestion.text}</TextF>
       {riskQuestion.options.map((option, index) => (
         <TouchableOpacity
+          id='RiskQuestionOption'
           key={index}
           onPress={() => handleSelect(option)}
           className={`p-4 border rounded-xl mb-2 mx-3 ${

@@ -38,6 +38,7 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
 
   return (
     <View 
+    id=' LoadingPageContainer'
     style={outStyles.loadingPage}
     className={`flex-1 justify-center items-center h-screen gap-5 bg-bgAuth`}>
       {/* <View className={stateLogo?'w-full flex items-center gap-5 duration-1000':'w-auto flex items-center gap-5 opacity-0 duration-1000'}>
@@ -45,7 +46,10 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
       </View> */}
       {stateLogo && (
         <Animated.View style={{ opacity: fadeAnim }} className="w-full flex items-center gap-5 duration-1000">
-          <Image source={Logo} style={outStyles.image}/>
+          <Image 
+          source={Logo} 
+          style={{objectFit: 'contain'}}
+          className='w-40 h-40 '/>
         </Animated.View>
       )}
     </View>
@@ -55,11 +59,6 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
 export default LoadingPage;
 
 const outStyles = StyleSheet.create({
-  image: {
-    width: 130,
-    height: 130,
-    resizeMode: 'contain',
-  },
   loadingPage: {
     position: 'absolute', 
     top: 0, 

@@ -24,15 +24,21 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
 
   return (
     <>
-      <ScrollView className='flex-1 bg-neutral w-full'>
-        <View className='flex-row mt-3 ml-5 h-14 items-center'>
-        <Text 
-          style={{ fontFamily: 'SarabunBold'}}
-          className=' text-normalText text-2xl ml-3 h-12 pt-2'>คู่มือการเงิน
-        </Text>
-      </View>
-      <AssessCard setActiveTab={setActiveTab} riskId={4} />
-        <View className='mx-8 mt-8'>
+      <ScrollView 
+      id='FinanceContainer'
+      showsVerticalScrollIndicator={false}
+      className='flex-1 bg-neutral w-full'>
+        <View className='flex-row mt-3 ml-5 h-14 items-center bg-neutral1'>
+          <Text 
+            style={{ fontFamily: 'SarabunBold'}}
+            className=' text-normalText text-2xl ml-3 h-12 pt-2'>คู่มือการเงิน
+          </Text>
+          
+        </View>
+        <View className='mx-5'>
+          <AssessCard setActiveTab={setActiveTab} riskId={4} />
+        </View>
+        <View className='px-5 mt-8'>
           <TextF className='text-label'>
             บทความการเงิน
           </TextF>
@@ -47,6 +53,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           />
         ))}
         </View>
+        <View className='h-40'></View>
       </ScrollView>
     </>
   )

@@ -17,6 +17,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({data}) => {
         <>
     {data.map((data, index) => (
         <View 
+        id='HistoryCardContainer'
         key={index}
         className='flex flex-row justify-between items-center h-28 border-t border-banner'>
             <View className={`w-3 h-full ${data.statusDeposit == 'Deposit'?'bg-ok':'bg-err'}`}></View>

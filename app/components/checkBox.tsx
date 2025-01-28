@@ -27,6 +27,7 @@ const headTitle: React.FC<headTitleProps> = ({ toggle, setToggle }) => {
 
     return (
         <TouchableOpacity
+            id='CheckBoxContainer'
             activeOpacity={1}
             style={styles.container}
             onPress={() => setToggle(!toggle)}

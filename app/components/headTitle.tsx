@@ -1,26 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 
 import  TextF  from './TextF';
 
-
-interface headTitleProps{
-    isDarkMode: boolean;
+type headTitleProps = TouchableOpacityProps & {
     setActiveTab: (tab: string) => void;
-    setStateNavbar: (state: boolean) => void;
     title: string;
-    route: string;
 }
-const headTitle: React.FC<headTitleProps> = ({ isDarkMode, setActiveTab, setStateNavbar, title, route }) => {
+const headTitle: React.FC<headTitleProps> = ({ setActiveTab, title, ...prop }) => {
+
 
 
     return (
         <>
-        <View className='flex-row mt-3 ml-5 h-14 items-center'>
-            <TouchableOpacity 
+        <View 
+        id=' headTitleContainer'
+        className='flex-row mt-3 ml-5 h-14 items-center'>
+            <TouchableOpacity
+                id='BtnBack'
                 activeOpacity={1}
-                onPress={()=>setActiveTab(route)}
+                {...prop}
                 className=''>
                 <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
             </TouchableOpacity>
