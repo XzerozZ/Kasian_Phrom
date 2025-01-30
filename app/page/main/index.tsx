@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import  TextF  from '../../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -151,21 +151,29 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
               </View>
             </View>
           </>
-          :isAuth && <View className='shadow-sm bg-secondary2 rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>
+          :isAuth && 
+          <View className='texture shadow-xs rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>
             <TouchableOpacity
             id='BtnStartCalRetirement'
             activeOpacity={1}
             onPress={() => setActiveTab('calRetirement')}
-            className='rounded-xl h-28 justify-between gap-2 flex-row items-center px-5'>
-              <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
-              <View>
-                <AntDesign name="caretright" size={25} color="#F68D2B"/>
+            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center'>
+              <ImageBackground 
+              source={require('../../../assets/images/texturePaper.png')} 
+              className='w-full h-full justify-between items-center flex-row rounded-2xl overflow-hidden absolute'
+            >
+              
+            </ImageBackground>
+              <View className='flex-row items-center justify-between w-full px-5'>
+                <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
+                <AntDesign name="caretright" size={25} color="#6780D6"/>
               </View>
             </TouchableOpacity>
           </View>
           }
           <TextF className=' mt-6 text-label'>บริการที่น่าสนใจ </TextF>
 
+          
           <View className=" flex-row justify-between mt-5">
             {menu.slice(0, 4).map((item, index) => (
               <TouchableOpacity

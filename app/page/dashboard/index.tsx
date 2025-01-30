@@ -115,7 +115,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       className='flex flex-row gap-5'>
       {/* หน้า Saving */}
       <View className='shrink-0 w-screen'>
-        <Saving isDarkMode={isDarkMode} />
+        <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab}/>
       </View>
       {/* หน้า Report */}
       <View className='shrink-0 w-screen'>

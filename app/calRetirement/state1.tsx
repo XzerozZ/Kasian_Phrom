@@ -82,8 +82,6 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
   }, [dataInput]);
 
 
-
-
   return (
     <View 
     id='CalRetirementState1'
@@ -101,7 +99,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
             </View>
           </View>
           <View className='flex mt-2'>
-            <TextF className='text-normalText text-lg mt-5'>ข้อมูลอายุของคุณ</TextF>
+            <TextF className='text-normalText text-lg mt-5'>ข้อมูลอายุของคุณ{dataInput.Birth_date}</TextF>
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
                 <TextF className='text-lg text-normalText'>วัน/เดือน/ปีเกิดของคุณ</TextF>
@@ -158,15 +156,17 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                     <FontAwesome6 name="calendar-days" size={22} color={`${subDate.day && subDate.month && subDate.year ?'#2A4296':'#B0B0B0'}`}/>
                   </TouchableOpacity>
                   <DateTimePickerModal
-                    id='DatePicker' 
-                    isVisible={isPickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirm}
-                    onCancel={() => setPickerVisible(false)}
-                    locale="th-TH"
-                    maximumDate={new Date()}
-                  />
+                      id='DatePicker' 
+                      isVisible={isPickerVisible}
+                      display='spinner'
+                      mode="date"
+                      onConfirm={handleConfirm}
+                      onCancel={() => setPickerVisible(false)}
+                      locale='th_TH'
+                      maximumDate={new Date()}
+                    />
                 </View>
+
               </View>
 
               <View className='w-full h-[1] bg-neutral2'></View>

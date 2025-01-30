@@ -19,6 +19,7 @@ import CalRetirement from './calRetirement';
 import NotificationScreen from './notification';
 import DetailNursingHouses from './detailnursingHouses';
 import FavNursingHouses from './favnursingHouses';
+import DebtManagement from './debtManagement';
 
 
 
@@ -84,6 +85,7 @@ function index() {
         {activeTab =='notification' && <NotificationScreen isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='detailnursingHouses' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} />}
         {activeTab =='favnursingHouses' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} />}
+        {activeTab =='debtManagement' && <DebtManagement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} />}
         
       </View>
       {stateNavbar && !loading &&
