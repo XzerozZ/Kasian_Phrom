@@ -29,11 +29,11 @@ const headTitle: React.FC<headTitleProps> = ({ toggle, setToggle }) => {
         <TouchableOpacity
             id='CheckBoxContainer'
             activeOpacity={1}
-            style={styles.container}
+            style={toggle ? styles.container : styles.container_f}
             onPress={() => setToggle(!toggle)}
         >
             <Animated.View
-                style={[styles.circle, { transform: [{ translateX }] }]}
+                style={[toggle ? styles.circle : styles.circle_f , { transform: [{ translateX }] }]}
             />
         </TouchableOpacity>
     );
@@ -54,6 +54,22 @@ const styles = StyleSheet.create({
         width: 26,
         height: 26,
         backgroundColor: '#2A4296', // Replace with your primary color
+        borderRadius: 13,
+    },
+    container_f: {
+        width: 60,
+        height: 34,
+        borderRadius: 17,
+        borderWidth: 2,
+        borderColor: '#C9C9C9', // Replace with your primary color
+        padding: 2,
+        backgroundColor: '#FCFCFC', // Replace with your secondary2 color
+        justifyContent: 'center',
+    },
+    circle_f: {
+        width: 26,
+        height: 26,
+        backgroundColor: '#C9C9C9', // Replace with your primary color
         borderRadius: 13,
     },
 });

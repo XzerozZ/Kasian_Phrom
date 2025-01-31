@@ -194,6 +194,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               value={query}
               onChangeText={setQuery}
               placeholder='ค้นหาบ้านพักคนชรา'
+              placeholderTextColor={'#B0B0B0'}
               // placeholderTextColor="#6780D6"
               className="flex-1 text-lg text-normalText pl-2 h-14"
             />

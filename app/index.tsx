@@ -19,6 +19,8 @@ import CalRetirement from './calRetirement';
 import NotificationScreen from './notification';
 import DetailNursingHouses from './detailnursingHouses';
 import FavNursingHouses from './favnursingHouses';
+import DebtManagement from './debtManagement';
+import WhatKasianPhrom from './whatKasianPhrom';
 
 
 
@@ -39,6 +41,7 @@ function index() {
 
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
+  const [backto, setBackto] = useState('main');
 
   const [isAuth, setIsAuth] = useState(false);
   const [selectedHome, setSelectedHome] = useState('');
@@ -72,9 +75,9 @@ function index() {
       className='w-full pt-10 flex-1 bg-neutral'>
         {loading && <LoadingPage stateLoading={stateLoading} setStateLoading={setStateLoading} setLoading={setLoading}/>}
         {activeTab =='auth' && <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} isAuth={isAuth} setIsAuth={setIsAuth}/>}
-        {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} isAuth={isAuth} setIsAuth={setIsAuth} havePlant={havePlant} setHavePlant={setHavePlant}/>}
+        {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} isAuth={isAuth} setIsAuth={setIsAuth} havePlant={havePlant} setHavePlant={setHavePlant} setBackto={setBackto}/>}
         {activeTab =='nursingHouses' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setSelectedHome={setSelectedHome}/>}
-        {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto}/>}
         {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
@@ -84,6 +87,8 @@ function index() {
         {activeTab =='notification' && <NotificationScreen isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='detailnursingHouses' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} />}
         {activeTab =='favnursingHouses' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} />}
+        {activeTab =='debtManagement' && <DebtManagement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} backto={backto}/>}
+        {activeTab =='whatKasianPhrom' && <WhatKasianPhrom isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         
       </View>
       {stateNavbar && !loading &&

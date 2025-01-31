@@ -46,7 +46,6 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
     }
   }, [newDataAssetInput]);
 
-
   useEffect(() => {
     if (isMore) {
       setNewDataAssetInput({ ...newDataAssetInput, type: type });
@@ -100,6 +99,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
               <TextInput
                 id='InputNameFutureUse'
                 placeholder="ชื่อทรัพย์สิน"
+                placeholderTextColor={'#B0B0B0'}
                 value={newDataAssetInput.Name}
                 onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Name: text})}
                 keyboardType='default'
@@ -120,6 +120,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                   <TextInput
                     id='InputTotalMoneyFutureUse'
                     placeholder='จำนวนเงิน'
+                    placeholderTextColor={'#B0B0B0'}
                     keyboardType='numeric'
                     value={newDataAssetInput.Total_money}
                     onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Total_money: text})}
@@ -142,6 +143,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                 <TextInput
                   id='InputEndYearFutureUse'
                   placeholder="ใส่ปีที่จะใช้"
+                  placeholderTextColor={'#B0B0B0'}
                   maxLength={4}
                   keyboardType="numeric"
                   value={newDataAssetInput.End_year} // แสดงค่าปัจจุบัน
@@ -217,7 +219,8 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                 <TextInput
                   id='InputCategoryMore'
                   placeholder="อื่นๆ"
-                  className="ml-2 border-b-[1px] border-neutral2 flex-1 h-10 mr-5"
+                  placeholderTextColor={'#B0B0B0'}
+                  className="ml-2 border-b-[1px] border-neutral2 flex-1 h-10 mr-5 py-2"
                   value={type}
                   onChangeText={(text) => setType(text)}
                   onFocus={() => {

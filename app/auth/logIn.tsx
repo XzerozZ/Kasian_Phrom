@@ -68,6 +68,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
         <View style={{position:'relative'}}>
           <TextInput
                 placeholder="อีเมล"
+                placeholderTextColor={'#B0B0B0'}
                 keyboardType='email-address'
                 value={email}
                 onChangeText={setEmail}
@@ -83,6 +84,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
         style={{position:'relative'}}>
           <TextInput
                 placeholder="รหัสผ่าน"
+                placeholderTextColor={'#B0B0B0'}
                 secureTextEntry={!visiblePassword}
                 value={password}
                 onChangeText={setPassword}

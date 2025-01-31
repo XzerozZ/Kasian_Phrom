@@ -69,11 +69,12 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             style={{objectFit: 'contain'}}
                             className='w-full h-full rounded-full'/>
                         </View>
-                        <View className='h-32 justify-between pr-5 max-w-56'>
-                            <View className='flex flex-row w-full'>
+                        <View className=' justify-between pr-5 w-1/2'>
+                            <View className='flex flex-row items-end'>
                                 <TextInput
                                 id=' EditInputUserName'
                                 placeholder="ชื่อผู้ใช้"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={userName}
                                 onChangeText={setUserName}
@@ -82,10 +83,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     <FontAwesome6 name='pen' size={12} color={userName ? '#2A4296' : '#C9C9C9' }/>
                                 </View>
                             </View>
-                            <View className='flex flex-row'>
+                            <View className='flex flex-row items-end'>
                                 <TextInput
                                 id=' EditInputFristName'
                                 placeholder="ชื่อจริง"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={fristName}
                                 onChangeText={setFristName}
@@ -94,10 +96,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     <FontAwesome6 name='pen' size={12} color={fristName ? '#2A4296' : '#C9C9C9' }/>
                                 </View>
                             </View>
-                            <View className='flex flex-row'>
+                            <View className='flex flex-row items-end'>
                                 <TextInput
                                 id=' EditInputLastName'
                                 placeholder="สกุล"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={lastName}
                                 onChangeText={setLastName}
@@ -138,6 +141,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     });
                                 }}
                                 placeholder="รหัสผ่านเก่า"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={oldPassword}
                                 onChangeText={setOldPassword}
@@ -151,6 +155,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     });
                                 }}
                                 placeholder="รหัสผ่านใหม่"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={newPassword}
                                 onChangeText={setNewPassword}

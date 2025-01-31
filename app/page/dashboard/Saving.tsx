@@ -4,14 +4,16 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign, Material
 import SelectDropdown from 'react-native-select-dropdown'
 import TextF from '../../components/TextF';
 import DropdownCustom from '../../components/DropdownCustom';
+import DebtManagement from '../../debtManagement';
 
 
 interface SavingProps{
   isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
 }
 
 
-const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
+const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
 
 
 
@@ -100,10 +102,11 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
               });
             }}
             placeholder="ใส่จำนวนเงิน"
+            placeholderTextColor={'#B0B0B0'}
             keyboardType="numeric"
             value={amount}
             onChangeText={setAmount}
-            className={`h-10 mx-5 px-3 mt-5 bg-neutral border-b text-primary ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
+            className={`h-12 mx-5 px-3 mt-5 bg-neutral border-b text-primary ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
 
 
         <TouchableOpacity 
@@ -115,7 +118,20 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode }) => {
         </TouchableOpacity>
 
     </View>
-    <View className='flex justify-center my-10 px-5'>
+    <View className='flex justify-center mt-10 px-5'>
+        <TextF className=' text-label'>จัดการข้อมูลหนี้</TextF>
+        <TouchableOpacity 
+        id='BtnAdjustPlan'
+        onPress={() => setActiveTab('debtManagement')}
+        className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-err rounded-xl shadow-sm'>
+            <TextF className='text-lg py-2'>จัดการข้อมูลหนี้ของคุณ</TextF>
+            <View className='flex flex-row gap-1'>
+                <TextF className='text-err'>แก้ไขข้อมูล</TextF>
+                <FontAwesome6 name="caret-right" size={20} color='#FF5449'/>
+            </View>
+        </TouchableOpacity>
+    </View>
+    <View className='flex justify-center mb-10 mt-5 px-5'>
         <TextF className=' text-label'>ปรับแผน</TextF>
         <TouchableOpacity 
         id='BtnAdjustPlan'

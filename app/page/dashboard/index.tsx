@@ -13,8 +13,9 @@ interface DashboardProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  setBackto: (backto: string) => void;
 }
-const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
   const [page, setPage] = useState(0) // 0 = Saving, 1 = Report, 2 = Record
   const indicators = [0, 1, 2];
   const animatedWidth = indicators.map(() => useRef(new Animated.Value(8)).current);
@@ -22,6 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
 
   useEffect(() =>{
     setStateNavbar(true)
+    setBackto('dashboard')
   },[]);
 
   useEffect(() => {
@@ -115,7 +117,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       className='flex flex-row gap-5'>
       {/* หน้า Saving */}
       <View className='shrink-0 w-screen'>
-        <Saving isDarkMode={isDarkMode} />
+        <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab}/>
       </View>
       {/* หน้า Report */}
       <View className='shrink-0 w-screen'>

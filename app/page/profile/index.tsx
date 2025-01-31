@@ -55,10 +55,10 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       <View className='flex flex-row justify-center gap-10 items-center h-40'>
         <View 
         style={{ borderWidth: 3}}
-        className='w-36 h-36 rounded-full border-primary'>
+        className='w-36 h-36 rounded-full border-primary overflow-hidden'>
           <Image 
             source={Logo}
-            style={{objectFit: 'cover', width: '100%', height: '100%', borderRadius:'100%'}}/>
+            style={{objectFit: 'cover', width: '100%', height: '100%'}}/>
         </View>
         <View className='flex flex-row gap-2 h-32'>
           <View className='flex justify-between'>

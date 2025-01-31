@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import  TextF  from '../../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,8 +15,9 @@ interface MainProps {
   setIsAuth: (state: boolean) => void;
   havePlant: boolean;
   setHavePlant: (state: boolean) => void;
+  setBackto: (backto: string) => void;
 }
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth, havePlant, setHavePlant }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth, havePlant, setHavePlant, setBackto }) => {
   
   
   
@@ -31,13 +32,14 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
   
     useEffect(() =>{
       setStateNavbar(true)
+      setBackto('main')
       if( !isAuth ){
         setMenu([
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
           { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
-          { tag: '', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+          { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
       }
       if( isAuth && !havePlant ){
@@ -45,8 +47,9 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
           { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
+          { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
-          { tag: '', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+          { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
       }
     },[isAuth]);
@@ -56,10 +59,11 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
     const [menu, setMenu] = useState([
       { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
       { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
-      { tag: '', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
+      { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
       { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
+      { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
       { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
-      { tag: '', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+      { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
     ])
 
     const DataNow = new Date();
@@ -151,21 +155,29 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
               </View>
             </View>
           </>
-          :isAuth && <View className='shadow-sm bg-secondary2 rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>
+          :isAuth && 
+          <View className='texture shadow-xs rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>
             <TouchableOpacity
             id='BtnStartCalRetirement'
             activeOpacity={1}
             onPress={() => setActiveTab('calRetirement')}
-            className='rounded-xl h-28 justify-between gap-2 flex-row items-center px-5'>
-              <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
-              <View>
-                <AntDesign name="caretright" size={25} color="#F68D2B"/>
+            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center'>
+              <ImageBackground 
+              source={require('../../../assets/images/texturePaper.png')} 
+              className='w-full h-full justify-between items-center flex-row rounded-2xl overflow-hidden absolute'
+            >
+              
+            </ImageBackground>
+              <View className='flex-row items-center justify-between w-full px-5'>
+                <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
+                <AntDesign name="caretright" size={25} color="#6780D6"/>
               </View>
             </TouchableOpacity>
           </View>
           }
           <TextF className=' mt-6 text-label'>บริการที่น่าสนใจ </TextF>
 
+          
           <View className=" flex-row justify-between mt-5">
             {menu.slice(0, 4).map((item, index) => (
               <TouchableOpacity

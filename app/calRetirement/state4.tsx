@@ -83,6 +83,7 @@ const handelSaveData = () => {
                     <TextInput
                       id='ExpectedMonthlyExpensesInput'
                       placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Expected_monthly_expenses}
                       keyboardType='numeric'
                       onChangeText={(text) => {

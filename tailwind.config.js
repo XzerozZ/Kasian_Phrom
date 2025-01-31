@@ -30,7 +30,8 @@ module.exports = {
         bgmenu_Testfinance:'#fecdb2',
         bgmenu_Change:'#c8e8fe',
         bgmenu_Money:'#fef5b2',
-        bgmenu_mean:'##feefc4'
+        bgmenu_mean:'##feefc4',
+        bg_debt:'#FFEAEA',
 
       },
     },
