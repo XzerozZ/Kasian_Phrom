@@ -3,6 +3,7 @@ import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity, Im
 import  TextF  from '../../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Logo = require('../../../assets/images/logo.png');
 
@@ -11,20 +12,34 @@ interface MainProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-  isAuth: boolean; 
-  setIsAuth: (state: boolean) => void;
   havePlant: boolean;
   setHavePlant: (state: boolean) => void;
   setBackto: (backto: string) => void;
 }
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth, havePlant, setHavePlant, setBackto }) => {
+
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, havePlant, setHavePlant, setBackto }) => {
   
   
   
   
   
   
-  
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          setIsAuth(true);
+        }
+      } catch (error) {
+        console.error('Failed to fetch token from storage', error);
+      }
+    };
+
+    fetchToken();
+  }, []);
   
   
   
