@@ -136,6 +136,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                 <TextInput
                                 id='searchLocation'
                                 placeholder='ค้นหาจังหวัด'
+                                placeholderTextColor={'#B0B0B0'}
                                 value={search}
                                 onChangeText={setSearch}
                                 className='h-10 px-5 w-11/12 text-lg text-normalText'/>
@@ -196,6 +197,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                             id='startPrice'
                                             keyboardType='numeric'
                                             placeholder='ไม่มี'
+                                            placeholderTextColor={'#B0B0B0'}
                                             value={queryFilter.startPrice}
                                             onChangeText={(text) => setQueryFilter({ ...queryFilter, startPrice: text })}
                                             onBlur={() => {
@@ -218,6 +220,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                             id='endPrice'
                                             keyboardType='numeric'
                                             placeholder='ไม่มี'
+                                            placeholderTextColor={'#B0B0B0'}
                                             value={queryFilter.endPrice}
                                             onChangeText={(text) => setQueryFilter({ ...queryFilter, endPrice: text })}
                                             onBlur={() => {

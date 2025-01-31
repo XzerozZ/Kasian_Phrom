@@ -93,6 +93,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
               <TextInput
               id='NameInput' 
               placeholder="ชื่อแผน"
+              placeholderTextColor={'#B0B0B0'}
               value={dataInput.Name}
               onChangeText={(text) => setDataInput({ ...dataInput, Name: text })}
               className={`text-lg`}/>
@@ -107,6 +108,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                     <TextInput
                       id='BirthDateInput' 
                       placeholder="วัน"
+                      placeholderTextColor={'#B0B0B0'}
                       value={subDate.day}
                       keyboardType='numeric'
                       maxLength={2}
@@ -121,6 +123,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       <TextInput
                         id='BirthMonthInput' 
                         placeholder="เดือน"
+                        placeholderTextColor={'#B0B0B0'}
                         value={subDate.month}
                         keyboardType="numeric"
                         maxLength={2}
@@ -137,6 +140,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       <TextInput
                       id='BirthYearInput'
                       placeholder="ปี"
+                      placeholderTextColor={'#B0B0B0'}
                       value={subDate.year}
                       keyboardType='numeric'
                       maxLength={4}

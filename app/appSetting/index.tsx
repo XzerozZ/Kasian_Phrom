@@ -74,6 +74,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 <TextInput
                                 id=' EditInputUserName'
                                 placeholder="ชื่อผู้ใช้"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={userName}
                                 onChangeText={setUserName}
@@ -86,6 +87,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 <TextInput
                                 id=' EditInputFristName'
                                 placeholder="ชื่อจริง"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={fristName}
                                 onChangeText={setFristName}
@@ -98,6 +100,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 <TextInput
                                 id=' EditInputLastName'
                                 placeholder="สกุล"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={lastName}
                                 onChangeText={setLastName}
@@ -138,6 +141,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     });
                                 }}
                                 placeholder="รหัสผ่านเก่า"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={oldPassword}
                                 onChangeText={setOldPassword}
@@ -151,6 +155,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                     });
                                 }}
                                 placeholder="รหัสผ่านใหม่"
+                                placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={newPassword}
                                 onChangeText={setNewPassword}

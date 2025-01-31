@@ -65,6 +65,7 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
             value={query}
             onChangeText={setQuery}
             placeholder="ค้นหาบ้านพักคนชรา"
+            placeholderTextColor={'#B0B0B0'}
             className="flex-1 text-lg text-normalText pl-2 h-14"
           />
         </View>

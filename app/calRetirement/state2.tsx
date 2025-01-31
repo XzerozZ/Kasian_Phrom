@@ -46,6 +46,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                     <TextInput
                       id='Current_savingsInput'
                       placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Current_savings}
                       keyboardType="decimal-pad"
                       onChangeText={(text) => {
@@ -110,6 +111,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                     <TextInput
                       id='Monthly_incomeInput'
                       placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Monthly_income}
                       keyboardType='numeric'
                       onChangeText={(text) => {
@@ -135,6 +137,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                     <TextInput
                       id='Monthly_expensesInput'
                       placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Monthly_expenses}
                       keyboardType='numeric'
                       onChangeText={(text) => {
@@ -167,6 +170,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                     <TextInput
                       id='Current_total_investmentInput'
                       placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Current_total_investment}
                       keyboardType='numeric'
                       onChangeText={(text) => {

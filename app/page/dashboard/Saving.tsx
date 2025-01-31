@@ -102,6 +102,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
               });
             }}
             placeholder="ใส่จำนวนเงิน"
+            placeholderTextColor={'#B0B0B0'}
             keyboardType="numeric"
             value={amount}
             onChangeText={setAmount}

@@ -45,6 +45,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         <View style={{position:'relative'}}>
           <TextInput
                 placeholder="ชื่อผู้ใช้"
+                placeholderTextColor={'#B0B0B0'}
                 keyboardType='default'
                 value={username}
                 onChangeText={setUsername}
@@ -59,6 +60,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         <View style={{position:'relative'}}>
           <TextInput
                 placeholder="อีเมล"
+                placeholderTextColor={'#B0B0B0'}
                 keyboardType='email-address'
                 value={email}
                 onChangeText={setEmail}
