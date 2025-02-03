@@ -3,6 +3,11 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import Port from '../../Port';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
@@ -22,6 +27,8 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false)
   const [passIsNotMatch, setPassIsNotMatch] = useState(false)
+
+
 
 
   const handleSigup = async () => {

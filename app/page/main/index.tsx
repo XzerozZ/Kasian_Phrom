@@ -24,6 +24,14 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, h
   
   
   
+  interface MenuItem {
+    tag: string;
+    icon: JSX.Element;
+    text: string;
+    bg: string;
+  }
+  
+  const [menu, setMenu] = useState<MenuItem[]>([]);
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
@@ -67,19 +75,21 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, h
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
       }
+      if( isAuth && havePlant ){
+        setMenu([
+          { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
+          { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
+          { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
+          { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
+          { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
+          { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
+          { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+        ])
+      }
     },[isAuth]);
     
 
 
-    const [menu, setMenu] = useState([
-      { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
-      { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
-      { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
-      { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
-      { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
-      { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
-      { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
-    ])
 
     const DataNow = new Date();
     const DateNow = DataNow.getDate();

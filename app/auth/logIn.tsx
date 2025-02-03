@@ -4,17 +4,10 @@ import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import * as WebBrowser from 'expo-web-browser';
-// import * as Google from 'expo-auth-session/providers/google';
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
-
-// WebBrowser.maybeCompleteAuthSession();
-
-
-// web 788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com
-// ios 788619682273-jih87ufg9fpk2ul960tbcnvc36sn667t.apps.googleusercontent.com
-// android 788619682273-983bndch72394g38b36af4jq3gu2hj6o.apps.googleusercontent.com
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
@@ -32,17 +25,41 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup
 
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [userInformation, setUserInformation] = useState<any>(null)
-//   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-//     webClientId: '788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com',
-//     androidClientId: '788619682273-983bndch72394g38b36af4jq3gu2hj6o.apps.googleusercontent.com',
-//     iosClientId: '788619682273-jih87ufg9fpk2ul960tbcnvc36sn667t.apps.googleusercontent.com',
+  
 
-//   });
+  GoogleSignin.configure();
 
 
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      setUserInformation(userInfo);
+    } catch (error) {
+      if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("cancelled");
+      } else if ((error as any).code === statusCodes.IN_PROGRESS) {
+        console.log("in progress");
+      } else if ((error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("play services not available or outdated");
+      } else {
+        console.log("Something went wrong", error);
+      }
+    }
+  };
 
+console.log(JSON.stringify(userInformation, null, 2));
 
-
+const signOut = async () => {
+  try {
+    await GoogleSignin.signOut();
+    setUserInformation(null);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const handleLogin = async () => {
   try {
@@ -158,7 +175,7 @@ const handleLogin = async () => {
       </View>
       <TouchableOpacity
         activeOpacity={1}
-        // onPress={()=>promptAsync()}
+        onPress={googleSignIn}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
           <Image 
           source={google} 
@@ -169,7 +186,8 @@ const handleLogin = async () => {
         <TextF className='text-normalText'>ยังไม่มีบัญชี </TextF>
         <TouchableOpacity
             activeOpacity={1}
-            onPress={()=>setStateLogin(false)}
+            // onPress={()=>setStateLogin(false)}
+            onPress={()=>signOut()}
           >
           <TextF className='text-primary'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
