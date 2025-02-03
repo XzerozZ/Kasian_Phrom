@@ -35,7 +35,9 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
-      setUserInformation(userInfo);
+      if (userInfo.type === "success") {
+        setUserInformation(userInfo.data.user);
+      }
     } catch (error) {
       if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
