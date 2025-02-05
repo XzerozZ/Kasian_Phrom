@@ -108,6 +108,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                 id="FilterContainer"
                 bounces={false}
                 showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 ref={scrollViewRef}
                 horizontal={true}
                 pagingEnabled={true}
@@ -147,21 +148,20 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                 <View className='w-1/2 h-full mt-5 border-r border-neutral2'>
                                     <ScrollView className=''>
                                         {queryFilter.location.map((location, index) => (
-                                            <View 
+                                            <TouchableOpacity 
                                             key={index} 
+                                            id="selectedLocation"
+                                            activeOpacity={0.8}
+                                            onPress={() => handleRemoveLocation(location)}
                                             style={{position: 'relative'}}
                                             className='flex flex-row items-center pr-5 w-full h-12 mt-2'>
                                                 <View style={{position: 'absolute', right: 20, top: 3, zIndex: 10}}>
                                                     <Entypo name="cross" size={15} color="#FCFCFC" />
                                                 </View>
-                                                <TouchableOpacity
-                                                    id="selectedLocation"
-                                                    activeOpacity={0.8}
-                                                    onPress={() => handleRemoveLocation(location)}
-                                                    className={` flex justify-center items-center bg-primary2 w-full h-full rounded-md`}>
+                                                <View className={` flex justify-center items-center bg-primary2 w-full h-full rounded-md`}>
                                                     <TextF className='text-neutral '>{location}</TextF>
-                                                </TouchableOpacity>
-                                            </View>
+                                                </View>
+                                            </TouchableOpacity>
                                         ))}
                                     </ScrollView>
                                 </View>

@@ -55,7 +55,8 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
       }
   
       const data = await response.json();
-      console.log(data,'+++++++++')
+      console.log(data)
+      setTypePopup("registerSuccess");
 
       setStateLogin(true)
     } catch (error) {

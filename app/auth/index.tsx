@@ -21,6 +21,7 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
   const translateYEmailRegister = useRef(new Animated.Value(-130)).current;
   const translateYEmailInvalid = useRef(new Animated.Value(-130)).current;
   const translateYPasswordInvalid = useRef(new Animated.Value(-130)).current;
+  const translateYRegisterSuccess = useRef(new Animated.Value(-130)).current;
 
   useEffect(() => {
     // สำหรับ 'emailIsRegister'
@@ -79,6 +80,24 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
         setTypePopup(""); // ตั้งค่า typePopup เป็นค่าว่าง
       }, 2000);
     }
+
+    if (typePopup === 'registerSuccess') {
+      Animated.timing(translateYRegisterSuccess, {
+        toValue: 64,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
+
+      setTimeout(() => {
+        Animated.timing(translateYRegisterSuccess, {
+          toValue: -130,
+          duration: 400,
+          useNativeDriver: true,
+        }).start();
+
+        setTypePopup(""); // ตั้งค่า typePopup เป็นค่าว่าง
+      }, 2000);
+    }
   }, [typePopup, setTypePopup]);
 
   return (
@@ -112,6 +131,15 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
       className="absolute flex justify-center items-center w-full "
     >
       <View className='flex justify-center items-center w-96 h-20 bg-neutral shadow-sm rounded-2xl'><TextF className="text-lg py-2 text-err">รหัสผ่านไม่ถูกต้อง</TextF></View>
+    </Animated.View>
+    
+    <Animated.View
+      style={{
+        transform: [{ translateY: translateYRegisterSuccess }],
+      }}
+      className="absolute flex justify-center items-center w-full "
+    >
+      <View className='flex justify-center items-center w-96 h-20 bg-neutral shadow-sm rounded-2xl'><TextF className="text-lg py-2 text-primary">ลงทะเบียนสำเร็จ</TextF></View>
     </Animated.View>
     </View>
     

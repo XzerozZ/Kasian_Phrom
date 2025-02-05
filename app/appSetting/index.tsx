@@ -3,7 +3,6 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, ScrollView,
 import { FontAwesome6, FontAwesome, MaterialIcons, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import HeadTitle from '../components/headTitle';
 import  TextF  from '../components/TextF';
-import SelectDropdown from 'react-native-select-dropdown'
 import CheckBox from '../components/checkBox';
 import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
@@ -45,10 +44,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [isNotification, setIsNotification] = useState(true);
 
 
-
-
     const handleLogout = async () => {
         try {
+
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",

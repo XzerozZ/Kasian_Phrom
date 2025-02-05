@@ -5,21 +5,23 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
+// import 
 
 interface futureUseProps{
   isDarkMode: boolean;
   setStateFutureUse: (state: boolean) => void
   dataAssetInput: any;
   setDataAssetInput: (data: any) => void;
+  dataEditAsset: number | null;
+  setDataEditAsset: (data: number | null) => void;
 }
-const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput}) => {
+const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [newDataAssetInput, setNewDataAssetInput] = useState({
     Name: '',
     Total_money: '',
-    Monthly_expenses: '',
     End_year: '',
     type: 'home',
   })
@@ -38,6 +40,17 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
   const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
 
 
+
+  useEffect(() => {
+    if (dataEditAsset !== null) {
+      console.log(dataEditAsset);
+      console.log(dataAssetInput[dataEditAsset]);
+      console.log(dataAssetInput);
+
+      setNewDataAssetInput(dataAssetInput[dataEditAsset]);
+    }
+  }, []);
+
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
       setIsFully(true);
@@ -55,17 +68,95 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
 
   const handleSave = () => {
-    setDataAssetInput((prevData: any[]) => [...prevData, newDataAssetInput]);
+    const currentYear = new Date().getFullYear() + 543; // ปี พ.ศ.
+    const numericText = newDataAssetInput.End_year.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+    const validatedValue = parseInt(numericText, 10);
+  
+    // ถ้าปีที่ใส่น้อยกว่าปีปัจจุบัน ให้ใช้ปีปัจจุบันแทน
+    const finalValue = !isNaN(validatedValue) && validatedValue < currentYear
+      ? String(currentYear)
+      : numericText;
+  
+    // อัปเดตค่า End_year ก่อนบันทึก
+    const updatedData = { ...newDataAssetInput, End_year: finalValue };
+  
+    // เพิ่มข้อมูลใหม่เข้าไปใน dataAssetInput
+    setDataAssetInput((prevData: any[]) => [...prevData, updatedData]);
+  
+    // รีเซ็ตค่า input
     setNewDataAssetInput({
       Name: '',
       Total_money: '',
-      Monthly_expenses: '',
       End_year: '',
       type: 'home',
     });
-    setType(''); 
+  
+    setType('');
     setStateFutureUse(false);
   };
+  
+
+  const handleCancelEdit = () => {
+    setDataEditAsset(null);
+    setNewDataAssetInput({
+      Name: '',
+      Total_money: '',
+      End_year: '',
+      type: 'home',
+    });
+    setType('');
+    setStateFutureUse(false);
+  }
+
+  const handleSaveEdit = () => {
+    const currentYear = new Date().getFullYear() + 543; // ปี พ.ศ.
+    const numericText = newDataAssetInput.End_year.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+    const validatedValue = parseInt(numericText, 10);
+  
+    // ถ้าปีที่ใส่น้อยกว่าปีปัจจุบัน ให้ใช้ปีปัจจุบันแทน
+    const finalValue = !isNaN(validatedValue) && validatedValue < currentYear
+      ? String(currentYear)
+      : numericText;
+  
+    // อัปเดตค่า End_year ก่อนบันทึก
+    const updatedData = { ...newDataAssetInput, End_year: finalValue };
+  
+    // อัปเดตข้อมูลใน dataAssetInput
+    const newData = dataAssetInput.map((item: any, index: number) => {
+      if (index === dataEditAsset) {
+        return updatedData;
+      }
+      return item;
+    });
+  
+    setDataAssetInput(newData);
+  
+    setDataEditAsset(null);
+    setNewDataAssetInput({
+      Name: '',
+      Total_money: '',
+      End_year: '',
+      type: 'home',
+    });
+    setType('');
+    setStateFutureUse(false);
+    
+  }
+
+  const handleDelAsset = () => {
+    const newData: any[] = dataAssetInput.filter((_: any, index: number) => index !== dataEditAsset);
+    setDataAssetInput(newData);
+
+    setDataEditAsset(null);
+    setNewDataAssetInput({
+      Name: '',
+      Total_money: '',
+      End_year: '',
+      type: 'home',
+    });
+    setType('');
+    setStateFutureUse(false);
+  }
 
   return (
     <View 
@@ -76,7 +167,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
           <TouchableOpacity
               id='BtnBackToCalRetirementState3'
               activeOpacity={1}
-              onPress={()=>setStateFutureUse(false)}
+              onPress={()=> dataEditAsset !== null ? handleCancelEdit() :setStateFutureUse(false)}
               className=''>
               <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
           </TouchableOpacity>
@@ -241,13 +332,13 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
         className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none'>
           <TouchableOpacity
           id='BtnCancelFutureUse'
-          onPress={()=>setStateFutureUse(false)}
+          onPress={()=> dataEditAsset !== null ? handleDelAsset() : setStateFutureUse(false)}
           className='flex-1 h-14 rounded-lg border border-err justify-center items-center'>
-            <TextF className='text-err text-lg'>ยกเลิก</TextF>
+            <TextF className='text-err text-lg'>{dataEditAsset !== null ? 'ลบ' : 'ยกเลิก'}</TextF>
           </TouchableOpacity>
           <TouchableOpacity 
           id='BtnSaveFutureUse'
-          onPress={ isFully ? handleSave : () => {}}
+          onPress={() => { if (isFully) { dataEditAsset !== null ? handleSaveEdit() : handleSave(); } }}
           className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>บันทึก</TextF>
           </TouchableOpacity>

@@ -31,30 +31,13 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
       month: (selectedDate.getMonth() + 1).toString().padStart(2, '0'),
       year: thaiYear.toString(),
     });
-
-    const formattedDate = selectedDate.toLocaleDateString('th-TH', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-    setDataInput({ ...dataInput, Birth_date: formattedDate });
     setPickerVisible(false);
   };
 
   useEffect(() => {
     if (subDate.day && subDate.month && subDate.year) {
-      const selectedDate = new Date(
-        parseInt(subDate.year, 10) - 543,
-        parseInt(subDate.month, 10) - 1, 
-        parseInt(subDate.day, 10) 
-      );
-  
-      const formattedDate = selectedDate.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      });
-  
+      const christYear = Number(subDate.year) - 543
+      const formattedDate = (subDate.day+'-'+subDate.month+'-'+christYear)
       setDataInput({ ...dataInput, Birth_date: formattedDate });
     }
   }, [subDate]);
@@ -62,7 +45,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
 
   useEffect(() => {
     if (dataInput.Birth_date) {
-      const dateParts = dataInput.Birth_date.split('/');
+      const dateParts = dataInput.Birth_date.split('-');
       setSubDate({
         day: dateParts[0],
         month: dateParts[1],
@@ -115,7 +98,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       onChangeText={(text) => {
                         const numericText = text.replace(/[^0-9]/g, '');
                         const validatedValue = parseInt(numericText, 10);
-                        const finalValue = !isNaN(validatedValue) && validatedValue > 31 ? '31' : numericText;
+                        const finalValue = !isNaN(validatedValue) && validatedValue > 31 ? '31' : validatedValue < 1 ? '1' : numericText;
                         setSubDate({ ...subDate, day: finalValue });
                       }}
                       className={` w-8 text-center text-primary`}/>
@@ -131,7 +114,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                           const numericText = text.replace(/[^0-9]/g, ''); 
                         
                           const validatedValue = parseInt(numericText, 10);
-                          const finalValue = !isNaN(validatedValue) && validatedValue > 12 ? '12' : numericText;
+                          const finalValue = !isNaN(validatedValue) && validatedValue > 12 ? '12' : validatedValue < 1 ? '1' : numericText;
                         
                           setSubDate({ ...subDate, month: finalValue });
                         }}

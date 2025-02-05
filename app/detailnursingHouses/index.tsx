@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image, Linking, Alert } from "react-native";
 import { FontAwesome6, FontAwesome, Fontisto, Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import Clipboard from '@react-native-clipboard/clipboard';
 import TextF from "../components/TextF";
 
 interface DetailNursingHousesProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-
+  homeSelected: string;
+  setHomeSelected: (home: any) => void;
+  formPage: string;
+  state: number | null;
+  homePickInPlan: string;
+  setHomePickInPlan: (home: string) => void;
+  setState: (state: number) => void;
 }
 
 const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   setActiveTab,
   setStateNavbar,
+  homeSelected,
+  setHomeSelected,
+  formPage,
+  state,
+  homePickInPlan,
+  setHomePickInPlan,
+  setState
 }) => {
   useEffect(() => {
     setStateNavbar(false);
@@ -21,6 +33,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   const [isActive, setIsActive] = useState(true);
 
   const nursingHome = {
+    id: "00002",
     name: "สถานพักฟื้นผู้ป่วย ผู้สูงอายุ เพชรเกษมเฮลท์แคร์",
     address: "164 177-178 ซอย เพชรเกษม 14 แขวงวัดท่าพระ เขตบางกอกใหญ่ กรุงเทพมหานคร",
     price: "เริ่มต้น 20,000 บาทต่อเดือน",
@@ -38,12 +51,12 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
       { day: "อาทิตย์", time: "24 ชม." },
     ],
   };
-
+  console.log('homeSelected',homeSelected)
   return (
     <>
       {/* Header */}
       <View className="flex-row items-center p-4">
-        <TouchableOpacity onPress={() => setActiveTab("nursingHouses")}>
+        <TouchableOpacity onPress={() => formPage==='index'? setActiveTab("nursingHouses"):setHomeSelected('')}>
           <FontAwesome6 name="angle-left" size={28} color="#070F2D" />
         </TouchableOpacity>
         <Text 
@@ -163,11 +176,14 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
 
         {/* Recommend Button */}
         <View className="p-5">
-          <TouchableOpacity className="bg-primary rounded-lg py-3">
+          <TouchableOpacity 
+          onPress={() => formPage === 'calRetirement' ? (setHomePickInPlan(nursingHome.id), setState(4), setHomeSelected('')) : setActiveTab('index')}
+          className="bg-primary rounded-lg py-3">
             <TextF
               className="text-center text-white text-lg"
             >
-              แทนที่บ้านพัก
+              {formPage === 'calRetirement' && 'เลือกบ้านพัก'}
+              {formPage === 'index' && 'แทนที่บ้านพัก'}
             </TextF>
           </TouchableOpacity>
         </View>

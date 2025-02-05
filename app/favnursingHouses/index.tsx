@@ -8,9 +8,12 @@ interface FavNursingHousesProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  setHomeSelected: (home: any) => void;
+  formPage: string;
+  setState: (state: number) => void;
 }
 
-const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState }) => {
   const favoriteHomes = [
     {
       id: "1",
@@ -40,14 +43,18 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
   }, [query]);
 
   useEffect(() => {
-    setStateNavbar(true);
+    if (formPage === 'index') {
+      setStateNavbar(true);
+    }else{
+      setStateNavbar(false);
+    }
   }, [setStateNavbar]);
 
   return (
     <View className="flex-1 px-5">
       {/* Header */}
       <View className="flex-row items-center p-4">
-        <TouchableOpacity onPress={() => setActiveTab("nursingHouses")}>
+        <TouchableOpacity onPress={() => formPage === 'index' ? setActiveTab("nursingHouses") : setState(5)}>
           <FontAwesome6 name="angle-left" size={28} color="#070F2D" />
         </TouchableOpacity>
         <Text 

@@ -12,12 +12,10 @@ interface MainProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-  havePlant: boolean;
-  setHavePlant: (state: boolean) => void;
   setBackto: (backto: string) => void;
 }
 
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, havePlant, setHavePlant, setBackto }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
   
   
   
@@ -33,6 +31,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, h
   
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [isAuth, setIsAuth] = useState(false);
+  const [havePlant, setHavePlant] = useState(false);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -186,13 +185,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, h
             id='BtnStartCalRetirement'
             activeOpacity={1}
             onPress={() => setActiveTab('calRetirement')}
-            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center'>
-              <ImageBackground 
-              source={require('../../../assets/images/texturePaper.png')} 
-              className='w-full h-full justify-between items-center flex-row rounded-2xl overflow-hidden absolute'
-            >
-              
-            </ImageBackground>
+            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center border border-banner'>
               <View className='flex-row items-center justify-between w-full px-5'>
                 <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
                 <AntDesign name="caretright" size={25} color="#6780D6"/>
