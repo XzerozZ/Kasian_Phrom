@@ -55,7 +55,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   useEffect(() => {
     setStateNavbar(false);
-    setState(4);
+    setState(1);
   }, [])
 
   useEffect(() => {
@@ -159,9 +159,9 @@ const handleBack = () => {
 }
 
 useEffect(() => {
-  const fetchToken = async () => {
+  const fetchToken = async (token:string ) => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      
       console.log(token)
       const response = await fetch(`${Port.BASE_URL}/retirement`, {
         method: 'GET',
@@ -189,8 +189,6 @@ useEffect(() => {
 
       if (data.result !== null) {
         setHavePlant(true)
-        console.log('data.result:', token)
-        console.log('data.result:',JSON.stringify(data.result.plan, null, 2) )
         const plan = data.result.plan;
         if (plan !== undefined) {
           setDataInput({
@@ -211,8 +209,6 @@ useEffect(() => {
             Annual_investment_return: plan.annual_investment_return.toString() ,
           })
         }
-
-        
       }
       if (dataAsset.result !== null) {
         console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
@@ -236,8 +232,14 @@ useEffect(() => {
       console.error('Failed to fetch token from storage', error);
     }
   };
-
-  fetchToken();
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== undefined && token !== null && havePlant) {
+      fetchToken(token);
+    }
+  };
+  
+  getToken();
 }, []);
 
 

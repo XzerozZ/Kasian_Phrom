@@ -40,20 +40,20 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         const token = await AsyncStorage.getItem('token');
         if (token) {
           setIsAuth(true);
-        }
-        const response = await fetch(`${Port.BASE_URL}/retirement`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        
+          const response = await fetch(`${Port.BASE_URL}/retirement`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        const data = await response.json();
-        console.log(data.result)
-        if (data.result !== null) {
-          setHavePlant(true);
+          const data = await response.json();
+          console.log(data.result)
+          if (data.result !== null) {
+            setHavePlant(true);
+          }
         }
-
       } catch (error) {
         console.error('Failed to fetch token from storage', error);
       }
