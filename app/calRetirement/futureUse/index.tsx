@@ -5,6 +5,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
+import CheckBox from '../../components/checkBox';
 // import 
 
 interface futureUseProps{
@@ -14,8 +15,9 @@ interface futureUseProps{
   setDataAssetInput: (data: any) => void;
   dataEditAsset: number | null;
   setDataEditAsset: (data: number | null) => void;
+  havePlant: boolean;
 }
-const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset }) => {
+const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset, havePlant }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -24,6 +26,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
     Total_money: '',
     End_year: '',
     type: 'home',
+    Status: true,
   })
 
   const categories = [
@@ -41,15 +44,14 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
 
 
+
   useEffect(() => {
     if (dataEditAsset !== null) {
-      console.log(dataEditAsset);
-      console.log(dataAssetInput[dataEditAsset]);
-      console.log(dataAssetInput);
-
+      console.log(newDataAssetInput);
       setNewDataAssetInput(dataAssetInput[dataEditAsset]);
     }
   }, []);
+
 
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
@@ -89,6 +91,8 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       Total_money: '',
       End_year: '',
       type: 'home',
+      Status: true,
+
     });
   
     setType('');
@@ -103,6 +107,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       Total_money: '',
       End_year: '',
       type: 'home',
+      Status: true,
     });
     setType('');
     setStateFutureUse(false);
@@ -137,6 +142,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       Total_money: '',
       End_year: '',
       type: 'home',
+      Status: true,
     });
     setType('');
     setStateFutureUse(false);
@@ -153,10 +159,13 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       Total_money: '',
       End_year: '',
       type: 'home',
+      Status: true,
     });
     setType('');
     setStateFutureUse(false);
   }
+
+
 
   return (
     <View 
@@ -255,6 +264,22 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                 />
               </View>
             </View>
+            
+            {havePlant && 
+            <>
+              <View className='w-full h-[1] bg-neutral2'></View>
+              
+              <View className='flex flex-row  justify-between items-center h-16'>
+                <View> 
+                  <TextF className='text-lg text-normalText'>อยู่ระหว่างการออม</TextF>
+                </View>
+                <View 
+                  id='BtnChangeNotification'
+                  className='flex flex-row gap-5 justify-center items-center'>
+                      <CheckBox toggle={newDataAssetInput.Status} setToggle={(status) => setNewDataAssetInput({ ...newDataAssetInput, Status: status })}/>
+                </View>
+              </View>
+            </>}
           </View>
         </View>
         

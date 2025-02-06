@@ -66,6 +66,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
         }
     };
 
+    
+
     return (
         <> 
             <HeadTitle 

@@ -27,10 +27,12 @@ import FavNursingHouses from '../favnursingHouses';
   }
 
   interface Asset {
+    asset_id:string
     Total_money: string;
     End_year: string;
     type: string;
     Name: string;
+    Status: boolean
   }
 
 
@@ -53,7 +55,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   useEffect(() => {
     setStateNavbar(false);
-    setState(1);
+    setState(4);
   }, [])
 
   useEffect(() => {
@@ -138,7 +140,9 @@ const [dataInput, setDataInput] = useState({
 
 
 const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
+const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
 const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
+const [havePlant, setHavePlant] = useState(false)
 
 
 const scrollViewRef = useRef<ScrollView>(null);
@@ -154,8 +158,87 @@ const handleBack = () => {
   }
 }
 
+useEffect(() => {
+  const fetchToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      console.log(token)
+      const response = await fetch(`${Port.BASE_URL}/retirement`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const responseHouse = await fetch(`${Port.BASE_URL}/user/selected`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      const data = await response.json();
+      const dataAsset = await responseAsset.json();
+      const dataHouse = await responseHouse.json();
+      
 
+      if (data.result !== null) {
+        setHavePlant(true)
+        console.log('data.result:', token)
+        console.log('data.result:',JSON.stringify(data.result.plan, null, 2) )
+        const plan = data.result.plan;
+        if (plan !== undefined) {
+          setDataInput({
+            Name: plan.planName,
+            Birth_date: plan.birth_date,
+            Retirement_age: plan.retirement_age.toString() ,
+            Exp_lifespan: plan.expect_lifespan.toString() ,
+            Current_savings: plan.current_savings.toString() ,
+            Current_savings_returns: plan.current_savings_returns.toString() ,
+            Monthly_income: plan.monthly_income.toString() ,
+            Monthly_expenses: plan.monthly_expenses.toString() ,
+            Current_total_investment: plan.current_total_investment.toString() ,
+            Investment_return: plan.investment_return.toString() ,
+            Expected_inflation: plan.expected_inflation.toString() ,
+            Expected_monthly_expenses: plan.expected_monthly_expenses.toString() ,
+            Annual_expense_increase: plan.annual_expense_increase.toString() ,
+            Annual_savings_return: plan.annual_savings_return.toString() ,
+            Annual_investment_return: plan.annual_investment_return.toString() ,
+          })
+        }
+
+        
+      }
+      if (dataAsset.result !== null) {
+        console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
+
+        const assets = dataAsset.result.map((item: any) => ({
+          asset_id: item.asset.asset_id,
+          Name: item.asset.name,
+          Total_money: item.asset.total_cost.toString(),
+          End_year: (parseInt(item.asset.end_year)+543).toString(),
+          type: item.asset.type,
+          Status: item.asset.status === 'In_Progress' ? true : false
+        }));
+
+      console.log('dataHouse:', JSON.stringify(dataHouse.result.selected.NursingHouse.nh_id, null, 2))
+        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
+        setOldAssetInput(assets)
+        setDataAssetInput(assets);
+      }
+
+    } catch (error) {
+      console.error('Failed to fetch token from storage', error);
+    }
+  };
+
+  fetchToken();
+}, []);
 
 
 
@@ -231,9 +314,9 @@ const handleBack = () => {
           ref={scrollViewRef}
           className={`flex-1`}>
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
-            {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
+            {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput} havePlant={havePlant}/>}
             {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset}/>}
-            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan}/>}
+            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant}/>}
 
             
 
@@ -246,7 +329,7 @@ const handleBack = () => {
       {state === 6 && homeSelected === '' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState}/>}
       {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState}/>}
 
-      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset}/>}
+      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant}/>}
     </>
   )
 }

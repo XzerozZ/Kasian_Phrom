@@ -4,6 +4,7 @@ import  TextF  from '../../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '../../../Port';
 
 const Logo = require('../../../assets/images/logo.png');
 
@@ -40,6 +41,19 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         if (token) {
           setIsAuth(true);
         }
+        const response = await fetch(`${Port.BASE_URL}/retirement`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        console.log(data.result)
+        if (data.result !== null) {
+          setHavePlant(true);
+        }
+
       } catch (error) {
         console.error('Failed to fetch token from storage', error);
       }
@@ -63,8 +77,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
-      }
-      if( isAuth && !havePlant ){
+      }else if( isAuth && !havePlant ){
         setMenu([
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
@@ -73,19 +86,17 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
-      }
-      if( isAuth && havePlant ){
+      }else if( isAuth && havePlant ){
         setMenu([
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
           { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
           { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
           { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
-          { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
       }
-    },[isAuth]);
+    },[isAuth, havePlant]);
     
 
 
@@ -161,23 +172,24 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         {isAuth && havePlant ?
           <>
             <TextF className='pl-5 mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
-            <View className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
+            <TouchableOpacity 
+                id='BtnDashboard'
+                activeOpacity={1}
+                onPress={() => setActiveTab('dashboard')}
+                className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
               <TextF className=' ml-6 text-normalText text-lg'>จำนวนเงินที่ต้องเก็บในเดือนนี้</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
                   <TextF className='text-3xl ml-6 text-primary'>19,000</TextF>
                   <TextF className='text-lg text-normalText'>บาท</TextF>
                 </View>
-                <TouchableOpacity
-                id='BtnDashboard'
-                activeOpacity={1}
-                onPress={() => setActiveTab('dashboard')}>
+                <View>
                   <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน 
                     <AntDesign name="caretright" size={12} color="#F68D2B"/>
                   </TextF>
-                </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </>
           :isAuth && 
           <View className='texture shadow-xs rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>

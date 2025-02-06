@@ -53,8 +53,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
       });
     }
 
-    setDataInput({ ...dataInput, Birth_date: '' });
-  }, []);
+  }, [dataInput.Birth_date]);
 
   useEffect(() => {
     if (dataInput.Name === '' || dataInput.Birth_date === '' || dataInput.Retirement_age === '' || dataInput.Exp_lifespan === '') {
@@ -83,7 +82,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
             </View>
           </View>
           <View className='flex mt-2'>
-            <TextF className='text-normalText text-lg mt-5'>ข้อมูลอายุของคุณ{dataInput.Birth_date}</TextF>
+            <TextF className='text-normalText text-lg mt-5'>ข้อมูลอายุของคุณ</TextF>
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
                 <TextF className='text-lg text-normalText'>วัน/เดือน/ปีเกิดของคุณ</TextF>
@@ -166,7 +165,6 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='RetirementAgeInput'
-                      defaultValue='65'
                       value={dataInput.Retirement_age}
                       keyboardType='numeric'
                       maxLength={2}
