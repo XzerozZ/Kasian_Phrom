@@ -2,18 +2,22 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOpacity } from 'react-native';
 import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-
+import Port from '../../Port';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
 interface SignUpProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
-  isAuth: boolean;
-  setIsAuth: (state: boolean) => void;
+  setTypePopup: (type: string) => void;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, setIsAuth  }) => {
+const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePopup }) => {
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -22,7 +26,46 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
 
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false)
+  const [passIsNotMatch, setPassIsNotMatch] = useState(false)
 
+
+
+
+  const handleSigup = async () => {
+    try {
+      const response = await fetch(`${Port.BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uname: username,
+          email: email,
+          password: password,
+          role: "User"
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.message && errorData.message.includes('uni_users_email')) {
+            setTypePopup("emailIsRegister");
+        }else{
+            throw new Error('Network response was not ok');
+        }
+      }
+  
+      const data = await response.json();
+      console.log(data)
+      setTypePopup("registerSuccess");
+
+      setStateLogin(true)
+    } catch (error) {
+      throw new Error( error as string);
+      
+      
+    }
+  };
+  
 
   return (
     <View 
@@ -38,7 +81,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
       </TouchableOpacity>
       <Image 
       source={Logo} 
-      style={{objectFit: 'contain'}}
+      style={outStyles.image}
       className='w-52 h-52'/>
       <TextF className='text-2xl text-primary mb-5'>สมัครสมาชิก</TextF>
       <View className='flex w-full items-center gap-2'>
@@ -49,7 +92,6 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
                 keyboardType='default'
                 value={username}
                 onChangeText={setUsername}
-                // placeholderTextColor='#C9C9C9'
                 className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
           className='w-10 h-12 items-center justify-center mt-5'
@@ -76,9 +118,11 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         style={{position:'relative'}}>
           <TextInput
                 placeholder="รหัสผ่าน"
+                placeholderTextColor={'#B0B0B0'}
                 secureTextEntry={!visiblePassword}
                 value={password}
                 onChangeText={setPassword}
+                onBlur={()=>confirmPassword !== '' ?setPassIsNotMatch(password !== confirmPassword):null}
                 className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
           className='w-10 h-12 items-center justify-center mt-5 '
@@ -97,11 +141,19 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         <View 
         className=''
         style={{position:'relative'}}>
+          {passIsNotMatch &&
+          <View
+          style={{position: 'absolute', right: 30, top: -3 }}>
+            <TextF className='text-sm text-err'>*หรัสผ่านไม่ตรงกัน</TextF>
+          </View>}
+          
           <TextInput
                 placeholder="ยืนยันรหัสผ่าน"
+                placeholderTextColor={'#B0B0B0'}
                 secureTextEntry={!visibleConfirmPassword}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
+                onBlur={()=>setPassIsNotMatch(password !== confirmPassword)}
                 className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
           className='w-10 h-12 items-center justify-center mt-5 '
@@ -119,8 +171,8 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         </View>
         <TouchableOpacity
         activeOpacity={1}
-        onPress={()=>setStateLogin(true)}
-        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword ?'bg-primary':'bg-unselectMenu'}  `}>
+        onPress={()=>{ username&& email && password && confirmPassword && !passIsNotMatch ? handleSigup() : null }}
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ username&& email && password && confirmPassword && !passIsNotMatch ?'bg-primary':'bg-unselectMenu'}`}>
           <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
       </View>
@@ -132,7 +184,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, isAuth, se
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
           <Image 
           source={google} 
-          style={{objectFit: 'contain'}}
+          style={outStyles.imageGoogle}
           className='h-10 w-10'/>
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>

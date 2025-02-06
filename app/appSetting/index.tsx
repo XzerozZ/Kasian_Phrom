@@ -3,9 +3,10 @@ import { View, Text, Button, Image, StyleSheet, Animated, TextInput, ScrollView,
 import { FontAwesome6, FontAwesome, MaterialIcons, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import HeadTitle from '../components/headTitle';
 import  TextF  from '../components/TextF';
-import SelectDropdown from 'react-native-select-dropdown'
 import CheckBox from '../components/checkBox';
 import DropdownCustom from '../components/DropdownCustom';
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Logo = require('../../assets/images/logo.png')
 interface appSettingProps{
@@ -42,6 +43,30 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [isDark, setIsDark] = useState(false);
     const [isNotification, setIsNotification] = useState(true);
 
+
+    const handleLogout = async () => {
+        try {
+
+            const token = await AsyncStorage.getItem('token');
+            const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            });
+            if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Network response was not ok");
+            }
+            await AsyncStorage.removeItem('token');
+            setActiveTab('main');
+        } catch (error) {
+            throw new Error( error as string);
+        }
+    };
+
+    
 
     return (
         <> 
@@ -215,11 +240,13 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         </View>
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
-                    <View 
+                    <TouchableOpacity 
                     id='BtnLogout'
+                    activeOpacity={1}
+                    onPress={()=>handleLogout()}
                     className='flex flex-row justify-between my-10 mb-14'>
                         <TextF className='text-lg text-err'>ออกจากระบบ</TextF>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 
             </ScrollView>

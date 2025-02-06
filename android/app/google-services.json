@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "15846928113",
+    "project_id": "se-kasian-phrom",
+    "storage_bucket": "se-kasian-phrom.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15846928113:android:8296389b645223c47bc350",
+        "android_client_info": {
+          "package_name": "com.champmonthol.Kasian_phrom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15846928113-6qr8l88rm3adruhglf2uilbeskdfcfp4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.champmonthol.Kasian_phrom",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "15846928113-halndc2gsa772cru7kit0c8eq6tfnp3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIHMuPQlazW4WkvUvO0GAVKNgoLhscYd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15846928113-halndc2gsa772cru7kit0c8eq6tfnp3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

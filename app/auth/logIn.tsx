@@ -2,18 +2,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOpacity } from 'react-native';
 import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-// import * as WebBrowser from 'expo-web-browser';
-// import * as Google from 'expo-auth-session/providers/google';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
-
-// WebBrowser.maybeCompleteAuthSession();
-
-
-// web 788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com
-// ios 788619682273-jih87ufg9fpk2ul960tbcnvc36sn667t.apps.googleusercontent.com
-// android 788619682273-983bndch72394g38b36af4jq3gu2hj6o.apps.googleusercontent.com
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {
+//   GoogleSignin,
+//   statusCodes,
+// } from "@react-native-google-signin/google-signin";
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
@@ -22,22 +16,85 @@ const google = require('../../assets/images/googleIcon.png')
 interface LogInProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
-  isAuth: boolean;
-  setIsAuth: (state: boolean) => void;
+  setTypePopup: (type: string) => void;
 }
-const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setIsAuth }) => {
+const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup }) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [userInformation, setUserInformation] = useState<any>(null)
-//   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-//     webClientId: '788619682273-er631gpvr0vg6e6q4lnreasgopbgqev3.apps.googleusercontent.com',
-//     androidClientId: '788619682273-983bndch72394g38b36af4jq3gu2hj6o.apps.googleusercontent.com',
-//     iosClientId: '788619682273-jih87ufg9fpk2ul960tbcnvc36sn667t.apps.googleusercontent.com',
+  
 
-//   });
+//   GoogleSignin.configure();
+
+
+//   const googleSignIn = async () => {
+//     try {
+//       await GoogleSignin.hasPlayServices();
+//       const userInfo = await GoogleSignin.signIn();
+//       console.log(userInfo);
+//       setUserInformation(userInfo);
+//     } catch (error) {
+//       if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
+//         // user cancelled the login flow
+//         console.log("cancelled");
+//       } else if ((error as any).code === statusCodes.IN_PROGRESS) {
+//         console.log("in progress");
+//       } else if ((error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+//         console.log("play services not available or outdated");
+//       } else {
+//         console.log("Something went wrong", error);
+//       }
+//     }
+//   };
+
+// console.log(JSON.stringify(userInformation, null, 2));
+
+// const signOut = async () => {
+//   try {
+//     await GoogleSignin.signOut();
+//     setUserInformation(null);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+const handleLogin = async () => {
+  try {
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    console.log('formData:', formData);
+    console.log(Port.BASE_URL)
+    const response = await fetch(`${Port.BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Network response was not ok");
+    }
+
+    const data = await response.json();
+    await AsyncStorage.setItem('token', data.result.token);
+    console.log("Login Success:", data);
+    setActiveTab('main');
+  } catch (error) {
+    if (error instanceof Error && error.message === "invalid email") {
+      setTypePopup("emailIsInvalid");
+    } else if (error instanceof Error && error.message === "invalid password") {
+      setTypePopup("passIsInvalid");
+    }else{
+      throw new Error( error as string);
+    }
+  }
+};
 
 
 
@@ -67,12 +124,12 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
       <View className='flex w-full items-center'>
         <View style={{position:'relative'}}>
           <TextInput
-                placeholder="อีเมล"
-                placeholderTextColor={'#B0B0B0'}
-                keyboardType='email-address'
-                value={email}
-                onChangeText={setEmail}
-                className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
+          placeholder="อีเมล"
+          placeholderTextColor={'#B0B0B0'}
+          keyboardType='email-address'
+          value={email.trim()}
+          onChangeText={(text) => setEmail(text.trim())}
+          className={`h-[45] w-[310] mx-5 px-5 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View
           className='w-10 h-12 items-center justify-center mt-5'
           style={{ position: 'absolute', left: 25, top: 0 }}>
@@ -86,8 +143,8 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
                 placeholder="รหัสผ่าน"
                 placeholderTextColor={'#B0B0B0'}
                 secureTextEntry={!visiblePassword}
-                value={password}
-                onChangeText={setPassword}
+                value={password.trim()}
+                onChangeText={(text) => setPassword(text.trim())}
                 className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 bg-neutral rounded-full text-lg`}/>
           <View 
           className='w-10 h-12 items-center justify-center mt-5 '
@@ -108,11 +165,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
         </View>
         <TouchableOpacity
         activeOpacity={1}
-        // onPress={handleLogin}
-        onPress={()=>{
-          setActiveTab('main')
-          setIsAuth(true)
-        }}
+        onPress={handleLogin}
         className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
         </TouchableOpacity>
@@ -122,7 +175,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
       </View>
       <TouchableOpacity
         activeOpacity={1}
-        // onPress={()=>promptAsync()}
+        // onPress={googleSignIn}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
           <Image 
           source={google} 
@@ -134,6 +187,7 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, isAuth, setI
         <TouchableOpacity
             activeOpacity={1}
             onPress={()=>setStateLogin(false)}
+            // onPress={()=>signOut()}
           >
           <TextF className='text-primary'>สมัครสมาชิก</TextF>
         </TouchableOpacity>

@@ -1,11 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import  TextF  from '../components/TextF';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../components/WideBtn';
 
+interface AssetItem {
+  Name: string;
+  Total_money: number;
+  End_year: number;
+  type: string;
+}
 
+interface GroupedAssets {
+  [key: string]: AssetItem[];
+}
 
 interface stateProps{
   isDarkMode: boolean;
@@ -13,8 +22,9 @@ interface stateProps{
   dataAssetInput: any;
   setStateFutureUse: (state: boolean) => void;
   setDataAssetInput: (data: any) => void;
+  setDataEditAsset: (data: number) => void;
 }
-const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, setStateFutureUse, setDataAssetInput }) => {
+const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, setStateFutureUse, setDataAssetInput, setDataEditAsset }) => {
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const [isFully, setIsFully] = useState(false);
@@ -41,6 +51,14 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
     }).start();
   };
 
+  const handleEditAsset = (item: AssetItem) => {
+    const assetIndex = dataAssetInput.findIndex((asset: AssetItem) => asset.Name === item.Name);
+    console.log(assetIndex)
+    if (assetIndex !== -1) {
+      setStateFutureUse(true);
+      setDataEditAsset(assetIndex);
+    }
+  };
 
 
 
@@ -55,42 +73,52 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
           <TextF className='text-normalText text-lg mt-5'>เลือกวางแผนสำหรับอนาคต</TextF>
           <TextF className='text-label mt-1'>วางแผนว่าในอนาคตจะใช้เงินกับอะไรเท่าไหร่?</TextF>
           <View className='gap-5 mt-5'>
-          {dataAssetInput.map((data: any, index: number) => {
-            return (
-              <TouchableOpacity
-                id='AssetCard'
-                activeOpacity={1}
-                key={index}
-                className="flex"
-              >
-                <View
-                  className="flex bg-neutral rounded-xl py-4 flex-row items-center justify-between px-2"
-                >
-                  <View className="flex flex-row gap-2">
-                    <View className="mx-1 mt-[2]">
-                      <FontAwesome6 name="house-chimney" size={18} color="#070F2D" />
-                    </View>
-                    <View className="flex gap-3">
-                      <TextF className="text-normalText text-lg">{data.Name}</TextF>
-                      <TextF className="text-normalText text-lg">
-                        {data.Total_money} บาท
-                      </TextF>
-                    </View>
+              {Object.entries(
+                dataAssetInput.reduce((acc: GroupedAssets, item: AssetItem) => {
+                  if (!acc[item.type]) acc[item.type] = [];
+                  acc[item.type].push(item);
+                  return acc;
+                }, {} as GroupedAssets)
+              ).map(([type, items]) => (
+                <View key={type} className="mb-4 gap-3">
+                  <View className="flex flex-row gap-3 items-center mb-2">
+                    {type === 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" />}
+                    {type === 'child' && <MaterialIcons name="child-friendly" size={23} color="#070F2D" />}
+                    {type === 'car' && <FontAwesome6 name="car" size={18} color="#070F2D" />}
+                    {type === 'travel' && <FontAwesome6 name="plane-departure" size={18} color="#070F2D" />}
+                    {type === 'marry' && <Ionicons name="heart" size={22} color="#070F2D" />}
+                    {type === 'emergencyMoney' && <FontAwesome5 name="hospital-alt" size={18} color="#070F2D" />}
+                    <TextF className='text-xl font-bold'>{type}</TextF>
                   </View>
-
-                  <View className="flex flex-row gap-2">
-                    <View className="flex gap-3 items-end">
-                      <TextF className="text-normalText text-lg">ปีที่จะซื้อ</TextF>
-                      <TextF className="text-normalText text-lg">{data.End_year}</TextF>
-                    </View>
-                    <View className="mx-1">
-                      <FontAwesome6 name="pen" size={12} color="#F68D2B" />
-                    </View>
+                  <View className='gap-4'>
+                    {(items as AssetItem[]).map((item: AssetItem) => (
+                      <TouchableOpacity 
+                      id='AssetItem'
+                      key={item.Name} 
+                      activeOpacity={1} 
+                      onPress={() => handleEditAsset(item)}
+                      className="flex">
+                        <View className="bg-neutral rounded-xl py-4 px-4 gap-2">
+                          <View className="flex flex-row gap-2 w-full justify-between items-center">
+                            <TextF className="text-normalText text-lg py-1 font-bold">{item.Name}</TextF>
+                            <View className="mx-1">
+                              <FontAwesome6 name="pen" size={12} color="#F68D2B" />
+                            </View>
+                          </View>
+                          <View className="flex flex-row gap-2 w-full justify-between items-center">
+                            <TextF className="text-normalText text-lg py-1">ราคา</TextF>
+                            <TextF className="text-primary text-lg py-1">{item.Total_money} <TextF className='text-normalText'>บาท</TextF></TextF>
+                          </View>
+                          <View className="flex flex-row gap-2 w-full justify-between items-center">
+                            <TextF className="text-normalText text-lg py-1">ปีที่ต้องการใช้เงิน</TextF>
+                            <TextF className="text-normalText text-lg py-1">{item.End_year}</TextF>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
                   </View>
                 </View>
-              </TouchableOpacity>
-            );
-          })}
+              ))}
 
         </View>
         <TouchableWithoutFeedback
@@ -120,3 +148,5 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
 }
 
 export default state3
+
+

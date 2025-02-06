@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Svg, Line } from 'react-native-svg'; // เพิ่ม Svg และ Line
 import { Dimensions } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown'
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import  TextF  from './TextF';
 

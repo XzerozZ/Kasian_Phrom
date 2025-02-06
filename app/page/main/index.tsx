@@ -3,6 +3,8 @@ import { View, Text, Button, Image, StyleSheet, ScrollView, TouchableOpacity, Im
 import  TextF  from '../../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '../../../Port';
 
 const Logo = require('../../../assets/images/logo.png');
 
@@ -11,20 +13,54 @@ interface MainProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-  isAuth: boolean; 
-  setIsAuth: (state: boolean) => void;
-  havePlant: boolean;
-  setHavePlant: (state: boolean) => void;
   setBackto: (backto: string) => void;
 }
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, isAuth, setIsAuth, havePlant, setHavePlant, setBackto }) => {
+
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
   
   
   
   
   
   
+  interface MenuItem {
+    tag: string;
+    icon: JSX.Element;
+    text: string;
+    bg: string;
+  }
   
+  const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [isAuth, setIsAuth] = useState(false);
+  const [havePlant, setHavePlant] = useState(false);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          setIsAuth(true);
+        
+          const response = await fetch(`${Port.BASE_URL}/retirement`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const data = await response.json();
+          console.log(data.result)
+          if (data.result !== null) {
+            setHavePlant(true);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch token from storage', error);
+      }
+    };
+
+    fetchToken();
+  }, []);
   
   
   
@@ -41,8 +77,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
-      }
-      if( isAuth && !havePlant ){
+      }else if( isAuth && !havePlant ){
         setMenu([
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
@@ -51,20 +86,20 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
           { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
+      }else if( isAuth && havePlant ){
+        setMenu([
+          { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
+          { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
+          { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
+          { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
+          { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
+          { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
+        ])
       }
-    },[isAuth]);
+    },[isAuth, havePlant]);
     
 
 
-    const [menu, setMenu] = useState([
-      { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
-      { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
-      { tag: 'calRetirement', icon: <Ionicons name="sync-circle-outline" size={36} color="#19a4ca" />, text: "ปรับแผน", bg: "bg-bgmenu_Change" },
-      { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
-      { tag: 'debtManagement', icon: <FontAwesome6 name="file-invoice-dollar" size={29} color="#D93329" />, text: "หนี้สิน", bg: "bg-bg_debt" },
-      { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
-      { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
-    ])
 
     const DataNow = new Date();
     const DateNow = DataNow.getDate();
@@ -137,23 +172,24 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
         {isAuth && havePlant ?
           <>
             <TextF className='pl-5 mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
-            <View className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
+            <TouchableOpacity 
+                id='BtnDashboard'
+                activeOpacity={1}
+                onPress={() => setActiveTab('dashboard')}
+                className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
               <TextF className=' ml-6 text-normalText text-lg'>จำนวนเงินที่ต้องเก็บในเดือนนี้</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
                   <TextF className='text-3xl ml-6 text-primary'>19,000</TextF>
                   <TextF className='text-lg text-normalText'>บาท</TextF>
                 </View>
-                <TouchableOpacity
-                id='BtnDashboard'
-                activeOpacity={1}
-                onPress={() => setActiveTab('dashboard')}>
+                <View>
                   <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน 
                     <AntDesign name="caretright" size={12} color="#F68D2B"/>
                   </TextF>
-                </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </>
           :isAuth && 
           <View className='texture shadow-xs rounded-xl mt-10 h-26 justify-center mb-3 gap-2'>
@@ -161,13 +197,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, i
             id='BtnStartCalRetirement'
             activeOpacity={1}
             onPress={() => setActiveTab('calRetirement')}
-            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center'>
-              <ImageBackground 
-              source={require('../../../assets/images/texturePaper.png')} 
-              className='w-full h-full justify-between items-center flex-row rounded-2xl overflow-hidden absolute'
-            >
-              
-            </ImageBackground>
+            className='rounded-2xl h-28 justify-between gap-2 flex-row items-center border border-banner'>
               <View className='flex-row items-center justify-between w-full px-5'>
                 <TextF className=' text-normalText text-xl'>มาเริ่มวางแผนแรกของคุณกันเลย!</TextF>
                 <AntDesign name="caretright" size={25} color="#6780D6"/>

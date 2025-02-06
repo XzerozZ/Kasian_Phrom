@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, Pressable, Modal, FlatList } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import SelectDropdown from 'react-native-select-dropdown'
 import TextF from '../../components/TextF';
 import DropdownCustom from '../../components/DropdownCustom';
 import DebtManagement from '../../debtManagement';
@@ -122,6 +121,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
         <TextF className=' text-label'>จัดการข้อมูลหนี้</TextF>
         <TouchableOpacity 
         id='BtnAdjustPlan'
+        activeOpacity={1}
         onPress={() => setActiveTab('debtManagement')}
         className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-err rounded-xl shadow-sm'>
             <TextF className='text-lg py-2'>จัดการข้อมูลหนี้ของคุณ</TextF>
@@ -135,6 +135,8 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
         <TextF className=' text-label'>ปรับแผน</TextF>
         <TouchableOpacity 
         id='BtnAdjustPlan'
+        activeOpacity={1}
+        onPress={() => setActiveTab('calRetirement')}
         className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-unselectMenu rounded-xl shadow-sm'>
             <TextF className='text-lg'>ปรับแผนการเกษียณ</TextF>
             <View className='flex flex-row gap-1'>

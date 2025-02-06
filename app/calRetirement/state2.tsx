@@ -11,8 +11,9 @@ interface stateProps{
   scrollViewRef: any;
   dataInput: any;
   setDataInput: (data: any) => void;
+  havePlant: boolean;
 }
-const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dataInput, setDataInput }) => {
+const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dataInput, setDataInput, havePlant }) => {
 
 
 
@@ -49,11 +50,12 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Current_savings}
                       keyboardType="decimal-pad"
+                      readOnly={havePlant}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Current_savings: text });
                       }}
-                      className={`h-16 text-end text-lg text-primary pr-2`}/>
-                      <TextF className={` text-lg text-primary`}>บาท</TextF>
+                      className={`h-16 text-end text-lg  pr-2 ${havePlant ? 'text-label': 'text-primary'}`}/>
+                      <TextF className={` text-lg ${havePlant ? 'text-label': 'text-primary'}`}>บาท</TextF>
                 </View>
               </View>
 
@@ -173,6 +175,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       placeholderTextColor={'#B0B0B0'}
                       value={dataInput.Current_total_investment}
                       keyboardType='numeric'
+                      readOnly={havePlant}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Current_total_investment: text });
                       }}
@@ -182,8 +185,8 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                               animated: true,
                           });
                       }}
-                      className={`h-16 text-end text-lg text-primary pr-2`}/>
-                      <TextF className={` text-lg text-primary`}>บาท</TextF>
+                      className={`h-16 text-end text-lg pr-2 ${havePlant ? 'text-label': 'text-primary'}`}/>
+                      <TextF className={` text-lg ${havePlant ? 'text-label': 'text-primary'}`}>บาท</TextF>
                 </View>
               </View>
 

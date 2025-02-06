@@ -4,6 +4,7 @@ import  TextF  from '../../components/TextF';
 import NursingHomeCard from '../../components/NursingHousesCard';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import Filter from './filter';
+import HeadTitle from '../../components/headTitle';
 
 
 
@@ -21,15 +22,21 @@ interface NursingHousesProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-  setSelectedHome: (select: string) => void;
+  setHomeSelected: (home: string) => void;
+  formPage: string;
+  setState: (state: number) => void;
+  setHomePickInPlan: (home: string) => void;
 }
-const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setSelectedHome }) => {
+const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState, setHomePickInPlan }) => {
   useEffect(() => {
-    setStateNavbar(true);
+    if (formPage === 'calRetirement' ){
+      setStateNavbar(false);
+    }else{
+      setStateNavbar(true);
+    }
     setShowData(recommendedHomes);
   }, []);
 
-  const [state, setState] = useState(false);
   const favoriteHomes = [
     {
       id: "1",
@@ -163,6 +170,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
 
     const isNoFilter = queryFilter.startPrice === '' && queryFilter.endPrice === '' && queryFilter.location.length === 0;
 
+
+
   
   return (
     <View 
@@ -172,16 +181,35 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       {stateFilter && <Filter stateFilter={stateFilter} setStateFilter={setStateFilter} queryFilter={queryFilter} setQueryFilter={setQueryFilter}/>}
       <View className="flex-1 px-5">
         <View className='flex-row my-3 h-14 items-center justify-between'>
-            <Text 
-            style={{ fontFamily: 'SarabunBold'}}
-            className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
-            <TouchableOpacity
-            id='BtnFilter'
-            activeOpacity={1}
-            onPress={() => setStateFilter(!stateFilter)}
-            className='w-14 h-14 items-center justify-center'>
-              <Feather name="sliders" size={32} color={ isNoFilter ? '#B0B0B0' : '#2A4296'}/>
-            </TouchableOpacity>
+            {formPage === 'calRetirement' ?
+            <>
+            <HeadTitle 
+              id='CalRetirementHeadTitle'
+              setActiveTab={setActiveTab} 
+              title='บ้านพักคนชรา' 
+              onPress={() => setState(4)}/>
+              <TouchableOpacity
+              id='BtnFilter'
+              activeOpacity={1}
+              onPress={() => setStateFilter(!stateFilter)}
+              style={{position: 'absolute', right: 0}}
+              className='w-14 h-14 items-center justify-center absolute'>
+                <Feather name="sliders" size={32} color={ isNoFilter ? '#B0B0B0' : '#2A4296'}/>
+              </TouchableOpacity>
+            </>
+            :
+            <>
+              <Text 
+              style={{ fontFamily: 'SarabunBold'}}
+              className=' text-normalText text-2xl ml-3 h-12 pt-2'>บ้านพักคนชรา</Text>
+              <TouchableOpacity
+              id='BtnFilter'
+              activeOpacity={1}
+              onPress={() => setStateFilter(!stateFilter)}
+              className='w-14 h-14 items-center justify-center'>
+                <Feather name="sliders" size={32} color={ isNoFilter ? '#B0B0B0' : '#2A4296'}/>
+              </TouchableOpacity>
+            </>}
         </View>
         <View className="h-16 mt-4">
           <View className={`flex flex-row items-center px-4 py-2 rounded-full bg-neutral2 h-14`}>
@@ -200,10 +228,17 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
             />
           </View>
         </View>
+        {formPage === 'calRetirement' && 
+        <TouchableOpacity 
+        id='BtnSkip'
+        activeOpacity={1}
+        onPress={() => (setState(4), setHomePickInPlan('00001'))}
+        className='flex-row justify-end items-end mt-3'>
+          <TextF className="text-primary w-14 text-lg">ข้าม</TextF>
+        </TouchableOpacity>
+        }
         <ScrollView
         showsVerticalScrollIndicator={false}>
-
-
           <View className='flex flex-row justify-between items-center'>
             <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">{query === '' &&  isNoFilter ? 'บ้านพักคนชราในแผนของคุณ' : 'ผลลัพธ์การค้นหา' }</TextF>
             <TouchableOpacity 
@@ -221,7 +256,10 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               id='favoriteNursingHomes'
               key={index} 
               activeOpacity={1}
-              onPress={() => setActiveTab('detailnursingHouses')}>
+              onPress={() => {
+                (formPage === 'index' && setActiveTab('detailnursingHouses'))
+                setHomeSelected(home.id);
+              }}>
                 <NursingHomeCard
                   id={home.id}
                   name={home.name}
@@ -241,8 +279,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               key={index}
               activeOpacity={1}
               onPress={() => {
-                setActiveTab('detailnursingHouses');
-                setSelectedHome(home.id);
+                (formPage === 'index' && setActiveTab('detailnursingHouses'))
+                setHomeSelected(home.id);
               }}
             >
               <NursingHomeCard

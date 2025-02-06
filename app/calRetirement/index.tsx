@@ -3,6 +3,8 @@ import { View,Text , Button, Image, StyleSheet, Animated, TextInput, TouchableOp
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import  TextF  from '../components/TextF';
 import Svg, { Defs, ClipPath, Path, Rect, Circle } from 'react-native-svg';
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HeadTitle from '../components/headTitle';
 
@@ -11,6 +13,9 @@ import State2 from './state2';
 import State3 from './state3';
 import State4 from './state4';
 import FutureUse from './futureUse';
+import NursingHouses from '../page/nursingHouses';
+import DetailNursingHouses from '../detailnursingHouses';
+import FavNursingHouses from '../favnursingHouses';
 
 
   interface LayoutEvent {
@@ -21,18 +26,27 @@ import FutureUse from './futureUse';
     };
   }
 
+  interface Asset {
+    asset_id:string
+    Total_money: string;
+    End_year: string;
+    type: string;
+    Name: string;
+    Status: boolean
+  }
+
+
 interface CalRetirementProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   activeTab: string;
   setStateNavbar: (state: boolean) => void;
-  havePlant: boolean;
-  setHavePlant: (state: boolean) => void;
 }
-const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar, havePlant, setHavePlant }) => {
+const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar}) => {
 
+  const formPage = 'calRetirement'
   const [box1Width, setBox1Width] = useState(0);
-  const [state, setState] = useState(1);
+  const [state, setState] = useState<number | null>(1);
   const [stateFutureUse, setStateFutureUse] = useState(false);
   const widthAnim = useRef(new Animated.Value(0)).current;
   const colorAnim = useRef(new Animated.Value(0)).current;
@@ -41,6 +55,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   useEffect(() => {
     setStateNavbar(false);
+    setState(1);
   }, [])
 
   useEffect(() => {
@@ -101,6 +116,10 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
 
 
+const [homeSelected, setHomeSelected] = useState('');
+
+const [homePickInPlan, setHomePickInPlan] = useState('');
+
 const [dataInput, setDataInput] = useState({
   Name: '',
   Birth_date: '',
@@ -120,20 +139,10 @@ const [dataInput, setDataInput] = useState({
 })
 
 
-const [dataAssetInput, setDataAssetInput] = useState([{
-  Name: 'บ้านแสนสุข',
-  Total_money: '4,500,000',
-  Monthly_expenses: '',
-  End_year: '2045',
-  type: 'home',
-},{
-  Name: 'รถแสนสุข2',
-  Total_money: '8,500,000',
-  Monthly_expenses: '',
-  End_year: '2055',
-  type: 'car',
-}
-])
+const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
+const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
+const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
+const [havePlant, setHavePlant] = useState(false)
 
 
 const scrollViewRef = useRef<ScrollView>(null);
@@ -143,12 +152,114 @@ const handleBack = () => {
   if(state === 1){
     setActiveTab('main')
   }else{
-    setState(state-1)
+    if (state !== null) {
+      setState(state - 1);
+    }
   }
 }
-const isRounded = (activeTab === 'calRetirement'); 
+
+
+
+useEffect(() => {
+  const fetchToken = async (token:string ) => {
+    try {
+      
+      console.log(token)
+      const response = await fetch(`${Port.BASE_URL}/retirement`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const responseHouse = await fetch(`${Port.BASE_URL}/user/selected`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      const dataAsset = await responseAsset.json();
+      
+
+      if (data.result !== null) {
+        setHavePlant(true)
+        const plan = data.result.plan;
+        if (plan !== undefined) {
+          setDataInput({
+            Name: plan.planName,
+            Birth_date: plan.birth_date,
+            Retirement_age: plan.retirement_age.toString() ,
+            Exp_lifespan: plan.expect_lifespan.toString() ,
+            Current_savings: plan.current_savings.toString() ,
+            Current_savings_returns: plan.current_savings_returns.toString() ,
+            Monthly_income: plan.monthly_income.toString() ,
+            Monthly_expenses: plan.monthly_expenses.toString() ,
+            Current_total_investment: plan.current_total_investment.toString() ,
+            Investment_return: plan.investment_return.toString() ,
+            Expected_inflation: plan.expected_inflation.toString() ,
+            Expected_monthly_expenses: plan.expected_monthly_expenses.toString() ,
+            Annual_expense_increase: plan.annual_expense_increase.toString() ,
+            Annual_savings_return: plan.annual_savings_return.toString() ,
+            Annual_investment_return: plan.annual_investment_return.toString() ,
+          })
+        }
+        const dataHouse = await responseHouse.json();
+        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
+      }
+
+      if (dataAsset.result !== null) {
+        console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
+        const assets = dataAsset.result.map((item: any) => ({
+          asset_id: item.asset.asset_id,
+          Name: item.asset.name,
+          Total_money: item.asset.total_cost.toString(),
+          End_year: (parseInt(item.asset.end_year)+543).toString(),
+          type: item.asset.type,
+          Status: item.asset.status === 'In_Progress' ? true : false
+        }));
+        setOldAssetInput(assets)
+        setDataAssetInput(assets);
+      }
+
+    } catch (error) {
+      console.error('Failed to fetch token from storage', error);
+    }
+  };
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== undefined && token !== null ) {
+      fetchToken(token);
+    }
+  };
+  
+  getToken();
+}, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
+    <>
+    {state !== 5 &&
     <>
       <HeadTitle 
       id='CalRetirementHeadTitle'
@@ -205,14 +316,22 @@ const isRounded = (activeTab === 'calRetirement');
           ref={scrollViewRef}
           className={`flex-1`}>
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
-            {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput}/>}
-            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput}/>}
-            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} havePlant={havePlant} setHavePlant={setHavePlant}/>}
+            {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput} havePlant={havePlant}/>}
+            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset}/>}
+            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant}/>}
+
+            
+
             
           </ScrollView>
         </View>
       </View>
-      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput}/>}
+      </>}
+      {state === 5 && homeSelected === '' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState} setHomePickInPlan={setHomePickInPlan}/>}
+      {state === 6 && homeSelected === '' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState}/>}
+      {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState}/>}
+
+      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant}/>}
     </>
   )
 }
