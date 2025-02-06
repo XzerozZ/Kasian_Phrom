@@ -158,6 +158,8 @@ const handleBack = () => {
   }
 }
 
+
+
 useEffect(() => {
   const fetchToken = async (token:string ) => {
     try {
@@ -184,7 +186,6 @@ useEffect(() => {
 
       const data = await response.json();
       const dataAsset = await responseAsset.json();
-      const dataHouse = await responseHouse.json();
       
 
       if (data.result !== null) {
@@ -209,10 +210,12 @@ useEffect(() => {
             Annual_investment_return: plan.annual_investment_return.toString() ,
           })
         }
+        const dataHouse = await responseHouse.json();
+        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
       }
+
       if (dataAsset.result !== null) {
         console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
-
         const assets = dataAsset.result.map((item: any) => ({
           asset_id: item.asset.asset_id,
           Name: item.asset.name,
@@ -221,9 +224,6 @@ useEffect(() => {
           type: item.asset.type,
           Status: item.asset.status === 'In_Progress' ? true : false
         }));
-
-      console.log('dataHouse:', JSON.stringify(dataHouse.result.selected.NursingHouse.nh_id, null, 2))
-        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
         setOldAssetInput(assets)
         setDataAssetInput(assets);
       }
@@ -234,7 +234,7 @@ useEffect(() => {
   };
   const getToken = async () => {
     const token = await AsyncStorage.getItem('token');
-    if (token !== undefined && token !== null && havePlant) {
+    if (token !== undefined && token !== null ) {
       fetchToken(token);
     }
   };
