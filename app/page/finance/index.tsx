@@ -11,7 +11,7 @@ interface FinanceProps{
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
 }
-// ถ้าหา riskId ไม่เจอจะให้เป็น 0 แปลว่ายังไม่ได้ทำการประเมินความเสี่ยง
+
 const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
   useEffect(() =>{
       setStateNavbar(true);
