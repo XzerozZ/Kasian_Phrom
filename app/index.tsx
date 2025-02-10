@@ -46,6 +46,9 @@ function index() {
   const [loading, setLoading] = useState(true);
   const [backto, setBackto] = useState('main');
 
+  const [selectedId, setSelectedId] = useState(0);
+  const newsId = selectedId;
+
   const [isAuth, setIsAuth] = useState(false);
   const [loaded] = useFonts({
     KanitRegular: require('../assets/fonts/Kanit-Regular.ttf'),
@@ -84,7 +87,7 @@ function index() {
         {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='assessmentRisk' && <AssessmentRisk isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
-        {activeTab =='financeDetail' && <FinanceDetail isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+        {activeTab =='financeDetail' && <FinanceDetail isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setSelectedId={setSelectedId} newsId={newsId}/>}
         {activeTab =='notification' && <NotificationScreen isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
         {activeTab =='detailnursingHouses' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={null} setState={()=>{}} homePickInPlan={changeHome} setHomePickInPlan={setChangeHome}/>}
         {activeTab =='favnursingHouses' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={() => {}}/>}
