@@ -211,18 +211,18 @@ useEffect(() => {
           })
         }
         const dataHouse = await responseHouse.json();
-        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
+        setHomePickInPlan(dataHouse.result.NursingHouse.nh_id)
       }
 
       if (dataAsset.result !== null) {
         console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
         const assets = dataAsset.result.map((item: any) => ({
-          asset_id: item.asset.asset_id,
-          Name: item.asset.name,
-          Total_money: item.asset.total_cost.toString(),
-          End_year: (parseInt(item.asset.end_year)+543).toString(),
-          type: item.asset.type,
-          Status: item.asset.status === 'In_Progress' ? true : false
+          asset_id: item.asset_id,
+          Name: item.name,
+          Total_money: item.total_cost.toString(),
+          End_year: (parseInt(item.end_year)+543).toString(),
+          type: item.type,
+          Status: item.status === 'In_Progress' ? true : false
         }));
         setOldAssetInput(assets)
         setDataAssetInput(assets);

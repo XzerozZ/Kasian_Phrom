@@ -5,7 +5,7 @@ import  TextF  from './TextF';
 
 
 interface DropdownYearCustomProps{
-    options: {title: string}[];
+    options: {item: string}[];
     selectedOption: string;
     setSelectedOption: (option: string) => void;
     }
@@ -31,9 +31,9 @@ const DropdownYearCustom: React.FC<DropdownYearCustomProps> = ({options, selecte
                 <View key={index}>
                     <TouchableOpacity 
                     activeOpacity={1}
-                    onPress={()=>{setSelectedOption(option.title); setSelectIsOpen(false)}}
+                    onPress={()=>{setSelectedOption(option.item); setSelectIsOpen(false)}}
                     className='flex flex-row justify-between items-center h-10 px-5 active:bg-unselectInput'>
-                    <TextF className='flex justify-center items-center'>{option.title}</TextF>
+                    <TextF className='flex justify-center items-center'>{option.item}</TextF>
                     </TouchableOpacity>
                     {index !== options.length-1 &&<View className=' border-b border-neutral2 w-11/12 mx-auto'></View>}
                 </View>

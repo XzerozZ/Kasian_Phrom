@@ -171,7 +171,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         <View className='flex px-5'>
         {isAuth && havePlant ?
           <>
-            <TextF className='pl-5 mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
+            <TextF className='mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
             <TouchableOpacity 
                 id='BtnDashboard'
                 activeOpacity={1}
