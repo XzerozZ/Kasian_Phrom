@@ -293,7 +293,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode }) => {
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='flex flex-row items-center'>
-              <TextF className='text-label'>รายระเอียด</TextF>
+              <TextF className='text-label'>รายละเอียด</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
