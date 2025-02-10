@@ -42,8 +42,6 @@ const AssessmentRisk: React.FC<AssessmentRiskProps> = ({ isDarkMode, setActiveTa
         console.log('Fetched riskId:', data.result.Risk.risk_id);
         setRiskId(data.result.Risk.risk_id);
         setStateAssessed(!!data.result.Risk.risk_id);
-      } catch (error) {
-        console.error('Error fetching riskId:', error);
       } finally {
         setIsLoading(false);
       }

@@ -83,7 +83,7 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
 
         <Text className='text-2xl text-normalText mt-5 mx-8' style={{fontFamily: 'SarabunBold'}}>{ newsDetail?.title }</Text>
         <TextF className='text-label mx-8 mt-2 mb-5'>อัพเดทเมื่อ { formatDate(newsDetail?.updated_date) }</TextF>
-        <TextF className='text-lg text-normalText mx-8'>      { newsDetail?.dialog[0].desc }</TextF >
+        <Text className='text-lg text-normalText mx-8' style={{fontFamily: 'SarabunBold'}}>      { newsDetail?.dialog[0].desc }</Text >
         <TextF className='text-lg text-normalText mx-8'>
                { newsDetail?.dialog[1].desc }</TextF>
         <TextF className='text-lg text-normalText mx-8'>
