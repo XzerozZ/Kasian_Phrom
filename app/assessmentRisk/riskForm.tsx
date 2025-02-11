@@ -4,6 +4,8 @@ import riskQuestions from './questions';
 import RiskQuestion from '../components/RiskQuestion';
 import HeadTitle from '../components/headTitle';
 import TextF from '../components/TextF';
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Answer = {
   questionId: number;
@@ -56,10 +58,8 @@ const RiskForm: React.FC<RiskFormProps> = ({
     const question = riskQuestions.find((q) => q.id === questionId);
     if (!question) return;
 
-    const score = selectedOptions.reduce((acc, option) => {
-      const optionIndex = question.options.indexOf(option);
-      return acc + (optionIndex + 1);
-    }, 0);
+    const maxIndex = Math.max(...selectedOptions.map(option => question.options.indexOf(option)), -1);
+    const score = maxIndex + 1;
 
     setAnswers((prev) => {
       const updatedAnswers = prev.filter((a) => a.questionId !== questionId);
@@ -72,13 +72,38 @@ const RiskForm: React.FC<RiskFormProps> = ({
     return answer ? answer.selectedOptions : [];
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => { 
     const isComplete = answers.length === riskQuestions.length;
     if (isComplete) {
-      console.log('Submitting:', answers);
-      const totalScore = answers.reduce((acc, answer) => acc + answer.score, 0);
-      console.log('Total Score:', totalScore);
-      setStateAssessed(true);
+      try {
+        const formData = new FormData();
+        answers.forEach(a => {
+          formData.append("weight", a.score.toString());
+        });
+
+        console.log('Submitting form-data:', [...formData.entries()]);
+        console.log(Port.BASE_URL)
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${Port.BASE_URL}/quiz`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log("Submit Success:", data);
+        setStateAssessed(true);
+      } catch (error) {
+        throw new Error(error as string);
+      }
     } else {
       console.log('Form is not complete!');
     }

@@ -88,7 +88,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>การลงทุนที่เหมาะกับคุณ</TextF>
       </View>
-      <AssessCard setActiveTab={setActiveTab} riskId={4} />
+      <AssessCard setActiveTab={setActiveTab} />
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>ข้อมูล</TextF>
       </View>

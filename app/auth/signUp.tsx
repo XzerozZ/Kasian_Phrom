@@ -144,7 +144,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
           {passIsNotMatch &&
           <View
           style={{position: 'absolute', right: 30, top: -3 }}>
-            <TextF className='text-sm text-err'>*หรัสผ่านไม่ตรงกัน</TextF>
+            <TextF className='text-sm text-err'>*รหัสผ่านไม่ตรงกัน</TextF>
           </View>}
           
           <TextInput
