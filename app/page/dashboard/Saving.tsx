@@ -4,64 +4,249 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign, Material
 import TextF from '../../components/TextF';
 import DropdownCustom from '../../components/DropdownCustom';
 import DebtManagement from '../../debtManagement';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '@/Port';
 
+interface InfoPlanProps{
+  allRequiredFund: number;
+  all_money: number;
+  allretirementfund: number;
+  investment: number;
+  monthly_expenses: number;
+  saving: number;
+  stillneed: number;
+  plan_name: string;
+}
 
 interface SavingProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
+  setStatePopup: (state: boolean) => void;
+  setDataPopup: (data: any) => void;
+  reflesh: boolean;
+  setReflesh: (reflesh: boolean) => void;
+  planName: string;
+  setPlanName: (planName: string) => void;
 }
 
 
-const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
+
+const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup, setDataPopup, reflesh, setReflesh, planName, setPlanName }) => {
 
 
 
     const [selectedOption, setSelectedOption] = useState('เงินออม');
+    const [selectedOptionPriority, setSelectedOptionPriority] = useState('อัตโนมัติ');
     const [isDiposit, setIsDiposit] = useState(true)
     const [amount, setAmount] = useState('')
     const scrollViewRef = useRef<ScrollView>(null);
+    const [infoPlan, setInfoPlan] = useState<InfoPlanProps>();
+    const [dataAsset, setDataAsset] = useState([]);
+    const [loading, setLoading] = useState(true);
+
 
     const options = [
         {title:'เงินออม'},
         {title:'ลงทุน'}
     ];
+    const [optionsPriority, setOptionsPriority] = useState([
+        {title:'อัตโนมัติ'},
+        {title:'เงินเกษียณ'},
+    ]);
 
-    const handleConfirm = () => {
-        console.log('Selected Option:', selectedOption);
-        console.log('Amount:', amount);
+
+
+
+console.log(optionsPriority)
+
+  useEffect(() => {
+    const fetchToken = async (token:string ) => {
+      try {
+        
+        const response = await fetch(`${Port.BASE_URL}/user/plan`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const responseHouse = await fetch(`${Port.BASE_URL}/user/selected`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json();
+        const dataAsset = await responseAsset.json();
+        const dataHouse = await responseHouse.json();
+        console.log('infoPlan',data.result)
+        setInfoPlan(data.result)
+        setPlanName(data.result.plan_name)
+        // console.log('response', JSON.stringify(response, null, 2));
+        if (dataHouse?.result?.NursingHouse?.nh_id !== '00001' && 
+          dataHouse?.result?.status !== "Completed") {  
+        console.log('dataHouse', dataHouse.result);
+        
+        setOptionsPriority(prev => [
+          ...prev, 
+          { title: 'บ้านพักคนชรา' }
+        ]);
+      }
+      
+
+        if (dataAsset?.result) {
+          console.log('dataAsset', dataAsset.result);
+          setDataAsset(dataAsset.result);
+        
+          setOptionsPriority(prev => [
+            ...prev, 
+            ...dataAsset.result
+              .filter((item: any) => item.status === "In_Progress")
+              .map((item: any) => ({ title: item.name }))
+          ]);
+        }
+        
+        
+        setLoading(false)
+      } catch (error) {
+        console.error('Failed to fetch token from storage', error);
+      }
+    };
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== undefined && token !== null ) {
+        fetchToken(token);
+      }
+    };
+    
+    getToken();
+  }, [reflesh]);
+
+
+    useEffect(() => {
+      if(selectedOption === 'ลงทุน'){
+        setSelectedOptionPriority('เงินเกษียณ')
+      }else{
+        if(!isDiposit){
+          setSelectedOptionPriority('เงินเกษียณ')
+          setOptionsPriority(optionsPriority.filter((item) => item.title !== 'อัตโนมัติ'))
+        }else{
+          setOptionsPriority([{ title: 'อัตโนมัติ' }, ...optionsPriority.filter((item) => item.title !== 'อัตโนมัติ')])
+          
+          setSelectedOptionPriority('อัตโนมัติ')
+        }
+        }
+    }, [selectedOption, isDiposit]);
+
+
+    const handleManageMoney = () => {
+      const ManageMoney = async () => {
+        const token = await AsyncStorage.getItem('token');
+
+        try {
+          const formData = new FormData();
+          formData.append("method", isDiposit ? 'deposit' : 'withdraw' );
+          formData.append("type", selectedOption === 'เงินออม' ? 'saving_money' : 'investment' );
+          formData.append("money",amount );
+          formData.append("category", selectedOptionPriority === 'อัตโนมัติ' ? 'spread' :selectedOptionPriority === 'เงินเกษียณ'? 'retirementplan': selectedOptionPriority === 'บ้านพักคนชรา'? 'house':'asset' );
+          formData.append("name", selectedOptionPriority);
+
+          const response = await fetch(`${Port.BASE_URL}/history`, {
+            method: 'POST',
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData
+          });
+    
+          const data = await response.json();
+          setStatePopup(true)
+          console.log('data', data)
+          if(data.message?.toLowerCase().includes('insufficient funds')){
+            setDataPopup('Insufficient_savings')
+          }else if(data.message === 'insufficient investment funds'){
+            setDataPopup('Insufficient_investment')
+          }else{
+            if (isDiposit){
+              if (selectedOption === 'เงินออม'){
+                setDataPopup('Successfully_deposited_money_into_savings_account')
+              }else{
+                setDataPopup('Successfully_deposited_money_into_investment_account')
+              }
+            }else{
+              if (selectedOption === 'เงินออม'){
+                setDataPopup('Successfully_withdraw_money_from_savings_account')
+              }else{
+                setDataPopup('Successfully_withdraw_money_from_investment_account')
+              }
+            }
+          }
+
+
+          console.log(data)
+          setSelectedOption('เงินออม')
+          setSelectedOptionPriority('อัตโนมัติ')
+          setOptionsPriority([
+            {title:'อัตโนมัติ'},
+            {title:'เงินเกษียณ'},
+          ])
+          setIsDiposit(true)
+          setAmount('')
+          setReflesh(!reflesh)
+          
+    
+        } catch (error) {
+          console.error('Failed to fetch token from storage', error);
+        }
       };
-
-
-
-
-
+      ManageMoney();
+    }
+    
+    
+    
 
   return (
-    <ScrollView 
+    <>
+    {loading 
+    ?<>
+      <View className=' absolute flex-1 bg-slate-300'>
+        
+      </View>
+    </>
+    :<ScrollView 
     id='DashboardSavingContainer'
     showsVerticalScrollIndicator={false}
     ref={scrollViewRef} >
     <View className=' flex'>
       <View className='mt-5 flex justify-center items-center'>
-        <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
+        <TextF className='text-2xl font-bold'>{planName}</TextF>
       </View>
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
           <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</TextF>
-          <TextF className='text-3xl scale-125'>39,903</TextF>
+          <TextF className={`text-3xl scale-125 items-center justify-center flex ${infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? 'text-oktext' : ''}`}>{infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? `+ ${Math.abs(infoPlan.monthly_expenses)}`: infoPlan?.monthly_expenses}</TextF>
           <TextF>บาท</TextF>
         </View>
         <View className='mt-5 w-11/12 h-[2] bg-primary'></View>
         <View className='flex flex-row w-full gap-3 '>
             <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินสุทธิ</TextF>
-            <TextF className='text-xl'>100,000</TextF>
+            <TextF className='text-xl'>{infoPlan?.all_money}</TextF>
             <TextF>บาท</TextF>
           </View>
           <View className=' w-[2] bg-primary'></View>
           <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บ</TextF>
-            <TextF className='text-xl '>7,661,431</TextF>
+            <TextF className='text-xl '>{infoPlan?.allRequiredFund}</TextF>
             <TextF>บาท</TextF>
           </View>
         </View>
@@ -83,13 +268,21 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
         <TextF className={`text-lg ${!isDiposit?'text-white':'text-primary'}`}>ถอนเงิน</TextF>
       </TouchableOpacity>
     </View>
-    <View className='flex flex-row justify-between items-start mt-10 h-12'>
-        <View className='flex-1 items-center'>
-          <TextF className='text-lg'>เลือกประเภทการออม</TextF>
+    <View className='flex flex-row justify-between items-start mt-10 h-12 px-5 z-50'>
+        <View className='flex-1 items-start'>
+          <TextF className='text-lg'>รูปแบบการออม</TextF>
         </View>
-        <View className='flex-1 items-end pr-5'>
+        <View className='flex-1 items-end'>
           <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
         </View>
+    </View>
+    <View className='flex flex-row justify-between items-start mt-10 h-12 px-5 relative'>
+      <View className='flex-1 items-start'>
+        <TextF className='text-lg'>ประเภทการออม</TextF>
+      </View>
+      <View className='flex-1 items-end'>
+        <DropdownCustom options={selectedOption === 'ลงทุน' ? [] : optionsPriority} selectedOption={selectedOptionPriority} setSelectedOption={setSelectedOptionPriority}/>
+      </View>
     </View>
     <View className=''>
         <TextInput
@@ -110,9 +303,9 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
 
         <TouchableOpacity 
         id='BtnConfirm'
-        activeOpacity={1}
+        activeOpacity={amount == '' ? 1 : 0.5}
         className={`mt-5 mx-5 p-3 rounded-xl shadow-sm flex justify-center items-center h-14 ${amount == '' ?' bg-unselectMenu' :' bg-primary'}`}
-        onPress={handleConfirm} >
+        onPress={() => amount == '' ? {} : handleManageMoney() } >
             <TextF className='text-white'>ยืนยัน</TextF>
         </TouchableOpacity>
 
@@ -148,13 +341,10 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab }) => {
 
 
 
-
-
-
-
     
     <View className='h-32'></View>
-  </ScrollView>
+  </ScrollView>}
+  </>
   )
 }
 

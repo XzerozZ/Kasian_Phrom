@@ -98,7 +98,7 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
         setTypePopup(""); // ตั้งค่า typePopup เป็นค่าว่าง
       }, 2000);
     }
-  }, [typePopup, setTypePopup]);
+  }, [typePopup]);
 
   return (
     <View 
