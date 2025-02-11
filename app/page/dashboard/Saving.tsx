@@ -59,76 +59,76 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup
 
 console.log(optionsPriority)
 
-    useEffect(() => {
-      const fetchToken = async (token:string ) => {
-        try {
-          
-          const response = await fetch(`${Port.BASE_URL}/user/plan`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+  useEffect(() => {
+    const fetchToken = async (token:string ) => {
+      try {
+        
+        const response = await fetch(`${Port.BASE_URL}/user/plan`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-          const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+        const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-          const responseHouse = await fetch(`${Port.BASE_URL}/user/selected`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-    
-          const data = await response.json();
-          const dataAsset = await responseAsset.json();
-          const dataHouse = await responseHouse.json();
-          console.log('infoPlan',data.result)
-          setInfoPlan(data.result)
-          setPlanName(data.result.plan_name)
-          // console.log('response', JSON.stringify(response, null, 2));
-          if (dataHouse?.result?.NursingHouse?.nh_id !== '00001' && 
-            dataHouse?.result?.status !== "Completed") {  
-          console.log('dataHouse', dataHouse.result);
-          
+        const responseHouse = await fetch(`${Port.BASE_URL}/user/selected`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json();
+        const dataAsset = await responseAsset.json();
+        const dataHouse = await responseHouse.json();
+        console.log('infoPlan',data.result)
+        setInfoPlan(data.result)
+        setPlanName(data.result.plan_name)
+        // console.log('response', JSON.stringify(response, null, 2));
+        if (dataHouse?.result?.NursingHouse?.nh_id !== '00001' && 
+          dataHouse?.result?.status !== "Completed") {  
+        console.log('dataHouse', dataHouse.result);
+        
+        setOptionsPriority(prev => [
+          ...prev, 
+          { title: 'บ้านพักคนชรา' }
+        ]);
+      }
+      
+
+        if (dataAsset?.result) {
+          console.log('dataAsset', dataAsset.result);
+          setDataAsset(dataAsset.result);
+        
           setOptionsPriority(prev => [
             ...prev, 
-            { title: 'บ้านพักคนชรา' }
+            ...dataAsset.result
+              .filter((item: any) => item.status === "In_Progress")
+              .map((item: any) => ({ title: item.name }))
           ]);
         }
         
-
-          if (dataAsset?.result) {
-            console.log('dataAsset', dataAsset.result);
-            setDataAsset(dataAsset.result);
-          
-            setOptionsPriority(prev => [
-              ...prev, 
-              ...dataAsset.result
-                .filter((item: any) => item.status === "In_Progress")
-                .map((item: any) => ({ title: item.name }))
-            ]);
-          }
-          
-          
-          setLoading(false)
-        } catch (error) {
-          console.error('Failed to fetch token from storage', error);
-        }
-      };
-      const getToken = async () => {
-        const token = await AsyncStorage.getItem('token');
-        if (token !== undefined && token !== null ) {
-          fetchToken(token);
-        }
-      };
-      
-      getToken();
-    }, [reflesh]);
+        
+        setLoading(false)
+      } catch (error) {
+        console.error('Failed to fetch token from storage', error);
+      }
+    };
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== undefined && token !== null ) {
+        fetchToken(token);
+      }
+    };
+    
+    getToken();
+  }, [reflesh]);
 
 
     useEffect(() => {
