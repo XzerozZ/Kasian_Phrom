@@ -12,13 +12,16 @@ interface FinanceDetailProps{
   setStateNavbar: (state: boolean) => void;
   setSelectedId: (id: number) => void;
   newsId: number;
+  refreshing: boolean;
+  setRefreshing: (refresh: boolean) => void;
 }
-const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setSelectedId, newsId }) => {
+const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setSelectedId, newsId, refreshing, setRefreshing }) => {
   useEffect(() =>{
       setStateNavbar(false);
     },[]);
   
-  const [newsDetail, setNewsDetail] = useState<any>(null);
+  const [newsDetail, setNewsDetail] = useState<any>();
+  const [newDialog, setNewDialog] = useState<any>();
 
   useEffect(() => {
   const fetchNewsDetail = async () => {
@@ -41,7 +44,10 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
 
       const data = await response.json();
       setNewsDetail(data.result);
-      console.log('Fetched news detail:', data.result);
+      setNewDialog(data.result.dialog);
+      console.log('Fetched news detail:', JSON.stringify(data.result, null, 2));
+      console.log('Fetched news detail:', JSON.stringify(data.result.image_desc, null, 2));
+
     } catch (error) {
       console.error('Error fetching news detail:', error);
     }
@@ -50,6 +56,8 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
   fetchNewsDetail();
 }, [newsId]);
 
+
+console.log(newDialog)
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
     return date.toLocaleDateString('th-TH', {
@@ -63,13 +71,25 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
   //   return <Text>Loading...</Text>;
   // }
 
+  const [imageHeight, setImageHeight] = useState(0);
+
+  useEffect(() => {
+    if (newsDetail?.image_desc) {
+      Image.getSize(newsDetail.image_desc, (width, height) => {
+        const screenWidth = Dimensions.get("window").width * 0.9; // 90% ของหน้าจอ
+        const calculatedHeight = (height / width) * screenWidth; // คำนวณความสูงตามอัตราส่วน
+        setImageHeight(calculatedHeight);
+      }, (error) => console.warn("Image load error:", error));
+    }
+  }, [newsDetail?.image_desc]);
+
   return (
     <>
       <HeadTitle
       id='FinanceDetailHeadTitle'
       setActiveTab={setActiveTab} 
       title='บทความการเงิน' 
-      onPress={()=>setSelectedId(0)}/>
+      onPress={()=>{setSelectedId(0),setRefreshing(!refreshing)}}/>
       <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
       <ScrollView 
       id='FinanceDetailContainer'
@@ -83,16 +103,43 @@ const FinanceDetail: React.FC<FinanceDetailProps> = ({ isDarkMode, setActiveTab,
 
         <Text className='text-2xl text-normalText mt-5 mx-8' style={{fontFamily: 'SarabunBold'}}>{ newsDetail?.title }</Text>
         <TextF className='text-label mx-8 mt-2 mb-5'>อัพเดทเมื่อ { formatDate(newsDetail?.updated_date) }</TextF>
-        <Text className='text-lg text-normalText mx-8' style={{fontFamily: 'SarabunBold'}}>      { newsDetail?.dialog[0].desc }</Text >
-        <TextF className='text-lg text-normalText mx-8'>
-               { newsDetail?.dialog[1].desc }</TextF>
-        <TextF className='text-lg text-normalText mx-8'>
-               สำหรับการวางแผนการลงทุนแบบมีเป้าหมาย (Goal Based Investing) หมายถึง เมื่อเริ่มลงทุน ควรสำรวจตัวเองว่าเป้าหมาย
-        การลงทุนคืออะไร
-        </TextF>
+        {newsDetail?.image_desc !== null && 
+        (<View className='w-10/12 mx-auto'>
+          <Image 
+          source={{ uri: newsDetail?.image_desc }}
+          style={{ width: "100%", height: imageHeight, resizeMode: 'contain' }} 
+          className='flex-1'/>
+          <View className='h-5'/>
+        </View>)
+          }
+        {newDialog !== undefined && newDialog.map((item: any, index: number) => (
+          <Text 
+            key={item.d_id} 
+            className={` text-normalText mx-8 ${item.type === 'Heading' ? 'text-xl mt-4' : item.type === 'Small' ? 'text': 'text-lg'}`}
+            style={{ fontFamily: item.bold ? 'SarabunBold' : 'Sarabun' }}>
+            {item.desc}
+          </Text>
+        ))}
+        <View className='h-20'/>
       </ScrollView>
     </>
   )
 }
 
 export default FinanceDetail;
+
+[
+{
+    "d_id": "5614082c-1061-4786-83c2-bfd90067c4cb",
+    "type": "Heading",
+    "desc": "General Information\r\n\r\n",
+    "bold": true,
+    "news_id": "00002"
+},
+{
+    "d_id": "efce4b41-7f2d-4efb-9e9d-5f5ea4c2b234",
+    "type": "Paragraph",
+    "desc": "         Momonga is a hyperactive and slightly mean flying squirrel. It is always acting cute and begging for all sorts of things. Personality wise, it is very self-centered, and will often shamelessly demand things or refuse to share. Even during dangerous situations, it would ask for food and rest. In pursuit of these, it is core motivation for Momonga to \"act cute\", and they make conscious effort to imitate other characters' cute actions, notably Chiikawa. It often imitates Chiikawa's yawning and crying.",
+    "bold": false,
+    "news_id": "00002"
+},]

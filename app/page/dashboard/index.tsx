@@ -144,7 +144,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
           id='DashboardTitle'
           className='gap-2'>
             <TextF  className="text-xl font-bold">
-              {page == 0 ? 'บันทึกการออม' : page == 1 ? 'รายงานความคืบหน้า' : 'ประวัติการออม'}
+              {page == 0 ? 'รายงานความคืบหน้า' : page == 1 ? 'บันทึกการออม' : 'ประวัติการออม'}
             </TextF>
             <View className='flex flex-row items-center justify-center gap-1'>
                 {indicators.map((_, index) => (
@@ -180,13 +180,13 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
         onScroll={handleScroll}
         scrollEventThrottle={16}
         className='flex flex-row gap-5'>
-        {/* หน้า Saving */}
-        <View className='shrink-0 w-screen'>
-          <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePopup={setStatePopup} setDataPopup={setDataPopup} reflesh={reflesh} setReflesh={setReflesh} planName={planName} setPlanName={setPlanName} />
-        </View>
         {/* หน้า Report */}
         <View className='shrink-0 w-screen'>
           <Report isDarkMode={isDarkMode} reflesh={reflesh} planName={planName}/>
+        </View>
+        {/* หน้า Saving */}
+        <View className='shrink-0 w-screen'>
+          <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePopup={setStatePopup} setDataPopup={setDataPopup} reflesh={reflesh} setReflesh={setReflesh} planName={planName} setPlanName={setPlanName} />
         </View>
         {/* หน้า Record */}
         <View className='shrink-0 w-screen'>

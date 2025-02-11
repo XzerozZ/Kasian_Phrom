@@ -88,7 +88,6 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
     showsVerticalScrollIndicator={false}>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
-          <TextF className='text-2xl font-bold'>{planName}</TextF>
         </View>
         <View className='mt-5 px-5'>
           <View className='flex justify-center items-center bg-neutral pr-4 pt-7 pl-2 rounded-3xl shadow-sm h-96'>

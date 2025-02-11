@@ -228,7 +228,6 @@ console.log(optionsPriority)
     ref={scrollViewRef} >
     <View className=' flex'>
       <View className='mt-5 flex justify-center items-center'>
-        <TextF className='text-2xl font-bold'>{planName}</TextF>
       </View>
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
