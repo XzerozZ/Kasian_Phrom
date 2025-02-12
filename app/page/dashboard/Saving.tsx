@@ -43,6 +43,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup
     const [infoPlan, setInfoPlan] = useState<InfoPlanProps>();
     const [dataAsset, setDataAsset] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isDebt, setIsDebt] = useState(false);
 
 
     const options = [
@@ -83,10 +84,20 @@ console.log(optionsPriority)
             Authorization: `Bearer ${token}`,
           },
         });
+
+        const responseTransaction = await fetch(`${Port.BASE_URL}/transaction`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
   
         const data = await response.json();
         const dataAsset = await responseAsset.json();
         const dataHouse = await responseHouse.json();
+        const dataTransaction = await responseTransaction.json();
+
         console.log('infoPlan',data.result)
         setInfoPlan(data.result)
         setPlanName(data.result.plan_name)
@@ -113,6 +124,15 @@ console.log(optionsPriority)
               .map((item: any) => ({ title: item.name }))
           ]);
         }
+
+        setIsDebt(
+          dataTransaction?.result?.some((item: any) => 
+            item.status === 'หยุดพัก' || 
+            item.status === 'ชำระ' || 
+            item.status === 'ค้างชำระ'
+          )
+        );
+        
         
         
         setLoading(false)
@@ -211,6 +231,8 @@ console.log(optionsPriority)
       ManageMoney();
     }
     
+
+
     
     
 
@@ -309,7 +331,7 @@ console.log(optionsPriority)
         </TouchableOpacity>
 
     </View>
-    <View className='flex justify-center mt-10 px-5'>
+    {isDebt && <View className='flex justify-center mt-10 px-5'>
         <TextF className=' text-label'>จัดการข้อมูลหนี้</TextF>
         <TouchableOpacity 
         id='BtnAdjustPlan'
@@ -322,7 +344,7 @@ console.log(optionsPriority)
                 <FontAwesome6 name="caret-right" size={20} color='#FF5449'/>
             </View>
         </TouchableOpacity>
-    </View>
+    </View>}
     <View className='flex justify-center mb-10 mt-5 px-5'>
         <TextF className=' text-label'>ปรับแผน</TextF>
         <TouchableOpacity 

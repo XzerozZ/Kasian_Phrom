@@ -152,7 +152,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   activeOpacity={1}
                   onPress={()=> isAuth ? setActiveTab('notification') : setActiveTab('auth')}
                   className=''>
-                  {isAuth ? <MaterialCommunityIcons name="bell" size={30} color="#2A4296" />
+                  {isAuth ? <Ionicons name="mail" size={30} color="#2A4296" />
                   :<TextF className='text-primary text-lg'>เข้าสู่ระบบ</TextF>}
                   
                 </TouchableOpacity>

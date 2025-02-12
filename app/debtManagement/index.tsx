@@ -73,7 +73,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
     const data = await response.json();
     const dataTransaction = await responseTransaction.json();
     setInfoDebt(data.result);
-    console.log('Fetched debt:', JSON.stringify(data.result, null, 2));
+    // console.log('Fetched debt:', JSON.stringify(data.result, null, 2));
 
     setDataDebt(dataTransaction.result.map((item: DebtItem, index:number) => ({
       ...item,
@@ -82,7 +82,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
     })));
     
   
-    console.log('Fetched dataTransaction:', JSON.stringify(dataTransaction.result, null, 2));
+    
 
 
 
@@ -91,7 +91,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
 
   }, [refresh])
 
-
+// console.log('Fetched dataDebt:', JSON.stringify(dataDebt, null, 2));
 
 
   const [animatedHeights, setAnimatedHeights] = useState<{ [key: number]: Animated.Value }>({});
@@ -104,6 +104,21 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
   
     setAnimatedHeights(newAnimatedHeights);
   }, [dataDebt]);
+
+  useEffect(() => {
+    dataDebt.forEach((item) => {
+      if (animatedHeights[item.id] === undefined) {
+        setAnimatedHeights((prev) => ({ ...prev, [item.id]: new Animated.Value(110) }));
+      }
+    });
+    Object.keys(animatedHeights).forEach((id) => {
+      Animated.timing(animatedHeights[parseInt(id)], {
+        toValue: dataDebt.find((item) => item.id === parseInt(id))?.moreInfo ? 235 : 110,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    });
+  }, [dataDebt, animatedHeights]);
   
   
   
@@ -122,6 +137,8 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       useNativeDriver: false,
     }).start();
   };
+
+
 
   
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -198,7 +215,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       },
     });
     const data = await response.json();
-    console.log('Paid:', JSON.stringify(data, null, 2));
+    // console.log('Paid:', JSON.stringify(data, null, 2));
     setRefresh(!refresh);
     onClose();
     
@@ -213,7 +230,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       },
     });
     const data = await response.json();
-    console.log('Deleted:', JSON.stringify(data, null, 2));
+    // console.log('Deleted:', JSON.stringify(data, null, 2));
     if (data.status === 'success') {
       setDataDebt((prevData) => prevData.filter((item) => item.id !== id));
     }
