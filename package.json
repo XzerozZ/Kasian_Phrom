@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-clipboard/clipboard": "github:react-native-clipboard/clipboard",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
@@ -41,7 +42,10 @@
     "react-native": "^0.76.6",
     "react-native-chart-kit": "^6.12.0",
     "react-native-date-picker": "^5.0.8",
+    "react-native-fast-image": "^8.6.3",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-image-crop-picker": "^0.42.0",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.12.5",
     "react-native-pie-chart": "^4.0.0",

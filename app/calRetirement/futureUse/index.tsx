@@ -6,6 +6,8 @@ import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDe
 import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
 import CheckBox from '../../components/checkBox';
+import { useNumberFormat } from "@/app/NumberFormatContext";
+
 // import 
 
 interface futureUseProps{
@@ -20,6 +22,7 @@ interface futureUseProps{
 const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset, havePlant }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
+  const { addCommatoNumber } = useNumberFormat();
 
   const [newDataAssetInput, setNewDataAssetInput] = useState({
     Name: '',
@@ -222,7 +225,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                     placeholder='จำนวนเงิน'
                     placeholderTextColor={'#B0B0B0'}
                     keyboardType='numeric'
-                    value={newDataAssetInput.Total_money}
+                    value={addCommatoNumber(newDataAssetInput.Total_money)}
                     onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Total_money: text})}
                     onBlur={() => {
                       const numericText = newDataAssetInput.Total_money.replace(/[^0-9]/g, '');

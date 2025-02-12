@@ -4,6 +4,8 @@ import  TextF  from '../components/TextF';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../components/WideBtn';
+import { useNumberFormat } from "@/app/NumberFormatContext";
+
 
 
 interface stateProps{
@@ -21,6 +23,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
     month: '',
     year: '',
   });
+  const { addCommatoNumber } = useNumberFormat();
 
 
   const handleConfirm = (selectedDate: Date) => {
@@ -165,7 +168,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='RetirementAgeInput'
-                      value={dataInput.Retirement_age}
+                      value={addCommatoNumber(dataInput.Retirement_age)}
                       keyboardType='numeric'
                       maxLength={2}
                       onChangeText={(text) => {
@@ -191,7 +194,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='ExpLifespanInput'
-                      value={dataInput.Exp_lifespan}
+                      value={addCommatoNumber(dataInput.Exp_lifespan)}
                       keyboardType='numeric'
                       maxLength={3}
                       onChangeText={(text) => {

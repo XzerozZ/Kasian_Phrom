@@ -6,6 +6,7 @@ import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDe
 import WideBtn from '../components/WideBtn';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 
 interface DataAsset {
@@ -36,6 +37,7 @@ const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
 
 
 const [isFully, setIsFully] = useState(false);
+const { addCommatoNumber } = useNumberFormat();
 
 
 
@@ -343,7 +345,7 @@ const handleSaveEditPlant = async () => {
                       id='ExpectedMonthlyExpensesInput'
                       placeholder='ใส่จำนวนเงิน'
                       placeholderTextColor={'#B0B0B0'}
-                      value={dataInput.Expected_monthly_expenses}
+                      value={addCommatoNumber(dataInput.Expected_monthly_expenses)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Expected_monthly_expenses: text });
@@ -363,7 +365,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualExpenseIncreaseInput'
-                      value={dataInput.Annual_expense_increase}
+                      value={addCommatoNumber(dataInput.Annual_expense_increase)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -395,7 +397,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualSavingsReturnInput'
-                      value={dataInput.Annual_savings_return}
+                      value={addCommatoNumber(dataInput.Annual_savings_return)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -427,7 +429,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualInvestmentReturnInput'
-                      value={dataInput.Annual_investment_return}
+                      value={addCommatoNumber(dataInput.Annual_investment_return)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {

@@ -4,6 +4,7 @@ import  TextF  from '../components/TextF';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../components/WideBtn';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 interface AssetItem {
   Name: string;
@@ -28,6 +29,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const [isFully, setIsFully] = useState(false);
+  const { addCommatoNumber } = useNumberFormat();
 
 
 
@@ -115,7 +117,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1">ราคา</TextF>
-                            <TextF className="text-primary text-lg py-1">{item.Total_money} <TextF className='text-normalText'>บาท</TextF></TextF>
+                            <TextF className="text-primary text-lg py-1">{addCommatoNumber(item.Total_money)} <TextF className='text-normalText'>บาท</TextF></TextF>
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1">ปีที่ต้องการใช้เงิน</TextF>

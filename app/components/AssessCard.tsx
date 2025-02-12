@@ -71,7 +71,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
           onPress={() => setActiveTab('assessmentRisk')}
         >
           <View className='flex h-32 justify-center gap-1'>
-            <TextF className='text-center text-primary2 text-lg mt-2'>คุณคือผู้ลงทุนประเภท</TextF>
+            <TextF className='text-center text-primary2 text-lg mt-2 py-2'>คุณคือผู้ลงทุนประเภท</TextF>
             <View id='AssessCardSelectedRisk' className='h-14 justify-center items-center'>
               <Text 
                 className={`text-2xl h-14 flex justify-center items-center pt-2`} 
@@ -93,7 +93,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
           onPress={() => setActiveTab('assessmentRisk')}
         >
           <View className='flex h-32 justify-center gap-1 px-5'>
-            <Text className={`text-center text-2xl`} style={{ color:'#2A4296', fontFamily: 'SarabunBold' }}>
+            <Text className={`text-center text-2xl py-2`} style={{ color:'#2A4296', fontFamily: 'SarabunBold' }}>
               คุณยังไม่ได้ทำการประเมินความเสี่ยงที่รับได้ในการลงทุน
             </Text>
           </View>

@@ -6,6 +6,7 @@ import { Dimensions } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import  TextF  from './TextF';
 import DropdownYearCustom from './DropdownYearCustom';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -29,123 +30,9 @@ interface ChartLineProps {
 }
 
 const CustomGraph: React.FC<ChartLineProps> = ({ infoHistory }) => {
+    const { addCommatoNumber } = useNumberFormat();
+  
 
-  const infoHistory2 = [
-    // ปี 2023
-    {
-      history_id: "1",
-      method: "deposit",
-      type: "saving_money",
-      name: "เงินเดือน",
-      category: "income",
-      money: 30000,
-      track_at: "2025-01-15T08:30:00Z",
-    },
-    {
-      history_id: "2",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่าผ่อนบ้าน",
-      category: "housing",
-      money: 15000,
-      track_at: "2025-01-20T10:00:00Z",
-    },
-    {
-      history_id: "3",
-      method: "deposit",
-      type: "saving_money",
-      name: "โบนัส",
-      category: "income",
-      money: 5000,
-      track_at: "2025-02-05T12:45:00Z",
-    },
-    {
-      history_id: "4",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่ารถ",
-      category: "transport",
-      money: 7000,
-      track_at: "2024-02-12T14:20:00Z",
-    },
-  
-    // ปี 2024
-    {
-      history_id: "5",
-      method: "deposit",
-      type: "saving_money",
-      name: "เงินเดือน",
-      category: "income",
-      money: 32000,
-      track_at: "2024-03-10T09:00:00Z",
-    },
-    {
-      history_id: "6",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่ากิน",
-      category: "food",
-      money: 8000,
-      track_at: "2024-03-18T18:30:00Z",
-    },
-    {
-      history_id: "7",
-      method: "deposit",
-      type: "saving_money",
-      name: "เงินเกษียณ",
-      category: "retirement",
-      money: 12000,
-      track_at: "2024-04-05T15:10:00Z",
-    },
-    {
-      history_id: "8",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่ารักษาพยาบาล",
-      category: "health",
-      money: 5000,
-      track_at: "2024-04-20T16:40:00Z",
-    },
-  
-    // ปี 2025
-    {
-      history_id: "9",
-      method: "deposit",
-      type: "saving_money",
-      name: "เงินเดือน",
-      category: "income",
-      money: 35000,
-      track_at: "2024-02-10T16:28:04.077813Z",
-    },
-    {
-      history_id: "10",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่าผ่อนบ้าน",
-      category: "housing",
-      money: 17000,
-      track_at: "2024-02-20T10:30:00Z",
-    },
-    {
-      history_id: "11",
-      method: "deposit",
-      type: "saving_money",
-      name: "เงินเกษียณ",
-      category: "retirement",
-      money: 10000,
-      track_at: "2024-03-15T14:00:00Z",
-    },
-    {
-      history_id: "12",
-      method: "withdraw",
-      type: "expense",
-      name: "ค่าท่องเที่ยว",
-      category: "leisure",
-      money: 8000,
-      track_at: "2024-03-25T19:00:00Z",
-    },
-  ];
-  
     const [options, setOptions] = useState<{ item: string }[]>([]);
     const [selectedOption, setSelectedOption] = useState((new Date().getFullYear() + 543).toString());
 

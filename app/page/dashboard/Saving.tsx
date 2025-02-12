@@ -6,6 +6,7 @@ import DropdownCustom from '../../components/DropdownCustom';
 import DebtManagement from '../../debtManagement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '@/Port';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 interface InfoPlanProps{
   allRequiredFund: number;
@@ -44,7 +45,7 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup
     const [dataAsset, setDataAsset] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isDebt, setIsDebt] = useState(false);
-
+    const { addCommatoNumber } = useNumberFormat();
 
     const options = [
         {title:'เงินออม'},
@@ -54,6 +55,8 @@ const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup
         {title:'อัตโนมัติ'},
         {title:'เงินเกษียณ'},
     ]);
+
+
 
 
 
@@ -254,20 +257,20 @@ console.log(optionsPriority)
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
           <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</TextF>
-          <TextF className={`text-3xl scale-125 items-center justify-center flex ${infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? 'text-oktext' : ''}`}>{infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? `+ ${Math.abs(infoPlan.monthly_expenses)}`: infoPlan?.monthly_expenses}</TextF>
+          <TextF className={`text-3xl scale-125 items-center justify-center flex ${infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? 'text-oktext' : ''}`}>{infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? `+ ${addCommatoNumber(Math.abs(infoPlan.monthly_expenses))}`: addCommatoNumber(infoPlan?.monthly_expenses)}</TextF>
           <TextF>บาท</TextF>
         </View>
         <View className='mt-5 w-11/12 h-[2] bg-primary'></View>
         <View className='flex flex-row w-full gap-3 '>
             <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินสุทธิ</TextF>
-            <TextF className='text-xl'>{infoPlan?.all_money}</TextF>
+            <TextF className='text-xl'>{addCommatoNumber(infoPlan?.all_money)}</TextF>
             <TextF>บาท</TextF>
           </View>
           <View className=' w-[2] bg-primary'></View>
           <View className='flex-1 items-center gap-3 pt-5'>
             <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บ</TextF>
-            <TextF className='text-xl '>{infoPlan?.allRequiredFund}</TextF>
+            <TextF className='text-xl '>{addCommatoNumber(infoPlan?.allRequiredFund)}</TextF>
             <TextF>บาท</TextF>
           </View>
         </View>
@@ -317,7 +320,7 @@ console.log(optionsPriority)
             placeholder="ใส่จำนวนเงิน"
             placeholderTextColor={'#B0B0B0'}
             keyboardType="numeric"
-            value={amount}
+            value={addCommatoNumber(amount)}
             onChangeText={setAmount}
             className={`h-12 mx-5 px-3 mt-5 bg-neutral border-b text-primary ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
 
@@ -337,11 +340,11 @@ console.log(optionsPriority)
         id='BtnAdjustPlan'
         activeOpacity={1}
         onPress={() => setActiveTab('debtManagement')}
-        className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-err rounded-xl shadow-sm'>
+        className='flex flex-row justify-between items-center bg-neutral h-20 p-3 mt-5 border border-unselectMenu rounded-xl shadow-sm'>
             <TextF className='text-lg py-2'>จัดการข้อมูลหนี้ของคุณ</TextF>
             <View className='flex flex-row gap-1'>
-                <TextF className='text-err'>แก้ไขข้อมูล</TextF>
-                <FontAwesome6 name="caret-right" size={20} color='#FF5449'/>
+                <TextF className='text-accent'>แก้ไขข้อมูล</TextF>
+                <FontAwesome6 name="caret-right" size={20} color='#F68D2B'/>
             </View>
         </TouchableOpacity>
     </View>}

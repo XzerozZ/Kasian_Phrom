@@ -98,7 +98,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
 
   useEffect(() => {
     const newAnimatedHeights = dataDebt.reduce((acc: { [key: number]: Animated.Value }, item) => {
-      acc[item.id] = animatedHeights[item.id] || new Animated.Value(110);
+      acc[item.id] = animatedHeights[item.id] || new Animated.Value(115);
       return acc;
     }, {});
   
@@ -108,12 +108,12 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
   useEffect(() => {
     dataDebt.forEach((item) => {
       if (animatedHeights[item.id] === undefined) {
-        setAnimatedHeights((prev) => ({ ...prev, [item.id]: new Animated.Value(110) }));
+        setAnimatedHeights((prev) => ({ ...prev, [item.id]: new Animated.Value(115) }));
       }
     });
     Object.keys(animatedHeights).forEach((id) => {
       Animated.timing(animatedHeights[parseInt(id)], {
-        toValue: dataDebt.find((item) => item.id === parseInt(id))?.moreInfo ? 235 : 110,
+        toValue: dataDebt.find((item) => item.id === parseInt(id))?.moreInfo ? 245 : 115,
         duration: 300,
         useNativeDriver: false,
       }).start();
@@ -284,7 +284,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                 {type === 'land' && <View className='flex flex-row gap-2'><Fontisto name="map-marker-alt" size={18} color="#070F2D" /><Text className="font-bold text-lg">ที่ดิน</Text></View>}
                 {type === 'car' && <View className='flex flex-row gap-2'><FontAwesome6 name="car" size={18} color="#070F2D" /><Text className="font-bold text-lg">รถ</Text></View>}
                 {type === 'card' && <View className='flex flex-row gap-2'><FontAwesome6 name="credit-card" size={18} color="#070F2D" /><Text className="font-bold text-lg">ค่างวด</Text></View>}
-                {type !== 'home' && type !== 'land' && type !== 'car' && <View className='flex flex-row gap-2'><Text className="font-bold text-lg">{type}</Text></View>}
+                {type !== 'home' && type !== 'land' && type !== 'car' && type !== 'card' && <View className='flex flex-row gap-2'><Text className="font-bold text-lg">{type}</Text></View>}
                 {items.map((item) => (
                   <Animated.View 
                   key={item.id} 

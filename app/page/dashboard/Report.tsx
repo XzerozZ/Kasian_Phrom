@@ -5,6 +5,7 @@ import ChartCir from '../../components/ChartCir';
 import  TextF  from '../../components/TextF';
 import Port from '@/Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 
 interface NursingHouse {
@@ -85,6 +86,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, planName }) => {
   const [dataHouse, setDataHouse] = useState<NursingHouse>()
   const [series, setSeries] = useState<series[]>([])
   const [series2, setSeries2] = useState<series[]>([{ value: 1, color: '#FCE49E' }])
+  const { addCommatoNumber } = useNumberFormat();
   const [colorsCat, setColorsCat] = useState([
     '#F68D2B',
     '#FFB36C',
@@ -105,8 +107,6 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, planName }) => {
 
 
   const [dataPart, setDataPart] = useState<dataPartProp[]>([])
-
-
 
 
 
@@ -234,14 +234,14 @@ console.log('series2:', series2)
                 <View className='w-5 h-5 rounded'></View>
                 <TextF className='text-normalText text-lg'>จำนวนเงินที่ต้องเก็บทั้งหมด</TextF>
               </View>
-              <TextF className=' text-normalText text-lg'>{infoPlan?.allRequiredFund}</TextF>
+              <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.allRequiredFund)}</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
                 <View className='w-5 h-5 rounded bg-unselectMenu'></View>
                 <TextF className='text-normalText text-lg'>ต้องเก็บอีก</TextF>
               </View>
-              <TextF className=' text-normalText text-lg'>{infoPlan?.stillneed}</TextF>
+              <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.stillneed)}</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
@@ -252,7 +252,7 @@ console.log('series2:', series2)
                     <TextF className=' text-oktext text-sm '>{infoPlan?.annual_savings_return}%/ปี</TextF> 
                 </View>
               </View>
-              <TextF className=' text-normalText text-lg'>{infoPlan?.saving}</TextF>
+              <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.saving)}</TextF>
             </View>
             <View className='flex flex-row justify-between items-center'>
               <View className='flex flex-row items-center gap-2'>
@@ -263,7 +263,7 @@ console.log('series2:', series2)
                   <TextF className=' text-oktext text-sm '>{infoPlan?.annual_investment_return}%/ปี</TextF>
                 </View>
               </View>
-              <TextF className=' text-normalText text-lg'>{infoPlan?.investment}</TextF>
+              <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.investment)}</TextF>
             </View>
           </View>
           <View className="px-5 mt-3">
@@ -292,11 +292,11 @@ console.log('series2:', series2)
                     <View 
                     id={'PartOfMoney'+item.title}
                     key={index} 
-                    className="flex flex-row justify-between items-center px-5">
+                    className="flex flex-row justify-between items-center pl-5">
                       <View className="flex flex-row items-center gap-2">
                         <TextF className="text-normalText text-lg ml-2">{item.title} </TextF>
                       </View>
-                      <TextF className="text-normalText text-lg">{item.amount}</TextF>
+                      <TextF className="text-normalText text-lg">{addCommatoNumber(item.amount)}</TextF>
                     </View>
                   ))}
                 </View>
@@ -311,7 +311,7 @@ console.log('series2:', series2)
                 <View className='w-5 h-5 rounded bg-secondary'></View>
                 <TextF className='text-normalText text-lg'>เงินเก็บเพื่อเกษียณ</TextF>
               </View>
-              <TextF className=' text-normalText text-lg'>{infoPlan?.allretirementfund}</TextF>
+              <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.allretirementfund)}</TextF>
             </View>
             {/* ------------------------------------------------------------ */}
             <ScrollView 
@@ -323,7 +323,7 @@ console.log('series2:', series2)
                   <View 
                   id={'dataAsset'}
                   key={index} 
-                  className='flex w-52 h-32 rounded-xl border border-neutral2 shadow-sm bg-neutral p-3 justify-between mr-3'>
+                  className='flex w-56 h-33 rounded-xl border border-neutral2 shadow-sm bg-neutral p-3 justify-between mr-3'>
                     <View className='flex flex-row justify-between items-center'>
                       <View className='flex flex-row gap-2'>
                         {item.type == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" /> }
@@ -339,15 +339,15 @@ console.log('series2:', series2)
                       className={`w-5 h-5 rounded `}></View>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
-                      <TextF className='text-normalTextF text-sm'>ซื้อตอนอายุ {item.end_year} ปี</TextF>
+                      <TextF className='text-normalTextF text-sm py-1'>ซื้อตอนปี {item.end_year}</TextF>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text'>ต้องเก็บ/เดือน</TextF>
-                      <TextF className=' text-normalTextF text'>{item.monthly_expenses}</TextF>
+                      <TextF className=' text-normalTextF text'>{addCommatoNumber(item.monthly_expenses)}</TextF>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text'>ต้องเก็บทั้งหมด</TextF>
-                      <TextF className=' text-normalTextF text'>{item.total_cost}</TextF>
+                      <TextF className=' text-normalTextF text'>{addCommatoNumber(item.total_cost)}</TextF>
                     </View>
                   </View>
                 ))}
@@ -381,11 +381,11 @@ console.log('series2:', series2)
                 </Text>
                 <View className='flex flex-row justify-between items-center'>
                   <TextF className='text-normalText text-lg'>ราคา/เดือน</TextF>
-                  <TextF className=' text-normalText text-lg'>{dataHouse.NursingHouse.price} บาท</TextF>
+                  <TextF className=' text-normalText text-lg'>{addCommatoNumber(dataHouse.NursingHouse.price)} บาท</TextF>
                 </View>
                 <View className='flex flex-row justify-between items-center'>
                   <TextF className='text-normalText text-lg'>เงินที่ต้องเก็บ/เดือน</TextF>
-                  <TextF className=' text-normalText text-lg'>{dataHouse.monthly_expenses} บาท</TextF>
+                  <TextF className=' text-normalText text-lg'>{addCommatoNumber(dataHouse.monthly_expenses)} บาท</TextF>
                 </View>
                 <View className='w-full flex flex-row gap-1 justify-end'>
                     <TextF className='text-accent'>ดูรายละเอียด</TextF>

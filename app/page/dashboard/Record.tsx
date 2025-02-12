@@ -8,6 +8,8 @@ import  TextF  from '../../components/TextF';
 import Port from '../../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useNumberFormat } from "@/app/NumberFormatContext";
+
 interface infoHistoryProp{
   history_id: string,
   method: string,
@@ -26,6 +28,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
 
 
   const [infoHistory, setInfoHistory] = useState<infoHistoryProp[]>([]);
+  const { addCommatoNumber } = useNumberFormat();
 
   useEffect (() => {
     const fetchToken = async (token:string ) => {
@@ -81,6 +84,8 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
     return acc;
   }, {});
 
+ 
+
 
   return (
     <ScrollView 
@@ -106,7 +111,9 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
                   : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
                 }
                 <TextF className={`text-lg ${items.reduce((sum, item) => sum + item.money, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
-                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ? `+ ${items.reduce((sum, item) => sum + item.money, 0)}` : `- ${items.reduce((sum, item) => sum + item.money, 0)}`}
+                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ?`${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`
+                  :items.reduce((sum, item) => sum + item.money, 0) > 0 ?  `+ ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}` 
+                  : `- ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`}
                 </TextF>
               </View>
               {items.map((data, index) => (

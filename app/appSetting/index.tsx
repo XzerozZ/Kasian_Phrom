@@ -7,6 +7,11 @@ import CheckBox from '../components/checkBox';
 import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from 'react-native-image-crop-picker';
+import {
+    GoogleSignin,
+    statusCodes,
+  } from "@react-native-google-signin/google-signin";
 
 const Logo = require('../../assets/images/logo.png')
 
@@ -46,6 +51,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [imgProfile, setImgProfile] = useState('');
+    const [imgInput, setImgInput] = useState<any | null>(null);
+    const [refresh, setRefresh] = useState(false);
 
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -68,8 +76,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
-            // await AsyncStorage.removeItem('token');
-
+            await AsyncStorage.removeItem('token');
+            await GoogleSignin.signOut();
+            setActiveTab('main');
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",
@@ -78,6 +87,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                 "Authorization": `Bearer ${token}`
             },
             });
+            
+            
             if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.message || "Network response was not ok");
@@ -109,20 +120,17 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                 }
     
                 const dataname = await response.json();
-                if (dataname.result.data.uname) {
-                    setUserName(dataname.result.data.uname); 
-                    setOldUserName(dataname.result.data.uname); 
-                }
-                if (dataname.result.data.fname) {
-                    setFirstName(dataname.result.data.fname); 
-                    setOldFirstName(dataname.result.data.fname); 
-                }
-                if (dataname.result.data.lname) {
-                    setLastName(dataname.result.data.lname); 
-                    setOldLastName(dataname.result.data.lname); 
-                }
-                if (dataname.result.data.email) {
-                    setEmail(dataname.result.data.email); 
+                console.log('dataname', dataname);
+                if(dataname !== null){
+                    console.log(JSON.stringify(dataname.result , null , 2))
+                    setUserName(dataname.result.uname); 
+                    setOldUserName(dataname.result.uname); 
+                    setFirstName(dataname.result.fname); 
+                    setOldFirstName(dataname.result.fname); 
+                    setLastName(dataname.result.lname); 
+                    setOldLastName(dataname.result.lname); 
+                    setEmail(dataname.result.email); 
+                    setImgProfile(dataname.result.image_link); 
                 }
             } catch (error) {
                 console.error("Error fetching user details:", error);
@@ -130,7 +138,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
         };
     
         fetchUserDetails();
-    }, []);
+    }, [refresh]);
+
+
     const handleUpdateProfile = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -143,9 +153,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             formData.append('username', userName);
             formData.append('firstname', firstName);
             formData.append('lastname', lastName);
-            formData.append('email', email);
     
-            const response = await fetch(`${Port.BASE_URL}/user/user`, {
+            const response = await fetch(`${Port.BASE_URL}/user`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -214,6 +223,57 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             console.error("Error:", error);
         }
     };
+
+    const handleChangeImg = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                console.error("Token not found");
+                return;
+            }
+            ImagePicker.openPicker({
+                width: 300,
+                height: 300,
+                cropping: true
+            }).then(async image => {
+                
+                const formData = new FormData();
+                console.log('image:', JSON.stringify(image, null, 2));
+
+                const photo = {
+                    uri: image.path,
+                    type: image.mime,
+                    name: image.filename || `photo.${image.mime.split('/')[1]}`
+                };
+                formData.append('images', photo as any);
+                console.log(formData)
+            
+                const response = await fetch(`${Port.BASE_URL}/user`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
+                    },
+                    body: formData
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log('errorDataAsset', errorData);
+                    throw new Error(errorData.message || "Network response was not ok");
+                }
+                const data = await response.json();
+                console.log('data', data);
+                setImgProfile(data.result.image_link); 
+                setRefresh(!refresh);
+            });
+            
+            
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+console.log('imgInput', JSON.stringify(imgInput, null, 2));
     
     
     
@@ -234,15 +294,23 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <TextF className=' text-label pt-2'>ตั้งค่าโปรไฟล์</TextF>
                     </View>
                     <View className='flex flex-row mt-8 items-center gap-8'>
-                        <View 
+                        <TouchableOpacity 
                         id=' BtnSettingChangeImg'
+                        // activeOpacity={1}
+                        onPress={handleChangeImg}
                         style={{position:'relative', borderWidth: 3}}
                         className='w-32 h-32 rounded-full border-primary'>
-                            <Image 
-                            source={Logo}
-                            style={{objectFit: 'contain'}}
+                            {imgProfile ? <Image 
+                            source={{uri: imgProfile}}
+                            style={{objectFit: 'cover'}}
                             className='w-full h-full rounded-full'/>
-                        </View>
+                            :<View className='w-full h-full rounded-full'></View>}
+                            <View
+                            style={{right: 0, bottom: 0}}
+                            className='w-8 h-8 shrink-0 bg-primary absolute rounded-full justify-center items-center'>
+                                <FontAwesome6 name='pen' size={12} color='#C9C9C9'/>
+                            </View>
+                        </TouchableOpacity>
                         <View className=' justify-between pr-5 w-1/2'>
                             <View className='flex flex-row items-end'>
                                 <TextInput
@@ -252,7 +320,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 keyboardType='default'
                                 value={userName}
                                 onChangeText={setUserName}
-                                className={`text-lg border-b border-unselectInput w-full`}/>
+                                className={`text-lg border-b pb-1 border-unselectInput w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
                                     <FontAwesome6 name='pen' size={12} color={userName === oldName ? '#C9C9C9' : '#2A4296'} />
                                 </View>
@@ -265,7 +333,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 keyboardType='default'
                                 value={firstName}
                                 onChangeText={setFirstName}
-                                className={`text-lg border-b border-unselectInput  w-full`}/>
+                                className={`text-lg border-b pb-1 border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
                                     <FontAwesome6 name='pen' size={12} color={firstName === oldFirstName ? '#C9C9C9' : '#2A4296'}/>
                                 </View>
@@ -278,7 +346,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 keyboardType='default'
                                 value={lastName}
                                 onChangeText={setLastName}
-                                className={`text-lg border-b border-unselectInput  w-full`}/>
+                                className={`text-lg border-b pb-1 border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
                                     <FontAwesome6 name='pen' size={12} color={lastName === oldLastName ? '#C9C9C9' : '#2A4296'}/>
                                 </View>

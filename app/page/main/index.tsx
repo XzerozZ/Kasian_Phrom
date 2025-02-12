@@ -5,10 +5,16 @@ import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign,
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '../../../Port';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 const Logo = require('../../../assets/images/logo.png');
 
-
+interface MenuItem {
+    tag: string;
+    icon: JSX.Element;
+    text: string;
+    bg: string;
+  }
 interface MainProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -23,12 +29,8 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   
   
   
-  interface MenuItem {
-    tag: string;
-    icon: JSX.Element;
-    text: string;
-    bg: string;
-  }
+  
+  const { addCommatoNumber } = useNumberFormat();
   
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [isAuth, setIsAuth] = useState(false);
@@ -186,7 +188,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
               <TextF className=' ml-6 text-normalText text-lg'>{infoPlan.monthly_expenses < 0 ?'จำนวนเงินที่ต้องเก็บในดือนนี้ครบแล้ว':"จำนวนเงินที่ต้องเก็บในเดือนนี้"}</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
-                  <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${Math.abs(infoPlan.monthly_expenses)}` : infoPlan.monthly_expenses}</TextF>
+                  <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${addCommatoNumber(Math.abs(infoPlan.monthly_expenses))}` : addCommatoNumber(infoPlan.monthly_expenses)}</TextF>
                   <TextF className='text-lg text-normalText'>บาท</TextF>
                 </View>
                 <View>
