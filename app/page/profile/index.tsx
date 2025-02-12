@@ -4,9 +4,58 @@ import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@
 import { Link, useRouter } from 'expo-router';
 
 import AssessCard from '@/app/components/AssessCard';
-
+import Port from '../../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import  TextF  from '../../components/TextF';
 const Logo = require('../../../assets/images/logo.png')
+
+
+interface Profile {
+  age: number,
+  data: {
+    u_id: string,
+    fname: string,
+    lname: string,
+    uname: string,
+    email: string,
+    provider: string,
+    image_link: string,
+    role: {
+      r_id: number,
+      role: string,
+    },
+    retirement: {
+      financial_id: string,
+      planName: string,
+      birth_date: string,
+      retirement_age: number,
+      expect_lifespan: number,
+      current_savings: number,
+      current_savings_returns: number,
+      monthly_income: number,
+      monthly_expenses: number,
+      current_total_investment: number,
+      investment_return: number,
+      expected_monthly_expenses: number,
+      expected_inflation: number,
+      annual_expense_increase: number,
+      annual_savings_return: number,
+      annual_investment_return: number,
+      user_id: string,
+      created_at: string,
+      updated_at: string,
+    };
+    risk: {
+      Risk: {
+        risk_id: number,
+        risk: string
+      }
+    }
+  };
+}
+interface MoneyProfile {
+  all_money: number;
+}
 
 interface ProfileProps{
   isDarkMode: boolean;
@@ -14,23 +63,66 @@ interface ProfileProps{
   setStateNavbar: (state: boolean) => void;
 }
 const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+    const[userProfile, setUserProfile] = useState<Profile>();
+    const[userMoney, setUserMoney] = useState<MoneyProfile>();
+    const [dataProfile, setDataProfile] = useState<{ title: string; detail: string }[]>([]);
+
     useEffect(() =>{
       setStateNavbar(true)
+      const detailProfile = async() => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`${Port.BASE_URL}/user`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      const responseMoney = await fetch(`${Port.BASE_URL}/user/plan`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      if (!response.ok) {
+  
+        const errorData = await response.json();
+        console.log('errorDataAsset',errorData)
+        throw new Error(errorData.message || "Network response was not ok");
+      }
+  
+      const dataUser = await response.json();
+      const dataMoney = await responseMoney.json();
+      setUserProfile(dataUser.result)
+      setUserMoney(dataMoney.result)
+      console.log('----------------------a',JSON.stringify(dataUser.result, null, 2));
+      console.log('----------------------a',JSON.stringify(dataMoney.result, null, 2));
+      setDataProfile([
+        { title: 'อายุที่ต้องการเกษียณ', detail: String(dataUser.result.data?.retirement?.retirement_age ?? '') },
+        { title: 'อายุที่คาดว่าจะเสียชีวิต', detail: String(dataUser.result.data?.retirement?.expect_lifespan ?? '')},
+        { title: 'รายรับต่อเดือน', detail: String(dataUser.result.data?.retirement?.monthly_income ?? '') },
+        { title: 'รายจ่ายต่อเดือน', detail: String(dataUser.result.data?.retirement?.monthly_expenses ?? '') },
+        { title: 'เงินเฟ้อ', detail: String(dataUser.result.data?.retirement?.expected_inflation ?? '') },
+        { title: 'รายจ่ายหลังเกษียณ/เดือน', detail: String(dataUser.result.data?.retirement?.expected_monthly_expenses ?? '') },
+        { title: 'การเพิ่มขึ้นของรายจ่าย/ปี', detail: String(dataUser.result.data?.retirement?.annual_expense_increase ?? '') },
+        { title: 'ผลตอบแทนจากการออม/ปี', detail: String(dataUser.result.data?.retirement?.annual_savings_return ?? '') },
+        { title: 'ผลตอบแทนจากการลงทุน/ปี', detail: String(dataUser.result.data?.retirement?.annual_investment_return ?? '') },
+      ]);
+      
+    } catch (error) {
+      throw new Error(error as string);
+    }
+      }
+      detailProfile()
+      
+
     },[]);
     const router = useRouter();
 
 
-    const [dataProfile, setDataProfile] = useState([
-      {title:'อายุที่ต้องการเกษียณ', detail:'60'},
-      {title:'อายุที่คาดว่าจะเสียชีวิต', detail:'80'},
-      {title:'รายรับต่อเดือน', detail:'30,000'},
-      {title:'รายจ่ายต่อเดือน', detail:'15,000'},
-      {title:'เงินเฟ้อ', detail:'3%'},
-      {title:'รายจ่ายหลังเกษียณ/เดือน', detail:'30,000'},
-      {title:'การเพิ่มขึ้นของรายจ่าย/ปี', detail:'3%'},
-      {title:'ผลตอบแทนจากการออม/ปี', detail:'1.25%'},
-      {title:'ผลตอบแทนจากการลงทุน/ปี', detail:'5%'},
-    ])
+    
 
 
 
@@ -67,9 +159,9 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
             <TextF className='text-lg text-normalText'>อายุ</TextF>
           </View>
           <View className='flex justify-between'>
-            <TextF className='text-lg text-normalText'> นาย</TextF>
-            <TextF className='text-lg text-normalText'> พิชัย สุขเงิน</TextF>
-            <TextF className='text-lg text-normalText'> 45</TextF>
+            <TextF className='text-lg text-normalText'> {userProfile?.data?.uname}</TextF>
+            <TextF className='text-lg text-normalText'> {userProfile?.data?.fname} {userProfile?.data?.lname}</TextF>
+            <TextF className='text-lg text-normalText'> {userProfile?.age}</TextF>
           </View>
         </View>
       </View>
@@ -83,12 +175,12 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
       </TouchableOpacity>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className='text-lg text-normalText'>จำนวนเงินสุทธิ</TextF>
-        <TextF className='text-lg text-normalText'>100,000 บาท</TextF>
+        <TextF className='text-lg text-normalText'>{userMoney?.all_money}</TextF>
       </View>
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>การลงทุนที่เหมาะกับคุณ</TextF>
       </View>
-      <AssessCard setActiveTab={setActiveTab} />
+      <AssessCard setActiveTab={setActiveTab} riskId={userProfile?.data.risk?.Risk?.risk_id} />
       <View className='flex flex-row justify-between mt-8'>
         <TextF className=' text-label'>ข้อมูล</TextF>
       </View>
@@ -109,6 +201,3 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 }
 
 export default Profile
-
-
-

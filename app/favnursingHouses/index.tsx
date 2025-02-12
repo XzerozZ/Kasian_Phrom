@@ -3,6 +3,28 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-nativ
 import NursingHomeCard from '../components/NursingHousesCard';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 import TextF from "../components/TextF";
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface Home {
+  nh_id: string,
+  name: string,
+  province: string,
+  address: string,
+  price: number,
+  map: string,
+  phone_number: string,
+  site: string,
+  Date: string,
+  Status: string,
+  images: [{
+    image_id: string,
+    image_link: string
+  }],
+  CreatedAt: string,
+  UpdatedAt: string
+
+}
 
 interface FavNursingHousesProps {
   isDarkMode: boolean;
@@ -31,16 +53,16 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
   const [searchQuery, setSearchQuery] = useState(favoriteHomes);
 
   // Handle search query
-  useEffect(() => {
-    if (query === '') {
-      setSearchQuery(favoriteHomes);
-    } else {
-      const filteredHomes = favoriteHomes.filter((home) =>
-        home.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setSearchQuery(filteredHomes);
-    }
-  }, [query]);
+  // useEffect(() => {
+  //   if (query === '') {
+  //     setSearchQuery(favoriteHomes);
+  //   } else {
+  //     const filteredHomes = favoriteHomes.filter((home) =>
+  //       home.name.toLowerCase().includes(query.toLowerCase())
+  //     );
+  //     setSearchQuery(filteredHomes);
+  //   }
+  // }, [query]);
 
   useEffect(() => {
     if (formPage === 'index') {
@@ -49,6 +71,35 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
       setStateNavbar(false);
     }
   }, [setStateNavbar]);
+
+  useEffect(() => {
+    const favHouses = async() => {
+      try {
+    const response = await fetch(`${Port.BASE_URL}/nursinghouses`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        // "Authorization": Bearer ${token}
+      },
+    });
+    if (!response.ok) {
+
+      const errorData = await response.json();
+      console.log('errorDataAsset',errorData)
+      throw new Error(errorData.message || "Network response was not ok");
+    }
+
+    const data = await response.json();
+    // setShowData(data);   // กำหนดค่าให้ showData
+    // setSearchQuery(data); // ใช้ข้อมูลนี้แสดงผล
+    console.log('----------------------a',JSON.stringify(data.result, null, 2));
+  } catch (error) {
+    throw new Error(error as string);
+  }
+    }
+
+    favHouses()
+  }, []);
 
   return (
     <View className="flex-1 px-5">
@@ -86,7 +137,7 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
             activeOpacity={1}
             onPress={() => setActiveTab('detailnursingHouses')}
           >
-            <NursingHomeCard
+            {/* <NursingHomeCard
               id={home.id}
               name={home.name}
               description={home.description}
@@ -94,7 +145,7 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
               location={home.location}
               imageUrl={home.imageUrl}
               mapLink={home.mapLink}
-            />
+            /> */}
           </TouchableOpacity>
         ))}
         <View className="h-40"></View>
