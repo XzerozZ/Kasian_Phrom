@@ -133,7 +133,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
                 <View> 
-                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดื่อน</TextF>
+                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดือน</TextF>
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput

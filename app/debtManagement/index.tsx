@@ -355,6 +355,12 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                 ))}
               </View>
             ))}
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setStatePage('addDebt')}
+              className="flex-1 flex-row gap-3 items-center justify-center bg-neutral rounded-lg border-dashed border-2 h-24 border-primary">
+              <Text style={{ fontFamily: "SarabunBold" }} className="text-xl py-2 text-primary">เพิ่มข้อมูลหนี้สิน</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -445,7 +451,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       </>
     }
     {statePage === 'addDebt' && <>
-      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage}/>
+      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage} refresh={refresh} setRefresh={setRefresh} />
     </>}
 
     </>

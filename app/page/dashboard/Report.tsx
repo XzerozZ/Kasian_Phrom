@@ -394,6 +394,7 @@ console.log('series2:', series2)
               </View>
             </View>
           </View>}
+
         </View>
         <View className='h-32'></View>
       </ScrollView>
