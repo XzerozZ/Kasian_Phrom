@@ -37,7 +37,7 @@ interface NursingHousesProps{
 }
 const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState, setHomePickInPlan }) => {
   const[allHouses, setAllHouses] = useState<Home[]>([]);
-  const[ownHouses, setOwnHouses] = useState();
+  const[ownHouses, setOwnHouses] = useState<Home>();
   const [isAllHouses, setIsAllHouses] = useState(false)
   useEffect(() => {
     const allopenHouses = async () => {
@@ -80,6 +80,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         }
         // ตั้งค่า OwnHouses
         setOwnHouses(dataOwnHouses.result.selected.NursingHouse);
+        // console.log('123456789',dataOwnHouses.result.selected.NursingHouse)
+
   
       } catch (error) {
         console.error('Fetch error:', error);
@@ -94,9 +96,6 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
       allopenHouses();
     }
   }, [formPage, isAllHouses, setAllHouses, setOwnHouses]);
-  
-
-
   
   const [searchQuery, setSearchQuery] = useState<Home[]>([]);
 
@@ -275,8 +274,46 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         }
         <ScrollView
         showsVerticalScrollIndicator={false}>
-          <View className='flex flex-row justify-between items-center'>
-            <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">{query === '' &&  isNoFilter ? 'บ้านพักคนชราในแผนของคุณ' : 'ผลลัพธ์การค้นหา' }</TextF>
+          <View className='flex flex-row mt-4 justify-between items-center'>
+          {ownHouses !== undefined && isNoFilter 
+          ? ownHouses?.nh_id === '00001'
+            ? (
+              <View className='flex-row  text-lg justify-between'>
+                <View className='flex-row gap-3'>
+                  <TouchableOpacity
+                    id='BtnRecommendHouses'
+                    activeOpacity={1}
+                    onPress={() => setIsAllHouses(true)}
+                  >
+                    <View>
+                      <TextF className={`${!isAllHouses ? 'text-label' : 'text-normalText'}`}>แนะนำ</TextF>
+                    </View>
+                  </TouchableOpacity>
+                  <View className='flex h-5 w-[1] mt-1 bg-unselectInput'></View>
+                  <TouchableOpacity
+                    id='BtnAllHouses'
+                    activeOpacity={1}
+                    onPress={() => setIsAllHouses(false)}
+                  >
+                    <View>
+                      <TextF className={`${!isAllHouses ? 'text-normalText' : 'text-label'}`}>ทั้งหมด</TextF>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                  </View>
+                )
+                : (
+                  <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">
+                    บ้านพักคนชราในแผนของคุณ
+                  </TextF>
+                )
+              : (
+                <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">
+                  ผลลัพธ์การค้นหา
+                </TextF>
+              )
+            }
+
             <TouchableOpacity 
             id='BtnFavorite'
             activeOpacity={1}
@@ -286,7 +323,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
             </TouchableOpacity>
           </View>
-          {query === '' && isNoFilter &&
+          {query === '' && isNoFilter && ownHouses?.nh_id !== '00001' &&
             <TouchableOpacity 
             id='favoriteNursingHomes'
             activeOpacity={1}
@@ -296,29 +333,33 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               {ownHouses !==undefined && <NursingHomeCard datahouse={ownHouses} />}
             </TouchableOpacity>
           }
-          <View className=' flex-row mt-8 text-lg justify-between'>
-            {query === '' &&  isNoFilter && <TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
-            <View className=' flex-row gap-3'>
-              <TouchableOpacity
-                id='BtnRecommendHouses'
-                activeOpacity={1}
-                onPress={() => setIsAllHouses(true)}
-              >
-                <View>
-                  <TextF className={` ${!isAllHouses?'text-label':'text-normalText'}`}>แนะนำ</TextF>
-                </View>
-              </TouchableOpacity>
-              <View className='flex h-5 w-[1] mt-1 bg-unselectInput'></View>
-              <TouchableOpacity
-                id='BtnAllHouses'
-                activeOpacity={1}
-                onPress={() => setIsAllHouses(false)}
-              >
-                <View>
-                  <TextF className={` ${!isAllHouses?'text-normalText':'text-label'}`}>ทั้งหมด</TextF>
-                </View>
-              </TouchableOpacity>
-            </View>
+          {ownHouses?.nh_id !== '00001' && (<View className='mt-8'></View>)}
+          <View className=' flex-row text-lg justify-between'>
+            {query === '' &&  isNoFilter && ownHouses?.nh_id !== '00001' &&<TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
+            {ownHouses?.nh_id !== '00001' && (
+              <View className='flex-row gap-3'>
+                <TouchableOpacity
+                  id='BtnRecommendHouses'
+                  activeOpacity={1}
+                  onPress={() => setIsAllHouses(true)}
+                >
+                  <View>
+                    <TextF className={`${!isAllHouses ? 'text-label' : 'text-normalText'}`}>แนะนำ</TextF>
+                  </View>
+                </TouchableOpacity>
+                <View className='flex h-5 w-[1] mt-1 bg-unselectInput'></View>
+                <TouchableOpacity
+                  id='BtnAllHouses'
+                  activeOpacity={1}
+                  onPress={() => setIsAllHouses(false)}
+                >
+                  <View>
+                    <TextF className={`${!isAllHouses ? 'text-normalText' : 'text-label'}`}>ทั้งหมด</TextF>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+
           </View>
           <View className='h-5'></View>
           {allHouses.map((Home, index) => (
