@@ -14,6 +14,7 @@ interface DataAsset {
   type: string;
   Total_money: string;
   End_year: string;
+  Status: boolean;
 }
 
 interface stateProps{
@@ -193,7 +194,7 @@ const handleUpdateAsset = async (dataAsset: DataAsset, token:String): Promise<vo
     formData.append("type", dataAsset.type);
     formData.append("totalcost", dataAsset.Total_money);
     formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
-    // formData.append("status", dataAsset.Status);
+    // formData.append("status", dataAsset.Status ?'In_Progress':'Waiting');
     
     console.log('formDataAsset:', formData);
     const response = await fetch(`${Port.BASE_URL}/asset/${dataAsset.asset_id}`, {

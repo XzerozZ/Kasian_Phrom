@@ -55,7 +55,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   useEffect(() => {
     setStateNavbar(false);
-    setState(4);
+    setState(1);
   }, [])
 
   useEffect(() => {
@@ -158,10 +158,12 @@ const handleBack = () => {
   }
 }
 
+
+
 useEffect(() => {
-  const fetchToken = async () => {
+  const fetchToken = async (token:string ) => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      
       console.log(token)
       const response = await fetch(`${Port.BASE_URL}/retirement`, {
         method: 'GET',
@@ -184,13 +186,10 @@ useEffect(() => {
 
       const data = await response.json();
       const dataAsset = await responseAsset.json();
-      const dataHouse = await responseHouse.json();
       
 
       if (data.result !== null) {
         setHavePlant(true)
-        console.log('data.result:', token)
-        console.log('data.result:',JSON.stringify(data.result.plan, null, 2) )
         const plan = data.result.plan;
         if (plan !== undefined) {
           setDataInput({
@@ -211,23 +210,20 @@ useEffect(() => {
             Annual_investment_return: plan.annual_investment_return.toString() ,
           })
         }
-
-        
+        const dataHouse = await responseHouse.json();
+        setHomePickInPlan(dataHouse.result.NursingHouse.nh_id)
       }
+
       if (dataAsset.result !== null) {
         console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2))
-
         const assets = dataAsset.result.map((item: any) => ({
-          asset_id: item.asset.asset_id,
-          Name: item.asset.name,
-          Total_money: item.asset.total_cost.toString(),
-          End_year: (parseInt(item.asset.end_year)+543).toString(),
-          type: item.asset.type,
-          Status: item.asset.status === 'In_Progress' ? true : false
+          asset_id: item.asset_id,
+          Name: item.name,
+          Total_money: item.total_cost.toString(),
+          End_year: (parseInt(item.end_year)+543).toString(),
+          type: item.type,
+          Status: item.status === 'In_Progress' ? true : false
         }));
-
-      console.log('dataHouse:', JSON.stringify(dataHouse.result.selected.NursingHouse.nh_id, null, 2))
-        setHomePickInPlan(dataHouse.result.selected.NursingHouse.nh_id)
         setOldAssetInput(assets)
         setDataAssetInput(assets);
       }
@@ -236,8 +232,14 @@ useEffect(() => {
       console.error('Failed to fetch token from storage', error);
     }
   };
-
-  fetchToken();
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== undefined && token !== null ) {
+      fetchToken(token);
+    }
+  };
+  
+  getToken();
 }, []);
 
 

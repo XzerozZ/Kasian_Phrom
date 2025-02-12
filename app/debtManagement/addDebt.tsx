@@ -144,7 +144,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
         </View>
         
         <View className='px-5'>
-        <TextF className='text-lg text-normalText mt-5'>รายระเอียด</TextF>
+        <TextF className='text-lg text-normalText mt-5'>รายละเอียด</TextF>
           <View className='flex mt-5 bg-neutral rounded-xl px-3 shadow-sm border-[1px] border-neutral2'>
             <View className='flex flex-row  justify-between items-center h-16'>
               <View> 
