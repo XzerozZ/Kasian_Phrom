@@ -166,9 +166,14 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     
             console.log("Raw response:", result);
     
-            if (!response.ok) {
-                console.error("Error updating profile:", result);
-                throw new Error(typeof result === "object" ? result.message : "Failed to update profile");
+            if (response.ok) {
+                // หากอัปเดตสำเร็จ ให้ตั้งค่า oldName, oldFirstName, และ oldLastName ใหม่
+                setOldUserName(userName);
+                setOldFirstName(firstName);
+                setOldLastName(lastName);
+                console.log('Profile updated successfully');
+            } else {
+                console.log('Failed to update profile');
             }
     
             console.log("Profile updated successfully:", result);

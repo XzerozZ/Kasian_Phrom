@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import  TextF  from '../../components/TextF';
 import NursingHomeCard from '../../components/NursingHousesCard';
-import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign, Feather } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import Filter from './filter';
 import HeadTitle from '../../components/headTitle';
 import Port from '../../../Port';
@@ -79,8 +79,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           setAllHouses(data.result.slice(0, 1));
         }
         // ตั้งค่า OwnHouses
-        setOwnHouses(dataOwnHouses.result.selected.NursingHouse);
-        // console.log('123456789',dataOwnHouses.result.selected.NursingHouse)
+        setOwnHouses(dataOwnHouses.result.NursingHouse);
+        console.log('----------------------a',JSON.stringify(data.result, null, 2));
 
   
       } catch (error) {
@@ -107,6 +107,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     endPrice: '',
     location: [] as string[],
   });
+
+  console.log('123--------',ownHouses);
 
   // useEffect(() => {
 
@@ -323,12 +325,12 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
             </TouchableOpacity>
           </View>
-          {query === '' && isNoFilter && ownHouses?.nh_id !== '00001' &&
+          {query === '' && isNoFilter && ownHouses?.nh_id !== '00001' && ownHouses !== undefined &&
             <TouchableOpacity 
             id='favoriteNursingHomes'
             activeOpacity={1}
             onPress={() => {
-              (formPage === 'index' && setActiveTab('detailnursingHouses'))
+              (formPage === 'index' && setActiveTab('detailnursingHouses'),setHomeSelected(ownHouses?.nh_id))
             }}>
               {ownHouses !==undefined && <NursingHomeCard datahouse={ownHouses} />}
             </TouchableOpacity>
