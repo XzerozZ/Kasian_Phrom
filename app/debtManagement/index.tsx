@@ -359,7 +359,6 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
               activeOpacity={1}
               onPress={() => setStatePage('addDebt')}
               className="flex-1 flex-row gap-3 items-center justify-center bg-neutral rounded-lg border-dashed border-2 h-24 border-primary">
-              <FontAwesome6 name='plus' size={20} color={'#2A4296'}/>
               <Text style={{ fontFamily: "SarabunBold" }} className="text-xl py-2 text-primary">เพิ่มข้อมูลหนี้สิน</Text>
             </TouchableOpacity>
           </View>
