@@ -452,7 +452,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       </>
     }
     {statePage === 'addDebt' && <>
-      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage}/>
+      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage} refresh={refresh} setRefresh={setRefresh} />
     </>}
 
     </>

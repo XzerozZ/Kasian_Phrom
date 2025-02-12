@@ -14,8 +14,10 @@ interface AddDebtProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStatePage: (state: string) => void;
+  refresh: boolean;
+  setRefresh: (state: boolean) => void;
 }
-const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePage }) => {
+const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePage, refresh, setRefresh }) => {
 
   const [newDataAssetInput, setNewDataAssetInput] = useState({
     name: '',
@@ -73,6 +75,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       const data = await response.json();
       console.log("Debt Added:", data);
       setStatePage('debtManagement');
+      setRefresh(!refresh);
 
     } catch (error) {
       throw new Error( error as string);
