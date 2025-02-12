@@ -5,17 +5,25 @@ import NursingHomeCard from '../../components/NursingHousesCard';
 import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDesign, Feather } from '@expo/vector-icons';
 import Filter from './filter';
 import HeadTitle from '../../components/headTitle';
+import Port from '../../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
   interface Home {
-    id: string;
-    name: string;
-    description: string;
-    price: string;
-    location: string;
-    imageUrl: string;
-    mapLink: string;
+    nh_id: string,
+    name: string,
+    province: string,
+    address: string,
+    price: number,
+    map: string,
+    phone_number: string,
+    site: string,
+    Date: string,
+    Status: string,
+    images: [],
+    CreatedAt: string,
+    UpdatedAt: string
   }
 
 interface NursingHousesProps{
@@ -28,60 +36,67 @@ interface NursingHousesProps{
   setHomePickInPlan: (home: string) => void;
 }
 const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState, setHomePickInPlan }) => {
+  const[allHouses, setAllHouses] = useState<Home[]>([]);
+  const[ownHouses, setOwnHouses] = useState();
+  const [isAllHouses, setIsAllHouses] = useState(false)
   useEffect(() => {
-    if (formPage === 'calRetirement' ){
+    const allopenHouses = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+  
+        // เรียกใช้งาน API พร้อมกัน
+        const [response, responseOwnHouses] = await Promise.all([
+          fetch(`${Port.BASE_URL}/nursinghouses/Active`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }),
+          fetch(`${Port.BASE_URL}/user/selected`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `Bearer ${token}`,
+            },
+          }),
+        ]);
+  
+        // ตรวจสอบสถานะของ Response
+        if (!response.ok || !responseOwnHouses.ok) {
+          const errorData = await response.json();
+          console.log('errorDataAsset', errorData);
+          throw new Error(errorData.message || "Network response was not ok");
+        }
+  
+        // แปลงข้อมูลเป็น JSON
+        const data = await response.json();
+        const dataOwnHouses = await responseOwnHouses.json();
+        
+        // ตั้งค่า AllHouses ตาม isAllHouses
+        if (isAllHouses === false) {
+          setAllHouses(data.result);
+        } else if (isAllHouses === true) {
+          setAllHouses(data.result.slice(0, 1));
+        }
+        // ตั้งค่า OwnHouses
+        setOwnHouses(dataOwnHouses.result.selected.NursingHouse);
+  
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+  
+    // ตรวจสอบ formPage แล้วตั้งค่า State Navbar และเรียก API
+    if (formPage === 'calRetirement') {
       setStateNavbar(false);
-    }else{
+    } else {
       setStateNavbar(true);
+      allopenHouses();
     }
-    setShowData(recommendedHomes);
-  }, []);
+  }, [formPage, isAllHouses, setAllHouses, setOwnHouses]);
+  
 
-  const favoriteHomes = [
-    {
-      id: "1",
-      name: "MyLuck Nursinghome",
-      description: "ศูนย์ดูแลผู้สูงอายุและดูแลผู้ป่วย สาขาประชาอุทิศ 45 (บางมด)",
-      price: "1000",
-      location: "กทม.",
-      fullLocation: "กรุงเทพมหานคร",
-      imageUrl: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg",
-      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
-    },
-  ];
 
-  const recommendedHomes = [
-    {
-      id: "2",
-      name: "สถานพักฟื้นผู้ป่วย ผู้สูงอายุ เพชรเกษมเฮลท์แคร์",
-      description: "สถานที่ฟื้นฟูสุขภาพสำหรับผู้สูงอายุและผู้ป่วย",
-      price: "25000",
-      location: "กทม.",
-      fullLocation: "กรุงเทพมหานคร",
-      imageUrl: "https://udeemeesuk.com/cdn/shop/articles/A1-087-1_grande.jpg?v=1713762079",
-      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
-    },
-    {
-      id: "3",
-      name: "บ้านคุณจุ๋ม",
-      description: "สถานรับดูแลผู้ป่วยจิตเวชและผู้สูงอายุ (บ้านคุณจุ๋ม อิสรภาพ5)",
-      price: "2000",
-      location: "กทม.",
-      fullLocation: "กรุงเทพมหานคร",
-      imageUrl: "https://scontent.fbkk24-1.fna.fbcdn.net/v/t39.30808-6/348224569_270374295358366_1042483928026436489_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=KCmmWiMJyNsQ7kNvgGcg4dw&_nc_oc=AdhQ1hLX8LetQH1oV8kAxwZKso6CaTNzNUWlCiSJV1mTQwK0gKfJHez6FGfohg2YTZTYv-frqtUgQ2D15pH5OG4Y&_nc_zt=23&_nc_ht=scontent.fbkk24-1.fna&_nc_gid=AWiAyex7p-vKSz2sBmvgwTI&oh=00_AYDfWV5Y2fO2Ql47qIk5fspoXO71eJNB4G4NASh8wQtUWg&oe=678538AF",
-      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
-    },
-    {
-      id: "4",
-      name: "คิษฐารักษ์เนอร์สซิ่งโฮม",
-      description: "สาขาปิ่นเกล้า, Ditsara Nursing Home Pinklao Branch",
-      price: "30000",
-      location: "กทม.",
-      fullLocation: "กรุงเทพมหานคร",
-      imageUrl: "https://www.thaielder.com/datas/nursinghome/47/preview__ittara_ursing_ome_inklao_ranch_65f2d50dc9df4.jpg",
-      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
-    },
-  ];
   
   const [searchQuery, setSearchQuery] = useState<Home[]>([]);
 
@@ -93,80 +108,101 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     endPrice: '',
     location: [] as string[],
   });
-  const [showData, setShowData] = useState([{
-    id: "",
-    name: "",
-    description: "",
-    price: "",
-    location: "",
-    imageUrl: "",
-    mapLink: "",
-  }]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (query === '') {
-      setSearchQuery(showData);
-      return;
-    }else{
-      const filteredHomes = showData.filter((home) =>
-      home.name.toLowerCase().includes(query.toLowerCase()) // เปรียบเทียบข้อความแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-    );
-    setSearchQuery(filteredHomes);
-  }
+  //   if (query === '') {
+  //     setSearchQuery(showData);
+  //     return;
+  //   }else{
+  //     const filteredHomes = showData.filter((home) =>
+  //     home.name.toLowerCase().includes(query.toLowerCase()) // เปรียบเทียบข้อความแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+  //   );
+  //   setSearchQuery(filteredHomes);
 
-  }, [query]);
+  // }
+
+  // }, [query]);
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-      if(queryFilter.location.length > 0) {
-      const filteredHomes = recommendedHomes.filter((home) =>
-      queryFilter.location.some(location => home.fullLocation.toLowerCase().includes(location.toLowerCase())));
+  //     if(queryFilter.location.length > 0) {
+  //     const filteredHomes = recommendedHomes.filter((home) =>
+  //     queryFilter.location.some(location => home.fullLocation.toLowerCase().includes(location.toLowerCase())));
 
-        if (queryFilter.startPrice !== '' && queryFilter.endPrice !== '') {
-          const filteredHomesP = filteredHomes.filter((home) =>
-          parseInt(home.price) >= parseInt(queryFilter.startPrice) && parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else if( queryFilter.startPrice !== '' && queryFilter.endPrice === ''){
-          const filteredHomesP = filteredHomes.filter((home) =>
-          parseInt(home.price) >= parseInt(queryFilter.startPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else if (queryFilter.startPrice === '' && queryFilter.endPrice !== '') {
-          const filteredHomesP = filteredHomes.filter((home) =>
-          parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else {
-          setShowData(filteredHomes);
-          setSearchQuery(filteredHomes);
-        }
+  //       if (queryFilter.startPrice !== '' && queryFilter.endPrice !== '') {
+  //         const filteredHomesP = filteredHomes.filter((home) =>
+  //         parseInt(home.price) >= parseInt(queryFilter.startPrice) && parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else if( queryFilter.startPrice !== '' && queryFilter.endPrice === ''){
+  //         const filteredHomesP = filteredHomes.filter((home) =>
+  //         parseInt(home.price) >= parseInt(queryFilter.startPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else if (queryFilter.startPrice === '' && queryFilter.endPrice !== '') {
+  //         const filteredHomesP = filteredHomes.filter((home) =>
+  //         parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else {
+  //         setShowData(filteredHomes); 
+  //         setSearchQuery(filteredHomes);
+  //       }
 
-      }else {
+  //     }else {
 
-        if (queryFilter.startPrice !== '' && queryFilter.endPrice !== '') {
-          const filteredHomesP = recommendedHomes.filter((home) =>
-          parseInt(home.price) >= parseInt(queryFilter.startPrice) && parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else if( queryFilter.startPrice !== '' && queryFilter.endPrice === ''){
-          const filteredHomesP = recommendedHomes.filter((home) =>
-          parseInt(home.price) >= parseInt(queryFilter.startPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else if (queryFilter.startPrice === '' && queryFilter.endPrice !== '') {
-          const filteredHomesP = recommendedHomes.filter((home) =>
-          parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
-          setShowData(filteredHomesP);
-          setSearchQuery(filteredHomesP);
-        }else {
-          setShowData(recommendedHomes);
-          setSearchQuery(recommendedHomes);
-        }
-      }
-    }, [queryFilter]);
+  //       if (queryFilter.startPrice !== '' && queryFilter.endPrice !== '') {
+  //         const filteredHomesP = recommendedHomes.filter((home) =>
+  //         parseInt(home.price) >= parseInt(queryFilter.startPrice) && parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else if( queryFilter.startPrice !== '' && queryFilter.endPrice === ''){
+  //         const filteredHomesP = recommendedHomes.filter((home) =>
+  //         parseInt(home.price) >= parseInt(queryFilter.startPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else if (queryFilter.startPrice === '' && queryFilter.endPrice !== '') {
+  //         const filteredHomesP = recommendedHomes.filter((home) =>
+  //         parseInt(home.price) <= parseInt(queryFilter.endPrice)); 
+  //         setShowData(filteredHomesP);
+  //         setSearchQuery(filteredHomesP);
+  //       }else {
+  //         setShowData(recommendedHomes);
+  //         setSearchQuery(recommendedHomes);
+  //       }
+  //     }
+  //   }, [queryFilter]);
+  // useEffect(() => {
+  //   if (queryFilter.location.length > 0) {
+  //     const filteredHomes = allHouses.filter((home) =>
+  //       queryFilter.location.some(location => home.location.toLowerCase().includes(location.toLowerCase()))
+  //     );
+  
+  //     let filteredHomesP = filteredHomes;
+  //     if (queryFilter.startPrice !== '') {
+  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) >= parseInt(queryFilter.startPrice));
+  //     }
+  //     if (queryFilter.endPrice !== '') {
+  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) <= parseInt(queryFilter.endPrice));
+  //     }
+  
+  //     setShowData(filteredHomesP);
+  //     setSearchQuery(filteredHomesP);
+  //   } else {
+  //     let filteredHomesP = allHouses;
+  //     if (queryFilter.startPrice !== '') {
+  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) >= parseInt(queryFilter.startPrice));
+  //     }
+  //     if (queryFilter.endPrice !== '') {
+  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) <= parseInt(queryFilter.endPrice));
+  //     }
+  
+  //     setShowData(filteredHomesP);
+  //     setSearchQuery(filteredHomesP);
+  //   }
+  // }, [queryFilter, allHouses]);
 
     const isNoFilter = queryFilter.startPrice === '' && queryFilter.endPrice === '' && queryFilter.location.length === 0;
 
@@ -251,47 +287,50 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
             </TouchableOpacity>
           </View>
           {query === '' && isNoFilter &&
-            favoriteHomes.map((home, index) => (
-              <TouchableOpacity 
-              id='favoriteNursingHomes'
-              key={index} 
-              activeOpacity={1}
-              onPress={() => {
-                (formPage === 'index' && setActiveTab('detailnursingHouses'))
-                setHomeSelected(home.id);
-              }}>
-                <NursingHomeCard
-                  id={home.id}
-                  name={home.name}
-                  description={home.description}
-                  price={home.price}
-                  location={home.location}
-                  imageUrl={home.imageUrl}
-                  mapLink={home.mapLink}
-                />
+            <TouchableOpacity 
+            id='favoriteNursingHomes'
+            activeOpacity={1}
+            onPress={() => {
+              (formPage === 'index' && setActiveTab('detailnursingHouses'))
+            }}>
+              {ownHouses !==undefined && <NursingHomeCard datahouse={ownHouses} />}
+            </TouchableOpacity>
+          }
+          <View className=' flex-row mt-8 text-lg justify-between'>
+            {query === '' &&  isNoFilter && <TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
+            <View className=' flex-row gap-3'>
+              <TouchableOpacity
+                id='BtnRecommendHouses'
+                activeOpacity={1}
+                onPress={() => setIsAllHouses(true)}
+              >
+                <View>
+                  <TextF className={` ${!isAllHouses?'text-label':'text-normalText'}`}>แนะนำ</TextF>
+                </View>
               </TouchableOpacity>
-          ))}
-          {query === '' &&  isNoFilter && <TextF className="mt-8 text-lg text-normalText">บ้านพักคนชราแนะนำ</TextF>}
+              <View className='flex h-5 w-[1] mt-1 bg-unselectInput'></View>
+              <TouchableOpacity
+                id='BtnAllHouses'
+                activeOpacity={1}
+                onPress={() => setIsAllHouses(false)}
+              >
+                <View>
+                  <TextF className={` ${!isAllHouses?'text-normalText':'text-label'}`}>ทั้งหมด</TextF>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
           <View className='h-5'></View>
-          {searchQuery.map((home, index) => (
+          {allHouses.map((Home, index) => (
             <TouchableOpacity
               id='recommendNursingHomes'
               key={index}
               activeOpacity={1}
               onPress={() => {
-                (formPage === 'index' && setActiveTab('detailnursingHouses'))
-                setHomeSelected(home.id);
+                (formPage === 'index' && setActiveTab('detailnursingHouses'),setHomeSelected(Home.nh_id),console.log('idh',Home.nh_id))
               }}
             >
-              <NursingHomeCard
-                id={home.id}
-                name={home.name}
-                description={home.description}
-                price={home.price}
-                location={home.location}
-                imageUrl={home.imageUrl}
-                mapLink={home.mapLink}
-              />
+              <NursingHomeCard datahouse={Home} />
               <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
             </TouchableOpacity>
           ))}
@@ -303,4 +342,4 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
   );
 };
 
-export default NursingHouses;
+export default NursingHouses

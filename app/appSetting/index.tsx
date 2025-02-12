@@ -9,6 +9,22 @@ import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Logo = require('../../assets/images/logo.png')
+
+interface Profile {
+    data: {
+      u_id: string,
+      fname: string,
+      lname: string,
+      uname: string,
+      email: string,
+      provider: string,
+      image_link: string,
+      role: {
+        r_id: number,
+        role: string,
+      };
+    };
+}
 interface appSettingProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -22,14 +38,20 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     },[]);
 
     const [userName, setUserName] = useState('');
-    const [fristName, setFristName] = useState('');
+    const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [oldName, setOldUserName] = useState('');
+    const [oldFirstName, setOldFirstName] = useState('');
+    const [oldLastName, setOldLastName] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [email, setEmail] = useState('');
+
     const scrollViewRef = useRef<ScrollView>(null);
 
     const [selectedOption, setSelectedOption] = useState('ไทย (บาท ฿)');
     const [selectedLanguage, setSelectedLanguage] = useState('ไทย');
+    const [nameProfile,setNameProfile] = useState<Profile>()
     const options = [
         {title:'ไทย (บาท ฿)'},
         {title:'USA (ดอลล่าร์ $)'}
@@ -65,7 +87,134 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             throw new Error( error as string);
         }
     };
-
+    
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) return;
+    
+                const response = await fetch(`${Port.BASE_URL}/user`, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log('errorDataAsset', errorData);
+                    throw new Error(errorData.message || "Network response was not ok");
+                }
+    
+                const dataname = await response.json();
+                if (dataname.result.data.uname) {
+                    setUserName(dataname.result.data.uname); 
+                    setOldUserName(dataname.result.data.uname); 
+                }
+                if (dataname.result.data.fname) {
+                    setFirstName(dataname.result.data.fname); 
+                    setOldFirstName(dataname.result.data.fname); 
+                }
+                if (dataname.result.data.lname) {
+                    setLastName(dataname.result.data.lname); 
+                    setOldLastName(dataname.result.data.lname); 
+                }
+                if (dataname.result.data.email) {
+                    setEmail(dataname.result.data.email); 
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+    
+        fetchUserDetails();
+    }, []);
+    const handleUpdateProfile = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                console.error("Token not found");
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('username', userName);
+            formData.append('firstname', firstName);
+            formData.append('lastname', lastName);
+            formData.append('email', email);
+    
+            const response = await fetch(`${Port.BASE_URL}/user/user`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+                body: formData
+            });
+    
+            // ตรวจสอบ Content-Type ก่อนพาร์ส JSON
+            const contentType = response.headers.get("content-type");
+            let result;
+    
+            if (contentType && contentType.includes("application/json")) {
+                result = await response.json();
+            } else {
+                result = await response.text(); // ถ้าไม่ใช่ JSON ให้อ่านเป็น text
+            }
+    
+            console.log("Raw response:", result);
+    
+            if (!response.ok) {
+                console.error("Error updating profile:", result);
+                throw new Error(typeof result === "object" ? result.message : "Failed to update profile");
+            }
+    
+            console.log("Profile updated successfully:", result);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+    
+    
+    
+    
+    const handleChangePass = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                console.error("Token not found");
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('oldpassword', oldPassword);
+            formData.append('newpassword', newPassword);
+    
+            const response = await fetch(`${Port.BASE_URL}/auth/resetpassword`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+                body: formData
+            });
+    
+            const result = await response.json();  
+            console.log("Raw response:", result);
+    
+            if (!response.ok) {
+                console.error("Error updating password:", result);
+                throw new Error(result.message || "Failed to update password");
+            }
+    
+            console.log("Password updated successfully:", result);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+    
+    
     
 
     return (
@@ -98,14 +247,14 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                             <View className='flex flex-row items-end'>
                                 <TextInput
                                 id=' EditInputUserName'
-                                placeholder="ชื่อผู้ใช้"
+                                placeholder= "ชื่อผู้ใช้"                               
                                 placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={userName}
                                 onChangeText={setUserName}
                                 className={`text-lg border-b border-unselectInput w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color={userName ? '#2A4296' : '#C9C9C9' }/>
+                                    <FontAwesome6 name='pen' size={12} color={userName === oldName ? '#C9C9C9' : '#2A4296'} />
                                 </View>
                             </View>
                             <View className='flex flex-row items-end'>
@@ -114,11 +263,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 placeholder="ชื่อจริง"
                                 placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
-                                value={fristName}
-                                onChangeText={setFristName}
+                                value={firstName}
+                                onChangeText={setFirstName}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color={fristName ? '#2A4296' : '#C9C9C9' }/>
+                                    <FontAwesome6 name='pen' size={12} color={firstName === oldFirstName ? '#C9C9C9' : '#2A4296'}/>
                                 </View>
                             </View>
                             <View className='flex flex-row items-end'>
@@ -131,20 +280,22 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                                 onChangeText={setLastName}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color={lastName ? '#2A4296' : '#C9C9C9' }/>
+                                    <FontAwesome6 name='pen' size={12} color={lastName === oldLastName ? '#C9C9C9' : '#2A4296'}/>
                                 </View>
                             </View>
                         </View>
                     </View>
                     <View className='flex items-end mt-5'>
-                        <TouchableOpacity 
-                        id=' BtnSaveProfile'
+                    <TouchableOpacity 
+                        id='BtnSaveProfile'
+                        onPress={handleUpdateProfile}
                         activeOpacity={1}
-                        className={`w-40 h-10  ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${userName || fristName || lastName ?'bg-primary':'bg-unselectMenu'}`}>
-                            {/* ต้องเช็คว่าต่างจากเดิมไหมด้วย */}
-                            <TextF className=' text-white'>บันทึก</TextF>
-                            <MaterialIcons name="save-alt" size={22} color='#fff'/>
-                        </TouchableOpacity>
+                        className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 
+                            ${(userName !== oldName || firstName !== oldFirstName || lastName !== oldLastName) ? 'bg-primary' : 'bg-unselectMenu'}`}
+                    >
+                        <TextF className='text-white'>บันทึก</TextF>
+                        <MaterialIcons name="save-alt" size={22} color='#fff'/>
+                    </TouchableOpacity>
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
                     <View className='flex flex-row justify-between mt-5'>
@@ -152,7 +303,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                     </View>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>อีเมล</TextF>
-                        <TextF className=' text-primary text-lg'>example@gmail.com</TextF>
+                        <TextF className=' text-primary text-lg'>{email}</TextF>
                     </View>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>รีเซ็ตรหัสผ่าน</TextF>
@@ -191,6 +342,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         <TouchableOpacity 
                         id=' BtnChangePassword'
                         activeOpacity={1}
+                        onPress={handleChangePass}
                         className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${newPassword && oldPassword ?'bg-primary':'bg-unselectMenu'}`}>
                             <TextF className=' text-white'>เปลี่ยน</TextF>
                         </TouchableOpacity>

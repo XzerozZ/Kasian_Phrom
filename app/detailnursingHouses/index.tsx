@@ -2,7 +2,28 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image, Linking, Alert } from "react-native";
 import { FontAwesome6, FontAwesome, Fontisto, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import TextF from "../components/TextF";
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface Home {
+  nh_id: string,
+  name: string,
+  province: string,
+  address: string,
+  price: number,
+  map: string,
+  phone_number: string,
+  site: string,
+  Date: string,
+  Status: string,
+  images: [{
+    image_id: string,
+    image_link: string
+  }],
+  CreatedAt: string,
+  UpdatedAt: string
+
+}
 interface DetailNursingHousesProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -27,31 +48,55 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   setHomePickInPlan,
   setState
 }) => {
+  const[detailHouses,setDetailHouses] = useState<Home>();
   useEffect(() => {
     setStateNavbar(false);
-  }, []);
-  const [isActive, setIsActive] = useState(true);
+    const allopenHouses = async() => {
+      try {
+    const response = await fetch(`${Port.BASE_URL}/nursinghouses/${homeSelected}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        // "Authorization": Bearer ${token}
+      },
+    });
+    if (!response.ok) {
 
-  const nursingHome = {
-    id: "00002",
-    name: "สถานพักฟื้นผู้ป่วย ผู้สูงอายุ เพชรเกษมเฮลท์แคร์",
-    address: "164 177-178 ซอย เพชรเกษม 14 แขวงวัดท่าพระ เขตบางกอกใหญ่ กรุงเทพมหานคร",
-    price: "เริ่มต้น 20,000 บาทต่อเดือน",
-    phone: "093 592 2595",
-    website: "https://www.google.com/maps",
-    imageUrl: "https://udeemeesuk.com/cdn/shop/articles/A1-087-1_grande.jpg?v=1713762079",
-    maplink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6",
-    hours: [
-      { day: "จันทร์", time: "24 ชม." },
-      { day: "อังคาร", time: "24 ชม." },
-      { day: "พุธ", time: "24 ชม." },
-      { day: "พฤหัสบดี", time: "24 ชม." },
-      { day: "ศุกร์", time: "24 ชม." },
-      { day: "เสาร์", time: "24 ชม." },
-      { day: "อาทิตย์", time: "24 ชม." },
-    ],
-  };
-  console.log('homeSelected',homeSelected)
+      const errorData = await response.json();
+      console.log('errorDataAsset',errorData)
+      throw new Error(errorData.message || "Network response was not ok");
+    }
+
+    const data = await response.json();
+    setDetailHouses(data.result)
+    // setShowData(data);   // กำหนดค่าให้ showData
+    // setSearchQuery(data); // ใช้ข้อมูลนี้แสดงผล
+    console.log('----------------------a',JSON.stringify(data.result, null, 2));
+  } catch (error) {
+    throw new Error(error as string);
+  }
+    }
+    if (homeSelected !== ''){
+      allopenHouses()
+    }
+  }, [homeSelected]);
+  const [isActive, setIsActive] = useState(true);
+  // console.log('homeSelected',detailHouses)
+
+  const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
+
+  let dateArray: { day: string; time: string }[] = [];
+
+  try {
+    dateArray = JSON.parse(dateString).map((item: string) => {
+      const [day, time] = item.split(': ');
+      return { day, time };
+    });
+  } catch (error) {
+    console.error('Error parsing Date:', error);
+  }
+  
+
   return (
     <>
       {/* Header */}
@@ -68,11 +113,12 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
       <ScrollView className="bg-white">
         {/* Image */}
         <View className="mx-4">
-          <Image
-            source={{ uri: nursingHome.imageUrl }}
-            className="w-full h-60 rounded-lg"
-            resizeMode="cover"
-          />
+            <Image
+              source={{ uri: detailHouses?.images[0].image_link }}
+              className="w-full h-60 rounded-lg"
+              resizeMode="cover"
+            />
+          
         </View>
 
         <View className="p-5 justify-between gap-4 mt-5">
@@ -82,7 +128,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               <FontAwesome6 name="house" size={25} color="#2A4296" className=" text-center" />
               <TextF className=" text-center text-sm mt-1">ชื่อ</TextF>
             </View>
-            <TextF className="text-lg text-normalText flex-1">{nursingHome.name}</TextF>
+            <TextF className="text-lg text-normalText flex-1">{detailHouses?.name}</TextF>
             <TouchableOpacity
               className="mx-4"
               onPress={() => setIsActive(!isActive)}>
@@ -97,9 +143,9 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               <FontAwesome5 name="map-marker-alt" size={25} color="#F68D2B" className=" text-center"/>
               <TextF className=" text-center text-sm mt-1">ที่อยู่</TextF>
             </View>
-            <TextF className=" text-normalText text-lg flex-1">{nursingHome.address}</TextF>
+            <TextF className=" text-normalText text-lg flex-1">{detailHouses?.address}</TextF>
             <Ionicons name="open-outline" size={25} color="#979797" className="mx-4" 
-              onPress={() => Linking.openURL(nursingHome.website)}/>
+              onPress={() => detailHouses !== undefined && Linking.openURL(detailHouses?.map)}/>
           </View>
 
           {/* Price */}
@@ -108,7 +154,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               <FontAwesome name="money" size={25} color="#38B62D" className=" text-center"/>
               <TextF className=" text-center text-sm mt-1">ราคา</TextF>
             </View>
-            <TextF className=" text-normalText text-lg flex-1">{nursingHome.price}</TextF>
+            <TextF className=" text-normalText text-lg flex-1">{detailHouses?.price}</TextF>
           </View>
 
           {/* Phone */}
@@ -121,13 +167,13 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               className=" text-normalText text-lg flex-1"
               style={{fontFamily: 'SarabunRegular'}} 
             >
-              {nursingHome.phone}
+              {detailHouses?.phone_number}
             </Text>
             <Ionicons name="copy-outline" size={25} color="#979797" className=""/>
             <FontAwesome 
               name="phone" size={25} color="#979797" className="mx-4" 
               activeOpacity={1}
-              onPress={() => Linking.openURL(`tel:${nursingHome.phone}`)}/>
+              onPress={() => Linking.openURL(`tel:${detailHouses?.phone_number}`)}/>
           </View>
 
           {/* Website */}
@@ -139,9 +185,8 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
             <Text
               className=" text-normalText underline flex-1 text-lg"
               style={{fontFamily: 'SarabunRegular'}} 
-              onPress={() => Linking.openURL(nursingHome.website)}
-            >
-              {nursingHome.website}
+              onPress={() => detailHouses !== undefined && Linking.openURL(detailHouses?.site)}>
+              {detailHouses?.site}
             </Text>
           </View>
 
@@ -159,10 +204,10 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               </View>
 
               {/* ตารางเวลา */}
-              {nursingHome.hours.map((hour, index) => (
+              {dateArray.map((hour, index) => (
                 <View
                   key={index}
-                  className={`flex-row items-center pb-2 ${index === nursingHome.hours.length - 1 ? '' : 'border-b border-gray-200 mb-2'}`}
+                  className={`flex-row items-center pb-2 ${index === Date.length - 1 ? '' : 'border-b border-gray-200 mb-2'}`}
                 >
                   <TextF className="text-normalText flex-1 text-center">{hour.day}</TextF>
                   <TextF className="text-normalText flex-1 text-center">{hour.time}</TextF>
@@ -177,7 +222,17 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
         {/* Recommend Button */}
         <View className="p-5">
           <TouchableOpacity 
-          onPress={() => formPage === 'calRetirement' ? (setHomePickInPlan(nursingHome.id), setState(4), setHomeSelected('')) : setActiveTab('index')}
+         onPress={() => {
+          if (formPage === 'calRetirement') {
+            if (detailHouses?.nh_id) {
+              setHomePickInPlan(detailHouses.nh_id);
+              setState(4);
+              setHomeSelected('');
+            }
+          } else {
+            setActiveTab('index');
+          }
+        }}
           className="bg-primary rounded-lg py-3">
             <TextF
               className="text-center text-white text-lg"
