@@ -33,6 +33,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [isAuth, setIsAuth] = useState(false);
   const [havePlant, setHavePlant] = useState(false);
+  const [infoPlan, setInfoPlan] = useState<any>(null);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -41,18 +42,22 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         if (token) {
           setIsAuth(true);
         
-          const response = await fetch(`${Port.BASE_URL}/retirement`, {
+          const responsePlan = await fetch(`${Port.BASE_URL}/user/plan`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
 
-          const data = await response.json();
-          console.log(data.result)
-          if (data.result !== null) {
+          const dataPlan = await responsePlan.json();
+
+          console.log(dataPlan.result)
+          if (dataPlan.result !== null) {
             setHavePlant(true);
+            setInfoPlan(dataPlan.result)
           }
+
+
         }
       } catch (error) {
         console.error('Failed to fetch token from storage', error);
@@ -61,7 +66,8 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
 
     fetchToken();
   }, []);
-  
+
+
   
   
   
@@ -146,7 +152,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   activeOpacity={1}
                   onPress={()=> isAuth ? setActiveTab('notification') : setActiveTab('auth')}
                   className=''>
-                  {isAuth ? <MaterialCommunityIcons name="bell" size={30} color="#2A4296" />
+                  {isAuth ? <Ionicons name="mail" size={30} color="#2A4296" />
                   :<TextF className='text-primary text-lg'>เข้าสู่ระบบ</TextF>}
                   
                 </TouchableOpacity>
@@ -171,20 +177,20 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
         <View className='flex px-5'>
         {isAuth && havePlant ?
           <>
-            <TextF className='pl-5 mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
+            <TextF className='mt-6 text-label'>ไปให้ถึงเป้าหมายที่วางไว้ </TextF>
             <TouchableOpacity 
                 id='BtnDashboard'
                 activeOpacity={1}
                 onPress={() => setActiveTab('dashboard')}
                 className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
-              <TextF className=' ml-6 text-normalText text-lg'>จำนวนเงินที่ต้องเก็บในเดือนนี้</TextF>
+              <TextF className=' ml-6 text-normalText text-lg'>{infoPlan.monthly_expenses < 0 ?'จำนวนเงินที่ต้องเก็บในดือนนี้ครบแล้ว':"จำนวนเงินที่ต้องเก็บในเดือนนี้"}</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
-                  <TextF className='text-3xl ml-6 text-primary'>19,000</TextF>
+                  <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${Math.abs(infoPlan.monthly_expenses)}` : infoPlan.monthly_expenses}</TextF>
                   <TextF className='text-lg text-normalText'>บาท</TextF>
                 </View>
                 <View>
-                  <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน 
+                  <TextF className='text-right mr-5 text-accent h-6'>ดูแผนของฉัน
                     <AntDesign name="caretright" size={12} color="#F68D2B"/>
                   </TextF>
                 </View>

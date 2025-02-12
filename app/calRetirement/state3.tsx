@@ -88,7 +88,15 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
                     {type === 'travel' && <FontAwesome6 name="plane-departure" size={18} color="#070F2D" />}
                     {type === 'marry' && <Ionicons name="heart" size={22} color="#070F2D" />}
                     {type === 'emergencyMoney' && <FontAwesome5 name="hospital-alt" size={18} color="#070F2D" />}
-                    <TextF className='text-xl font-bold'>{type}</TextF>
+                    <TextF className='text-xl font-bold'>
+                      {type === 'home' && 'บ้าน'}
+                      {type === 'child' && 'บุตร'}
+                      {type === 'car' && 'รถ'}
+                      {type === 'travel' && 'ท่องเที่ยว'}
+                      {type === 'marry' && 'แต่งงาน'}
+                      {type === 'emergencyMoney' && 'เงินฉุกเฉิน'}
+                      {type !== 'home' && type !== 'child' && type !== 'car' && type !== 'travel' && type !== 'marry' && type !== 'emergencyMoney' && type}
+                    </TextF>
                   </View>
                   <View className='gap-4'>
                     {(items as AssetItem[]).map((item: AssetItem) => (

@@ -5,69 +5,81 @@ import ChartLine from '../../components/ChartLine';
 import { LinearGradient } from 'expo-linear-gradient';
 import HistoryCard from '../../components/HistoryCard';
 import  TextF  from '../../components/TextF';
+import Port from '../../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface infoHistoryProp{
+  history_id: string,
+  method: string,
+  type: string,
+  name: string,
+  category: string,
+  money: number,
+  track_at: string
+}
 interface RecordProps{
   isDarkMode: boolean;
+  reflesh: boolean;
+  planName: string;
 }
-const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
+const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
 
 
+  const [infoHistory, setInfoHistory] = useState<infoHistoryProp[]>([]);
 
-  const [dataHistory, setDataHistory] = useState([
-      {statusDeposit:'Deposit', name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
-      {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '17/11/2024'},
-      {statusDeposit:'Withdraw',name: 'ถอนเงินลงทุน', amount: 5000, time: '20:43 น', date: '17/11/2024'},]);
+  useEffect (() => {
+    const fetchToken = async (token:string ) => {
+      try {
+        console.log('token:', token);
+        const response = await fetch(`${Port.BASE_URL}/history`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json();
 
-  const [dataHistory2, setDataHistory2] = useState([
-    {statusDeposit:'Deposit', name: 'เงินออม', amount: 8000, time: '20:43 น', date: '18/10/2024'},
-    {statusDeposit:'Deposit',name: 'เงินออม', amount: 5000, time: '20:43 น', date: '12/10/2024'},]);
+        const reversData = data.result.data.reverse()
+        setInfoHistory(reversData)
+        
+        
+        
+        
+        
+      } catch (error) {
+        console.error('Failed to fetch token from storage', error);
+      }
+    };
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== undefined && token !== null ) {
+        fetchToken(token);
+      }
+    };
+    
+    getToken();
+  } ,[reflesh])
 
-  const [dataHistoryPerMonth, setDataHistoryPerMonth] = useState([
-    {month: '11', amount: 5000, data: dataHistory},
-    {month: '10', amount: 18000, data: dataHistory2},
-    {month: '9', amount: 5000},
-    {month: '8', amount: 5000},
-    {month: '7', amount: 5000},
-    {month: '6', amount: 5000},
-    {month: '5', amount: 5000},
-    {month: '4', amount: 5000},
-    {month: '3', amount: 5000},
-    {month: '2', amount: 5000},
-    {month: '1', amount: 5000},
-    {month: '12', amount: 5000},
-  ]);
 
   const toThaiMonth = (month: string) => {
-    switch (month) {
-      case '1':
-        return 'มกราคม';
-      case '2':
-        return 'กุมภาพันธ์';
-      case '3':
-        return 'มีนาคม';
-      case '4':
-        return 'เมษายน';
-      case '5':
-        return 'พฤษภาคม';
-      case '6':
-        return 'มิถุนายน';
-      case '7':
-        return 'กรกฎาคม';
-      case '8':
-        return 'สิงหาคม';
-      case '9':
-        return 'กันยายน';
-      case '10':
-        return 'ตุลาคม';
-      case '11':
-        return 'พฤศจิกายน';
-      case '12':
-        return 'ธันวาคม';
-      default:
-        return '';
-    }
+    const monthNumber = parseInt(month.slice(5, 7), 10);
+    const thaiMonth = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม',
+      'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน',
+      'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม',
+    ];
+    return thaiMonth[monthNumber - 1];
   }
-
+  const groupedByMonth = infoHistory.reduce((acc: { [key: string]: typeof infoHistory }, item) => {
+    const monthKey = item.track_at.slice(0, 7); // ตัดเอาแค่ YYYY-MM (เช่น "2025-02")
+    
+    if (!acc[monthKey]) acc[monthKey] = [];
+    acc[monthKey].push(item);
+    
+    return acc;
+  }, {});
 
 
   return (
@@ -76,34 +88,32 @@ const Record: React.FC<RecordProps> = ({ isDarkMode }) => {
     showsVerticalScrollIndicator={false}>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
-          <TextF className='text-2xl font-bold'>ชื่อแผน</TextF>
         </View>
         <View className='mt-5 px-5'>
           <View className='flex justify-center items-center bg-neutral pr-4 pt-7 pl-2 rounded-3xl shadow-sm h-96'>
-            <ChartLine/>
+            <ChartLine infoHistory={infoHistory}/>
           </View>
-          
-
         </View>
-        
         <View className='px-5 mt-5 gap-3'>
           <TextF className=' text-normalText text-lg'>ประวัติการออม</TextF>
         </View>
-        {dataHistoryPerMonth.map((data, index) => (
-          data.data && data.data.length > 0 &&
-          <View 
-          id='HistoryCard'
-          key={index}>
-            <View className='px-5 mt-5 mb-2'>
-              <View className='flex flex-row justify-between items-center mb-5'>
+        {Object.entries(groupedByMonth).map(([month, items], index) => (
+          <View id="HistoryCard" key={month}>
+            <View className="px-5 mt-5 mb-2">
+              <View className="flex flex-row justify-between items-center mb-5">
                 {index === 0
-                ? <TextF className=' text-label text-lg'>เดือนนี้ {toThaiMonth(data.month)}</TextF>
-                : <TextF className=' text-label text-lg'>เดือน {toThaiMonth(data.month)}</TextF>
+                  ? <TextF className="text-label text-lg py-2">เดือนนี้ {toThaiMonth(month)}</TextF>
+                  : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
                 }
-                
-                <TextF className=' text-oktext text-lg'>+ {data.amount}</TextF>
+                <TextF className={`text-lg ${items.reduce((sum, item) => sum + item.money, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
+                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ? `+ ${items.reduce((sum, item) => sum + item.money, 0)}` : `- ${items.reduce((sum, item) => sum + item.money, 0)}`}
+                </TextF>
               </View>
-              <HistoryCard data={data.data || []}/>
+              {items.map((data, index) => (
+                <View key={index}>
+                  <HistoryCard data={data} />
+                </View>
+              ))}
             </View>
           </View>
         ))}

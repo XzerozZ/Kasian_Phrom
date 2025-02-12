@@ -46,6 +46,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
+            // await AsyncStorage.removeItem('token');
 
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
@@ -79,7 +80,6 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             <ScrollView 
             id='ProfileContainer'
             className='flex-1' ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-                
                 <View className='px-5'>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-label pt-2'>ตั้งค่าโปรไฟล์</TextF>
