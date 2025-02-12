@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, Linking, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, Linking, Alert,  Dimensions, NativeSyntheticEvent, NativeScrollEvent  } from "react-native";
 import { FontAwesome6, FontAwesome, Fontisto, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import TextF from "../components/TextF";
 import Port from '../../Port';
@@ -25,6 +25,7 @@ interface Home {
   UpdatedAt: string
 
 }
+
 interface DetailNursingHousesProps {
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
@@ -50,53 +51,141 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   setState
 }) => {
   const[detailHouses,setDetailHouses] = useState<Home>();
+  const[checkFav, setCheckFav] = useState(false)
+  const screenWidth = Dimensions.get('window').width;
   useEffect(() => {
     setStateNavbar(false);
+    
     const allopenHouses = async() => {
       try {
-    const response = await fetch(`${Port.BASE_URL}/nursinghouses/${homeSelected}`, {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-        // "Authorization": Bearer ${token}
-      },
-    });
-    if (!response.ok) {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${Port.BASE_URL}/nursinghouses/${homeSelected}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            // "Authorization": Bearer ${token}
+          },
+        });
+        const responseCheckFav = await fetch(`${Port.BASE_URL}/favorite/${homeSelected}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        if (!response.ok) {
 
-      const errorData = await response.json();
-      console.log('errorDataAsset',errorData)
-      throw new Error(errorData.message || "Network response was not ok");
+          const errorData = await response.json();
+          console.log('errorDataAsset',errorData)
+          throw new Error(errorData.message || "Network response was not ok");
+        }
+
+        const data = await response.json();
+        const dataFav = await responseCheckFav.json();
+        setDetailHouses(data.result)
+        if (dataFav.status === 'Success'){
+          setCheckFav(true)
+        }
+        else{
+          setCheckFav(false)
+        }
+        // console.log('-----------12-',JSON.stringify(dataFav.status, null, 2));
+      } catch (error) {
+        throw new Error(error as string);
+      }
+        }
+        if (homeSelected !== ''){
+          allopenHouses()
+        }
+      }, [homeSelected]);
+
+    // const [isActive, setIsActive] = useState(false);
+    const toggleFavorite = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        // ถ้าชื่นชอบอยู่แล้ว ให้ลบออก
+        if (checkFav === true) {
+          const responseDeleteFav = await fetch(`${Port.BASE_URL}/favorite/${detailHouses?.nh_id}`, {
+            method: "DELETE",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `Bearer ${token}`
+            }
+          });
+    
+          if (!responseDeleteFav.ok) {
+            const errorData = await responseDeleteFav.json();
+            console.log('Delete Error:', errorData);
+            throw new Error(errorData.message || "Delete request failed");
+          }
+          console.log('Deleted from Favorite');
+          setCheckFav(false)
+        } else {
+          // ถ้ายังไม่ชื่นชอบ ให้เพิ่มเข้าไป
+          const formData = new FormData();
+            if (detailHouses?.nh_id) {
+              formData.append('nursingHouseID', detailHouses.nh_id.toString());
+            } else {
+              console.error('nursingHouseID is undefined');
+            }
+          const responsePutFav = await fetch(`${Port.BASE_URL}/favorite`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            },
+            body: formData
+          });
+    
+          if (!responsePutFav.ok) {
+            const errorData = await responsePutFav.json();
+            console.log('Post Error:', errorData);
+            throw new Error(errorData.message || "Post request failed");
+          }
+          console.log('Added to Favorite');
+          setCheckFav(true)
+        }
+    
+      } catch (error) {
+        console.error('toggleFavorite Error:', error);
+      }
     }
-
-    const data = await response.json();
-    setDetailHouses(data.result)
-    // setShowData(data);   // กำหนดค่าให้ showData
-    // setSearchQuery(data); // ใช้ข้อมูลนี้แสดงผล
-    console.log('----------------------a',JSON.stringify(data.result, null, 2));
-  } catch (error) {
-    throw new Error(error as string);
-  }
-    }
-    if (homeSelected !== ''){
-      allopenHouses()
-    }
-  }, [homeSelected]);
-  const [isActive, setIsActive] = useState(true);
-  // console.log('homeSelected',detailHouses)
-
-  const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
-
-  let dateArray: { day: string; time: string }[] = [];
-
-  try {
-    dateArray = JSON.parse(dateString).map((item: string) => {
-      const [day, time] = item.split(': ');
-      return { day, time };
-    });
-  } catch (error) {
-    console.error('Error parsing Date:', error);
-  }
   
+  
+
+    const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
+    let dateArray: { day: string; time: string }[] = [];
+    try {
+      dateArray = JSON.parse(dateString).map((item: string) => {
+        const [day, time] = item.split(': ');
+        return { day, time };
+      });
+    } catch (error) {
+      console.error('Error parsing Date:', error);
+    }
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const ProgressBar: React.FC<{ currentPage: number; totalPages: number }> = ({
+      currentPage,
+      totalPages,
+    }) => {
+      return (
+        <View className="flex-row justify-center my-4">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <View
+              key={index}
+              className={`h-2 w-8 mx-1 rounded-full ${
+                index === currentPage ? 'bg-primary' : 'bg-neutral2'
+              }`}
+            />
+          ))}
+        </View>
+      );
+    };
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const offsetX = event.nativeEvent.contentOffset.x;
+      const currentIndex = Math.round(offsetX / screenWidth);
+      setCurrentPage(currentIndex);
+    };
 
   return (
     <>
@@ -114,13 +203,29 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
       <ScrollView className="bg-white">
         {/* Image */}
         <View className="mx-4">
-            <Image
-              source={{ uri: detailHouses?.images[0].image_link }}
-              className="w-full h-60 rounded-lg"
-              resizeMode="cover"
-            />
-          
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={screenWidth}  // เลื่อนทีละ 1 รูป
+            decelerationRate="fast" 
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            className="w-full h-60 rounded-lg"
+          >
+            {detailHouses?.images.slice(0, 5).map((image) => (
+              <Image
+                key={image.image_id}
+                source={{ uri: image.image_link }}
+                style={{ width: screenWidth, height: 240, borderRadius: 10 }}
+                resizeMode="cover"
+              />
+            ))}
+          </ScrollView>
+          <ProgressBar currentPage={currentPage} totalPages={Math.min(detailHouses?.images.length || 0, 5)} />
+
         </View>
+
 
         <View className="p-5 justify-between gap-4 mt-5">
           {/* Name */}
@@ -132,8 +237,8 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
             <TextF className="text-lg text-normalText flex-1">{detailHouses?.name}</TextF>
             <TouchableOpacity
               className="mx-4"
-              onPress={() => setIsActive(!isActive)}>
-              <Ionicons name="heart" size={30} color={isActive ? '#FF5449' : '#B0B0B0'} 
+              onPress={toggleFavorite}>
+              <Ionicons name="heart" size={30} color={checkFav? '#FF5449' : '#B0B0B0'} 
               />
             </TouchableOpacity>
           </View>
@@ -252,5 +357,4 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
     </>
   );
 };
-
 export default DetailNursingHouses;
