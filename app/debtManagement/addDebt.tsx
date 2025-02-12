@@ -191,6 +191,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
             <View className='flex flex-row  justify-between items-center h-16'>
               <View> 
                 <TextF className='text-lg text-normalText'>จำนวนเงินที่ต้องผ่อน/เดือน</TextF>
+                <TextF className='text-sm text-label py-1'>เริ่มนับตั้งแต่เดือนปัจจุบันเป็นต้นไป</TextF>
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
                   <TextInput
