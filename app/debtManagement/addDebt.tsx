@@ -4,11 +4,10 @@ import { FontAwesome6, FontAwesome5, FontAwesome, Fontisto, MaterialIcons, Ionic
 import  TextF  from '../components/TextF';
 import Svg, { Defs, ClipPath, Path, Rect, Circle } from 'react-native-svg';
 import CheckBox from '../components/checkBox';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '../../Port';
 import HeadTitle from '../components/headTitle';
 import { useMemo } from 'react';
-
-
 
 
 interface AddDebtProps{
@@ -18,45 +17,76 @@ interface AddDebtProps{
 }
 const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePage }) => {
 
-    const [newDataAssetInput, setNewDataAssetInput] = useState({
-      name: '',
-      isInstallment: true,
-      installmentPerMonth: '',
-      monthAmount: '',
-      type: 'home',
-    })
-    const [isInstallment, setIsInstallment] = useState(true);
-    const [type, setType] = useState('');
-    const categories = [
-        { id: 1, tag:'home', label: 'บ้าน' },
-        { id: 2, tag:'land', label: 'ที่ดิน'},
-        { id: 3, tag:'car', label: 'รถ' },
-        { id: 4, tag:'card', label: 'บัตรเครดิต'},
-        { id: 5, tag:'more', label: 'อื่นๆ'},
-      ];
-    const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
-    useEffect(() => {
-        if (isMore) {
-        setNewDataAssetInput({ ...newDataAssetInput, type: type });
-        }
-    }, [type, isMore]);
+  const [newDataAssetInput, setNewDataAssetInput] = useState({
+    name: '',
+    isInstallment: true,
+    installmentPerMonth: '',
+    monthAmount: '',
+    type: 'home',
+  })
+  const [isInstallment, setIsInstallment] = useState(true);
+  const [type, setType] = useState('');
+  const categories = [
+    { id: 1, tag:'home', label: 'บ้าน' },
+    { id: 2, tag:'land', label: 'ที่ดิน'},
+    { id: 3, tag:'car', label: 'รถ' },
+    { id: 4, tag:'card', label: 'บัตรเครดิต'},
+    { id: 5, tag:'more', label: 'อื่นๆ'},
+  ];
 
-    useEffect(() => {
-        setNewDataAssetInput({ ...newDataAssetInput, isInstallment: isInstallment });
-    }, [isInstallment]);
+  const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
+  
+  useEffect(() => {
+    if (isMore) {
+      setNewDataAssetInput({ ...newDataAssetInput, type: type });
+      }
+  }, [type, isMore]);
 
-    const handleSave = () => {
-        console.log(newDataAssetInput);
-        setStatePage('debtManagement')
+  useEffect(() => {
+    setNewDataAssetInput({ ...newDataAssetInput, isInstallment: isInstallment });
+  }, [isInstallment]);
+
+  const handleSave = async () => {
+    const token = await AsyncStorage.getItem('token');
+    console.log(newDataAssetInput);
+    try {
+      const formData = new FormData();
+      formData.append("name", newDataAssetInput.name);
+      formData.append("type", newDataAssetInput.type);
+      formData.append("monthlyexpenses", newDataAssetInput.installmentPerMonth);
+      formData.append("remainingmonths", newDataAssetInput.monthAmount);
+      formData.append("installment", newDataAssetInput.isInstallment.toString());
+      formData.append("interestpercentage", "3"); //รออัปเดตแบคเอน
+
+      const response = await fetch(`${Port.BASE_URL}/loan`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log("Debt Added:", data);
+      setStatePage('debtManagement');
+
+    } catch (error) {
+      throw new Error( error as string);
     }
-    const [isFully, setIsFully] = useState(false);
-     useEffect(() => {
+  }
+
+  const [isFully, setIsFully] = useState(false);
+  useEffect(() => {
     if (newDataAssetInput.name !== '' && newDataAssetInput.installmentPerMonth !== '' && newDataAssetInput.monthAmount !== '' && newDataAssetInput.type !== '') {
-      setIsFully(true);
+    setIsFully(true);
     } else {
       setIsFully(false);
     }
-     }, [newDataAssetInput]);
+  }, [newDataAssetInput]);
 
 
   return (
