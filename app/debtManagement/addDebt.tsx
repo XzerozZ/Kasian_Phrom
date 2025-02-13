@@ -4,59 +4,159 @@ import { FontAwesome6, FontAwesome5, FontAwesome, Fontisto, MaterialIcons, Ionic
 import  TextF  from '../components/TextF';
 import Svg, { Defs, ClipPath, Path, Rect, Circle } from 'react-native-svg';
 import CheckBox from '../components/checkBox';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '../../Port';
 import HeadTitle from '../components/headTitle';
 import { useMemo } from 'react';
-
-
 
 
 interface AddDebtProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStatePage: (state: string) => void;
+  refresh: boolean;
+  setRefresh: (state: boolean) => void;
+  debtSelect: any;
+  setDebtSelect: (state: any) => void;
 }
-const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePage }) => {
+const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePage, refresh, setRefresh, debtSelect,setDebtSelect }) => {
 
-    const [newDataAssetInput, setNewDataAssetInput] = useState({
-      name: '',
-      isInstallment: true,
-      installmentPerMonth: '',
-      monthAmount: '',
-      type: 'home',
-    })
-    const [isInstallment, setIsInstallment] = useState(true);
-    const [type, setType] = useState('');
-    const categories = [
-        { id: 1, tag:'home', label: 'บ้าน' },
-        { id: 2, tag:'land', label: 'ที่ดิน'},
-        { id: 3, tag:'car', label: 'รถ' },
-        { id: 4, tag:'card', label: 'บัตรเครดิต'},
-        { id: 5, tag:'more', label: 'อื่นๆ'},
-      ];
-    const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
-    useEffect(() => {
-        if (isMore) {
-        setNewDataAssetInput({ ...newDataAssetInput, type: type });
-        }
-    }, [type, isMore]);
+  const [newDataAssetInput, setNewDataAssetInput] = useState({
+    name: '',
+    isInstallment: true,
+    installmentPerMonth: '',
+    monthAmount: '',
+    type: 'home',
+  })
+  const [isInstallment, setIsInstallment] = useState(true);
+  const [type, setType] = useState('');
+  const categories = [
+    { id: 1, tag:'home', label: 'บ้าน' },
+    { id: 2, tag:'land', label: 'ที่ดิน'},
+    { id: 3, tag:'car', label: 'รถ' },
+    { id: 4, tag:'card', label: 'บัตรเครดิต'},
+    { id: 5, tag:'more', label: 'อื่นๆ'},
+  ];
 
-    useEffect(() => {
-        setNewDataAssetInput({ ...newDataAssetInput, isInstallment: isInstallment });
-    }, [isInstallment]);
+  const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
+  
+  useEffect(() => {
+    if (isMore) {
+      setNewDataAssetInput({ ...newDataAssetInput, type: type });
+      }
+  }, [type, isMore]);
 
-    const handleSave = () => {
-        console.log(newDataAssetInput);
-        setStatePage('debtManagement')
+  useEffect(() => {
+    setNewDataAssetInput({ ...newDataAssetInput, isInstallment: isInstallment });
+  }, [isInstallment]);
+
+  useEffect(() => {
+    const fetchDebt = async () => {
+
+    const response = await fetch(`${Port.BASE_URL}/loan/${debtSelect}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-    const [isFully, setIsFully] = useState(false);
-     useEffect(() => {
+
+    const data = await response.json();
+    console.log("Debt Selected:", data);
+
+    setNewDataAssetInput(prev => ({
+      ...prev,
+      name: data.result.name,
+      isInstallment: data.result.installment,
+      installmentPerMonth: String(data.result.monthly_expenses), // แปลงเป็น string
+      monthAmount: String(data.result.remaining_months),
+      type: data.result.type,
+    }));
+    setIsInstallment(data.result.installment);
+  }
+  if (debtSelect !== ''){
+    fetchDebt();
+  }
+  
+  }, [debtSelect]);
+  console.log(newDataAssetInput);
+
+
+  const handleSave = async () => {
+    const token = await AsyncStorage.getItem('token');
+    console.log(newDataAssetInput);
+    try {
+      const formData = new FormData();
+      formData.append("name", newDataAssetInput.name);
+      formData.append("type", newDataAssetInput.type);
+      formData.append("monthlyexpenses", newDataAssetInput.installmentPerMonth);
+      formData.append("remainingmonths", newDataAssetInput.monthAmount);
+      formData.append("installment", newDataAssetInput.isInstallment.toString());
+
+      const response = await fetch(`${Port.BASE_URL}/loan`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log("Debt Added:", data);
+      setStatePage('debtManagement');
+      setRefresh(!refresh);
+
+    } catch (error) {
+      throw new Error( error as string);
+    }
+  }
+
+  const [isFully, setIsFully] = useState(false);
+  useEffect(() => {
     if (newDataAssetInput.name !== '' && newDataAssetInput.installmentPerMonth !== '' && newDataAssetInput.monthAmount !== '' && newDataAssetInput.type !== '') {
-      setIsFully(true);
+    setIsFully(true);
     } else {
       setIsFully(false);
     }
-     }, [newDataAssetInput]);
+  }, [newDataAssetInput]);
+
+
+  const handleEidt = async () => {
+    const token = await AsyncStorage.getItem('token');
+    console.log(newDataAssetInput);
+    try {
+      const formData = new FormData();
+      formData.append("name", newDataAssetInput.name);
+      formData.append("installment", newDataAssetInput.isInstallment.toString());
+
+      const response = await fetch(`${Port.BASE_URL}/loan/${debtSelect}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log("Debt Edited:", data);
+      setStatePage('debtManagement');
+      setRefresh(!refresh);
+
+    } catch (error) {
+      throw new Error( error as string);
+    }
+  }
 
 
   return (
@@ -64,7 +164,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       <HeadTitle 
       setActiveTab={setActiveTab} 
       title='ข้อมูลหนี้สิน' 
-      onPress={() => setStatePage('debtManagement')}/>
+      onPress={() => {setStatePage('debtManagement'), setDebtSelect('')}}/>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -108,11 +208,11 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                 <TouchableOpacity
                   key={category.id}
                   activeOpacity={1}
-                  onPress={() => setNewDataAssetInput({ ...newDataAssetInput, type: category.tag })}
+                  onPress={() => debtSelect !== '' ? ()=>{}:setNewDataAssetInput({ ...newDataAssetInput, type: category.tag })}
                   className="flex-row items-center p-2 w-1/2 h-[60] pl-5"
                 >
                   <View className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
-                    {category.tag == newDataAssetInput.type && <View className="w-[10] h-[10] rounded-full bg-accent" />}
+                    {category.tag == newDataAssetInput.type && <View className={`w-[10] h-[10] rounded-full  ${debtSelect !== '' ? 'bg-label':'bg-accent'}`} />}
                   </View>
                   <View className='w-12 justify-center items-center'>
                     {category.tag == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" /> }
@@ -125,7 +225,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
               ))}
               <TouchableOpacity 
                 activeOpacity={1}
-                onPress={() => setNewDataAssetInput({ ...newDataAssetInput, type: type})}
+                onPress={() => debtSelect !== '' ? ()=>{}:setNewDataAssetInput({ ...newDataAssetInput, type: type})}
                 className="flex-row items-center p-2 w-full h-[60] pl-5">
                 <View className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
                   {isMore && <View className="w-[10] h-[10] rounded-full bg-accent" />}
@@ -133,6 +233,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                 <TextInput
                   id='InputCategoryMore'
                   placeholder="อื่นๆ"
+                  readOnly={debtSelect !== ''}
                   placeholderTextColor={'#B0B0B0'}
                   className="ml-2 border-b-[1px] border-neutral2 flex-1 h-10 mr-5 py-2"
                   value={type}
@@ -158,21 +259,22 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
             <View className='flex flex-row  justify-between items-center h-16'>
               <View> 
                 <TextF className='text-lg text-normalText'>จำนวนเงินที่ต้องผ่อน/เดือน</TextF>
+                <TextF className='text-sm text-label py-1'>เริ่มนับตั้งแต่เดือนปัจจุบันเป็นต้นไป</TextF>
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
-                  <TextInput
-                    id='InputTotalMoneyFutureUse'
+                  <TextInput 
                     placeholder='จำนวนเงิน'
                     placeholderTextColor={'#B0B0B0'}
                     keyboardType='numeric'
+                    readOnly={debtSelect !== ''}
                     value={newDataAssetInput.installmentPerMonth}
-                    onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, installmentPerMonth: text})}
-                    onBlur={() => {
-                      const numericText = newDataAssetInput.installmentPerMonth.replace(/[^0-9]/g, '');
-                      setNewDataAssetInput({ ...newDataAssetInput, installmentPerMonth: numericText });
-                    }}
-                    className={`h-16 text-end text-lg text-primary pr-2`}/>
+                    onChangeText={(text) =>
+                      setNewDataAssetInput(prev => ({ ...prev, installmentPerMonth: text }))
+                    }
+                    className={`h-16 text-end text-lg pr-2  ${debtSelect !== '' ? 'text-label':'text-primary '}`}
+                  />
                     <TextF className={` text-lg text-primary`}>บาท</TextF>
+
               </View>
             </View>
             <View className='w-full h-[1] bg-neutral2'></View>
@@ -182,20 +284,16 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
                 <TextInput
-                  id='InputEndYearFutureUse'
                   placeholder="จำนวนเดือน"
                   placeholderTextColor={'#B0B0B0'}
                   maxLength={4}
                   keyboardType="numeric"
+                  readOnly={debtSelect !== ''}
                   value={newDataAssetInput.monthAmount}
-                  onChangeText={(text) => {
-                    setNewDataAssetInput({ ...newDataAssetInput, monthAmount: text });
-                  }}
-                  onBlur={() => {
-                    const numericText = newDataAssetInput.monthAmount.replace(/[^0-9]/g, '');
-                    setNewDataAssetInput({ ...newDataAssetInput, monthAmount: numericText });
-                    }}
-                    className="h-16 text-end text-lg text-primary pr-2"
+                  onChangeText={(text) =>
+                    setNewDataAssetInput(prev => ({ ...prev, monthAmount: text }))
+                  }
+                  className={`h-16 text-end text-lg pr-2 ${debtSelect !== '' ? 'text-label':'text-primary '}`}
                   />
                     <TextF className={` text-lg text-primary`}>เดือน</TextF>
               </View>
@@ -216,9 +314,9 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
           </TouchableOpacity>
           <TouchableOpacity 
           id='BtnSaveFutureUse'
-          onPress={ isFully ? handleSave : () => {}}
+          onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
           className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
-            <TextF className='text-neutral text-lg'>บันทึก</TextF>
+            <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
           </TouchableOpacity>
         </View>
     </>

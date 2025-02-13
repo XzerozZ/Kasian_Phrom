@@ -4,10 +4,10 @@ import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {
-//   GoogleSignin,
-//   statusCodes,
-// } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 const Logo = require('../../assets/images/logo.png')
 const google = require('../../assets/images/googleIcon.png')
@@ -17,8 +17,9 @@ interface LogInProps{
   setStateLogin: (state: boolean) => void;
   setActiveTab: (tab: string) => void;
   setTypePopup: (type: string) => void;
+  setStatePageForgotPass: (state: boolean) => void;
 }
-const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup }) => {
+const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup, setStatePageForgotPass }) => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,39 +28,63 @@ const LogIn: React.FC<LogInProps> = ({ setStateLogin, setActiveTab, setTypePopup
   const [userInformation, setUserInformation] = useState<any>(null)
   
 
-//   GoogleSignin.configure();
+  GoogleSignin.configure();
 
 
-//   const googleSignIn = async () => {
-//     try {
-//       await GoogleSignin.hasPlayServices();
-//       const userInfo = await GoogleSignin.signIn();
-//       console.log(userInfo);
-//       setUserInformation(userInfo);
-//     } catch (error) {
-//       if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
-//         // user cancelled the login flow
-//         console.log("cancelled");
-//       } else if ((error as any).code === statusCodes.IN_PROGRESS) {
-//         console.log("in progress");
-//       } else if ((error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-//         console.log("play services not available or outdated");
-//       } else {
-//         console.log("Something went wrong", error);
-//       }
-//     }
-//   };
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      setUserInformation(userInfo);
 
-// console.log(JSON.stringify(userInformation, null, 2));
+      const formData = new FormData();
 
-// const signOut = async () => {
-//   try {
-//     await GoogleSignin.signOut();
-//     setUserInformation(null);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+      formData.append("email", userInfo?.data?.user?.email || '');
+      formData.append("imagelink", userInfo?.data?.user?.photo || '');
+      formData.append("firstname", userInfo?.data?.user?.givenName || '');
+      formData.append("lastname", userInfo?.data?.user?.familyName || '');
+      formData.append("username", userInfo?.data?.user?.name || '');
+      
+      console.log('formData:', formData);
+      console.log(Port.BASE_URL)
+      const response = await fetch(`${Port.BASE_URL}/auth/google/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
+  
+      const data = await response.json();
+      await AsyncStorage.setItem('token', data.result.token);
+      console.log("Login Success:", data);
+      console.log("token:", data.result.token);
+      
+      setActiveTab('main');
+
+
+
+    } catch (error) {
+      if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("cancelled");
+      } else if ((error as any).code === statusCodes.IN_PROGRESS) {
+        console.log("in progress");
+      } else if ((error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("play services not available or outdated");
+      } else {
+        console.log("Something went wrong", error);
+      }
+    }
+  };
+
+console.log(JSON.stringify(userInformation, null, 2));
+
+
 
 const handleLogin = async () => {
   try {
@@ -84,6 +109,7 @@ const handleLogin = async () => {
     const data = await response.json();
     await AsyncStorage.setItem('token', data.result.token);
     console.log("Login Success:", data);
+
     setActiveTab('main');
   } catch (error) {
     if (error instanceof Error && error.message === "invalid email") {
@@ -160,9 +186,12 @@ const handleLogin = async () => {
             <FontAwesome6 name={visiblePassword ? 'eye-slash' : 'eye'} size={21} color='#C9C9C9' />
           </TouchableOpacity>
         </View>
-        <View className='w-96  items-end px-10 mt-3'>
+        <TouchableOpacity 
+        activeOpacity={1}
+        onPress={()=>setStatePageForgotPass(true)}
+        className='w-96  items-end px-10 mt-3'>
           <TextF className='text-primary'>ลืมรหัสผ่าน</TextF>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
         activeOpacity={1}
         onPress={handleLogin}
@@ -175,7 +204,7 @@ const handleLogin = async () => {
       </View>
       <TouchableOpacity
         activeOpacity={1}
-        // onPress={googleSignIn}
+        onPress={googleSignIn}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
           <Image 
           source={google} 
@@ -186,9 +215,7 @@ const handleLogin = async () => {
         <TextF className='text-normalText'>ยังไม่มีบัญชี </TextF>
         <TouchableOpacity
             activeOpacity={1}
-            onPress={()=>setStateLogin(false)}
-            // onPress={()=>signOut()}
-          >
+            onPress={()=>setStateLogin(false)}>
           <TextF className='text-primary'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
       </View>

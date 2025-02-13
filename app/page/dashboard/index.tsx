@@ -18,35 +18,57 @@ interface DashboardProps{
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
   setBackto: (backto: string) => void;
+  setFormClick: (formClick: string) => void;
 }
-const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick }) => {
   const [page, setPage] = useState(0) // 0 = Saving, 1 = Report, 2 = Record
   const indicators = [0, 1, 2];
   const animatedWidth = indicators.map(() => useRef(new Animated.Value(8)).current);
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
+  const [textAuth, setTextAuth] = useState<string>('');
 
   const [statePopup, setStatePopup] = useState(false);
   const [dataPopup, setDataPopup] = useState<any>('');
-  const [planName, setPlanName] = useState('');
   
   const [reflesh, setReflesh] = useState(false);
+  const [havePlan, setHavePlan] = useState(false);
+  const [textHavePlan, setTextHavePlan] = useState<string>('');
+  
   
 
 
   useEffect(() =>{
     setStateNavbar(true)
     setBackto('dashboard')
+    setFormClick('default')
     const getToken = async () => {
       const token = await AsyncStorage.getItem('token');
       if (token !== undefined && token !== null ) {
         setIsAuth(true);
+        setTextAuth('')
       }else{
         setIsAuth(false);
+        setTextAuth('คุณยังไม่ได้เข้าสู่ระบบ')
       }
+      const response = await fetch(`${Port.BASE_URL}/user/plan`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log('--------------------------+++',data)
+      if (data.result === null) {
+        setHavePlan(false)
+        setTextHavePlan('คุณยังไม่ได้สร้างแผน')
+      }else{
+        setHavePlan(true)
+        setTextHavePlan('')
+      }
+      
     };
     getToken();
   },[]);
-
 
 
   useEffect(() => {
@@ -128,7 +150,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
   return (
     <>
       {isAuth ?
-      <View 
+      !havePlan ?
+      <>
+        <View className='flex-1 justify-center content-center'>
+        {textHavePlan !== '' &&
+        <> 
+          <TextF className='text-center text-3xl text-label py-2'>คุณยังไม่ได้สร้างแผน</TextF>
+          <TextF className='text-center text-lg text-label py-2'>มาเริ่มสร้างแผนการเกษียณของคุณกันเลย</TextF>
+        </>}
+        </View>
+      </>
+      : <View 
       id='DashboardContainer'
       className='flex-1'>
         <View className="w-full flex flex-row justify-between items-center h-24 px-6 border-b border-neutral2">
@@ -144,7 +176,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
           id='DashboardTitle'
           className='gap-2'>
             <TextF  className="text-xl font-bold">
-              {page == 0 ? 'บันทึกการออม' : page == 1 ? 'รายงานความคืบหน้า' : 'ประวัติการออม'}
+              {page == 0 ? 'รายงานความคืบหน้า' : page == 1 ? 'บันทึกการออม' : 'ประวัติการออม'}
             </TextF>
             <View className='flex flex-row items-center justify-center gap-1'>
                 {indicators.map((_, index) => (
@@ -180,17 +212,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
         onScroll={handleScroll}
         scrollEventThrottle={16}
         className='flex flex-row gap-5'>
-        {/* หน้า Saving */}
-        <View className='shrink-0 w-screen'>
-          <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePopup={setStatePopup} setDataPopup={setDataPopup} reflesh={reflesh} setReflesh={setReflesh} planName={planName} setPlanName={setPlanName} />
-        </View>
         {/* หน้า Report */}
         <View className='shrink-0 w-screen'>
-          <Report isDarkMode={isDarkMode} reflesh={reflesh} planName={planName}/>
+          <Report isDarkMode={isDarkMode} reflesh={reflesh}/>
+        </View>
+        {/* หน้า Saving */}
+        <View className='shrink-0 w-screen'>
+          <Saving isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePopup={setStatePopup} setDataPopup={setDataPopup} reflesh={reflesh} setReflesh={setReflesh} />
         </View>
         {/* หน้า Record */}
         <View className='shrink-0 w-screen'>
-          <Record isDarkMode={isDarkMode} reflesh={reflesh} planName={planName}/>
+          <Record isDarkMode={isDarkMode} reflesh={reflesh}/>
         </View>
       </ScrollView>
         
@@ -198,8 +230,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       </View>
     :<>
       <View className='flex-1 justify-center content-center'>
-        <TextF className='text-center text-3xl text-label py-2'>กรุณาเข้าสู่ระบบ</TextF>
-        <TextF className='text-center text-lg text-label py-2'>โปรดเข้าสู่ระบบเพื่อการใช้งานฟีเจอร์นี้</TextF>
+          {textAuth !== '' &&<>
+            <TextF className='text-center text-3xl text-label py-2'>คุณยังไม่ได้เข้าสู่ระบบ</TextF>
+            <TextF className='text-center text-lg text-label py-2'>โปรดเข้าสู่ระบบเพื่อการใช้งานฟีเจอร์นี้</TextF>
+          </>}
       </View>
     </>}
     {statePopup && <>

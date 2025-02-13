@@ -73,7 +73,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
     className='flex-1 mt-14 justify-center items-center'>
       <TouchableOpacity 
         activeOpacity={1}
-
+        onPress={()=>setStateLogin(true)}
         style={{position:'absolute', left:20, top:0}}
         className=' w-16'>
 
@@ -176,7 +176,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
           <TextF className='text-white text-lg'>สมัครสมาชิก</TextF>
         </TouchableOpacity>
       </View>
-      <View className='w-full items-center px-10 my-5 '>
+      {/* <View className='w-full items-center px-10 my-5 '>
         <TextF className='text-label'>หรือ</TextF>
       </View>
       <TouchableOpacity
@@ -187,7 +187,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
           style={outStyles.imageGoogle}
           className='h-10 w-10'/>
           <TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View className='w-full flex flex-row justify-center items-center px-10 my-5 mb-24'>
         <TextF className='text-normalText'>มีบัญชีอยู่แล้ว </TextF>
         <TouchableOpacity

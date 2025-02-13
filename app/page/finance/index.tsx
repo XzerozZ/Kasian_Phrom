@@ -10,18 +10,19 @@ interface FinanceProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  setGoAuth: (auth: boolean) => void;
 }
 
-const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setGoAuth }) => {
 
   const [news, setNews] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() =>{
-      setStateNavbar(true);
-    },[]);
+
 
   useEffect(() => {
+    setStateNavbar(true);
     const fetchNews = async () => {
       try {
         const response = await fetch(`${Port.BASE_URL}/news`, {
@@ -45,7 +46,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
     };
 
     fetchNews();
-  }, []);
+  }, [refreshing]);
 
   const handlePress = (id: number) => {
     console.log(`Article ${id} clicked! Redirecting to finance detail page...`);
@@ -69,6 +70,8 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
         setStateNavbar={setStateNavbar}
         setSelectedId={setSelectedId}
         newsId={selectedId}
+        refreshing={refreshing}
+        setRefreshing={setRefreshing}
       />
     );
   } 
@@ -87,7 +90,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           
         </View>
         <View className='mx-5'>
-          <AssessCard setActiveTab={setActiveTab} />
+          <AssessCard setActiveTab={setActiveTab} setGoAuth={setGoAuth}/>
         </View>
         <View className='px-5 mt-8'>
           <TextF className='text-label'>

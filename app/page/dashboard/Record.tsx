@@ -8,6 +8,8 @@ import  TextF  from '../../components/TextF';
 import Port from '../../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useNumberFormat } from "@/app/NumberFormatContext";
+
 interface infoHistoryProp{
   history_id: string,
   method: string,
@@ -20,12 +22,12 @@ interface infoHistoryProp{
 interface RecordProps{
   isDarkMode: boolean;
   reflesh: boolean;
-  planName: string;
 }
-const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
+const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
 
 
   const [infoHistory, setInfoHistory] = useState<infoHistoryProp[]>([]);
+  const { addCommatoNumber } = useNumberFormat();
 
   useEffect (() => {
     const fetchToken = async (token:string ) => {
@@ -81,6 +83,8 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
     return acc;
   }, {});
 
+ 
+
 
   return (
     <ScrollView 
@@ -88,7 +92,6 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
     showsVerticalScrollIndicator={false}>
       <View className=' flex'>
         <View className='mt-5 flex justify-center items-center'>
-          <TextF className='text-2xl font-bold'>{planName}</TextF>
         </View>
         <View className='mt-5 px-5'>
           <View className='flex justify-center items-center bg-neutral pr-4 pt-7 pl-2 rounded-3xl shadow-sm h-96'>
@@ -107,7 +110,9 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
                   : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
                 }
                 <TextF className={`text-lg ${items.reduce((sum, item) => sum + item.money, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
-                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ? `+ ${items.reduce((sum, item) => sum + item.money, 0)}` : `- ${items.reduce((sum, item) => sum + item.money, 0)}`}
+                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ?`${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`
+                  :items.reduce((sum, item) => sum + item.money, 0) > 0 ?  `+ ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}` 
+                  : `- ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`}
                 </TextF>
               </View>
               {items.map((data, index) => (

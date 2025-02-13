@@ -5,37 +5,76 @@ import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign,
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '../../../Port';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 const Logo = require('../../../assets/images/logo.png');
 
-
-interface MainProps {
-  isDarkMode: boolean;
-  setActiveTab: (tab: string) => void;
-  setStateNavbar: (state: boolean) => void;
-  setBackto: (backto: string) => void;
+interface User {
+  u_id?: string;
+  uname?: string;
+  email?: string;
+  image_link?: string;
+  role?: {
+    r_id: number;
+    role: string;
+  };
+  retirement?: {
+    financial_id: string;
+    planName: string;
+    birth_date: string;
+    retirement_age: number;
+    expect_lifespan: number;
+    current_savings: number;
+    current_savings_returns: number;
+    monthly_income: number;
+    monthly_expenses: number;
+    current_total_investment: number;
+    investment_return: number;
+    expected_monthly_expenses: number;
+    expected_inflation: number;
+    annual_expense_increase: number;
+    annual_savings_return: number;
+    annual_investment_return: number;
+    user_id: string;
+    created_at: string;
+    updated_at: string;
+  };
+  risk?: {
+    Risk: {
+      risk_id: number;
+      risk: string;
+    };
+  };
 }
-
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
-  
-  
-  
-  
-  
-  
-  interface MenuItem {
+interface MenuItem {
     tag: string;
     icon: JSX.Element;
     text: string;
     bg: string;
   }
+interface MainProps {
+  isDarkMode: boolean;
+  setActiveTab: (tab: string) => void;
+  setStateNavbar: (state: boolean) => void;
+  setBackto: (backto: string) => void;
+  setFormClick: (form: string) => void;
+}
+
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick }) => {
+  
+  
+  
+  
+  const { addCommatoNumber } = useNumberFormat();
   
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [isAuth, setIsAuth] = useState(false);
   const [havePlant, setHavePlant] = useState(false);
   const [infoPlan, setInfoPlan] = useState<any>(null);
+  const [dataUser, setDataUser] = useState<User>({});
 
   useEffect(() => {
+    setFormClick('default')
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
@@ -49,13 +88,27 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             },
           });
 
+          const responseUser = await fetch(`${Port.BASE_URL}/user`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
           const dataPlan = await responsePlan.json();
+          const dataUser = await responseUser.json();
 
           console.log(dataPlan.result)
           if (dataPlan.result !== null) {
             setHavePlant(true);
             setInfoPlan(dataPlan.result)
           }
+
+          if (dataUser.result !== null) {
+            setDataUser(dataUser.result)
+          }
+
+
 
 
         }
@@ -80,7 +133,6 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
           { tag: 'nursingHouses', icon: <Feather name="home" size={30} color="#2a4296" />, text: "บ้านพักคนชรา", bg: "bg-banner" },
           { tag: 'finance', icon: <Ionicons name="document-text-outline" size={34} color="#38b62d" />, text: "คู่มือการเงิน", bg: "bg-bgmenu_Finance" },
           { tag: 'assessmentRisk', icon: <MaterialCommunityIcons name="chart-line" size={29} color="#f04545" />, text: "วัดความเสี่ยงการลงทุน", bg: "bg-bgmenu_Testfinance" },
-          { tag: 'calRetirement', icon: <FontAwesome6 name="sack-dollar" size={28} color="#da9e1d" />, text: "คำนวนเงินหลังเกษียณ", bg: "bg-bgmenu_Money" },
           { tag: 'whatKasianPhrom', icon: <AntDesign name="questioncircleo" size={30} color="#da9e1d" />, text: "เกษียณพร้อมคืออะไร?", bg: "bg-orange-100" },
         ])
       }else if( isAuth && !havePlant ){
@@ -152,7 +204,13 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   activeOpacity={1}
                   onPress={()=> isAuth ? setActiveTab('notification') : setActiveTab('auth')}
                   className=''>
-                  {isAuth ? <MaterialCommunityIcons name="bell" size={30} color="#2A4296" />
+                  {isAuth ? 
+                  <View className='flex-row items-center gap-2'>
+                    <Ionicons name="mail" size={30} color="#2A4296" />
+                    <View 
+                    style={{top:-2, right:-3}}
+                    className='absolute w-4 h-4 bg-accent border-2 border-white rounded-full'></View>
+                  </View>
                   :<TextF className='text-primary text-lg'>เข้าสู่ระบบ</TextF>}
                   
                 </TouchableOpacity>
@@ -160,7 +218,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             </View>
             <View className='flex-1 justify-between'>
               <View className='flex justify-between px-5 gap-1'>
-                <TextF className='text-2xl text-primary py-2'>สวัสดี, คุณพิชั่ย</TextF>
+                <TextF className='text-2xl text-primary py-2'>สวัสดี, คุณ {dataUser?.uname}</TextF>
                 <TextF className='text-2xl text-primary py-2'>{DateThai}</TextF>
               </View>
               <View className='flex-row justify-between px-5'>
@@ -186,7 +244,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
               <TextF className=' ml-6 text-normalText text-lg'>{infoPlan.monthly_expenses < 0 ?'จำนวนเงินที่ต้องเก็บในดือนนี้ครบแล้ว':"จำนวนเงินที่ต้องเก็บในเดือนนี้"}</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
-                  <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${Math.abs(infoPlan.monthly_expenses)}` : infoPlan.monthly_expenses}</TextF>
+                  <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${addCommatoNumber(Math.abs(infoPlan.monthly_expenses))}` : addCommatoNumber(infoPlan.monthly_expenses)}</TextF>
                   <TextF className='text-lg text-normalText'>บาท</TextF>
                 </View>
                 <View>

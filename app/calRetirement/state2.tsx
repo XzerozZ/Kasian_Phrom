@@ -4,6 +4,7 @@ import  TextF  from '../components/TextF';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import WideBtn from '../components/WideBtn';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 interface stateProps{
   isDarkMode: boolean;
@@ -18,6 +19,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
 
 
   const [isFully, setIsFully] = useState(false);
+  const { addCommatoNumber } = useNumberFormat();
 
   useEffect(() => {
   
@@ -48,7 +50,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       id='Current_savingsInput'
                       placeholder='ใส่จำนวนเงิน'
                       placeholderTextColor={'#B0B0B0'}
-                      value={dataInput.Current_savings}
+                      value={addCommatoNumber(dataInput.Current_savings)}
                       keyboardType="decimal-pad"
                       readOnly={havePlant}
                       onChangeText={(text) => {
@@ -69,7 +71,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Current_savings_returnsInput'
-                      value={dataInput.Current_savings_returns}
+                      value={addCommatoNumber(dataInput.Current_savings_returns)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -114,7 +116,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       id='Monthly_incomeInput'
                       placeholder='ใส่จำนวนเงิน'
                       placeholderTextColor={'#B0B0B0'}
-                      value={dataInput.Monthly_income}
+                      value={addCommatoNumber(dataInput.Monthly_income)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Monthly_income: text });
@@ -133,14 +135,14 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
                 <View> 
-                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดื่อน</TextF>
+                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดือน</TextF>
                 </View>
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Monthly_expensesInput'
                       placeholder='ใส่จำนวนเงิน'
                       placeholderTextColor={'#B0B0B0'}
-                      value={dataInput.Monthly_expenses}
+                      value={addCommatoNumber(dataInput.Monthly_expenses)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Monthly_expenses: text });
@@ -173,7 +175,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       id='Current_total_investmentInput'
                       placeholder='ใส่จำนวนเงิน'
                       placeholderTextColor={'#B0B0B0'}
-                      value={dataInput.Current_total_investment}
+                      value={addCommatoNumber(dataInput.Current_total_investment)}
                       keyboardType='numeric'
                       readOnly={havePlant}
                       onChangeText={(text) => {
@@ -200,7 +202,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Investment_returnInput'
-                      value={dataInput.Investment_return}
+                      value={addCommatoNumber(dataInput.Investment_return)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -249,7 +251,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Expected_inflationInput'
-                      value={dataInput.Expected_inflation}
+                      value={addCommatoNumber(dataInput.Expected_inflation)}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {

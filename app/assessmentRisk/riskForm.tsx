@@ -165,7 +165,7 @@ const RiskForm: React.FC<RiskFormProps> = ({
               onPress={goToPreviousPage}
               className="flex-1 h-14 bg-primary justify-center items-center px-6 py-3 rounded-lg"
             >
-              <TextF className="text-neutral text-center font-medium">ย้อนกลับ</TextF>
+              <TextF className="text-neutral text-center font-medium py-1">ย้อนกลับ</TextF>
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -183,7 +183,7 @@ const RiskForm: React.FC<RiskFormProps> = ({
             disabled={!isPageComplete}
           >
             <TextF
-              className={`text-center font-medium text-neutral`}
+              className={`text-center font-medium py-1 text-neutral`}
             >
               {currentPage < questionsPerPage.length ? 'ถัดไป' : 'ประเมินความเสี่ยง'}
             </TextF>

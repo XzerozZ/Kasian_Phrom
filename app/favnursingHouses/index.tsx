@@ -3,6 +3,28 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-nativ
 import NursingHomeCard from '../components/NursingHousesCard';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 import TextF from "../components/TextF";
+import Port from '../../Port';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+interface Home {
+  NursingHouse:{
+    nh_id: string,
+    name: string,
+    province: string,
+    address: string,
+    price: number,
+    map: string,
+    phone_number: string,
+    site: string,
+    Date: string,
+    Status: string,
+    images: [],
+    CreatedAt: string,
+    UpdatedAt: string
+  }
+}
+
 
 interface FavNursingHousesProps {
   isDarkMode: boolean;
@@ -14,34 +36,35 @@ interface FavNursingHousesProps {
 }
 
 const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState }) => {
-  const favoriteHomes = [
-    {
-      id: "1",
-      name: "MyLuck Nursinghome",
-      description: "ศูนย์ดูแลผู้สูงอายุและดูแลผู้ป่วย สาขาประชาอุทิศ 45 (บางมด)",
-      price: "1000",
-      location: "กทม.",
-      fullLocation: "กรุงเทพมหานคร",
-      imageUrl: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg",
-      mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
-    },
-  ];
+  // const favoriteHomes = [
+  //   {
+  //     id: "1",
+  //     name: "MyLuck Nursinghome",
+  //     description: "ศูนย์ดูแลผู้สูงอายุและดูแลผู้ป่วย สาขาประชาอุทิศ 45 (บางมด)",
+  //     price: "1000",
+  //     location: "กทม.",
+  //     fullLocation: "กรุงเทพมหานคร",
+  //     imageUrl: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg",
+  //     mapLink: "https://maps.app.goo.gl/TXeq6ov2JmdhwHJk6"
+  //   },
+  // ];
 
   const [query, setQuery] = useState('');
-  const [searchQuery, setSearchQuery] = useState(favoriteHomes);
+  // const [searchQuery, setSearchQuery] = useState(favoriteHomes);
+  
 
   // Handle search query
-  useEffect(() => {
-    if (query === '') {
-      setSearchQuery(favoriteHomes);
-    } else {
-      const filteredHomes = favoriteHomes.filter((home) =>
-        home.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setSearchQuery(filteredHomes);
-    }
-  }, [query]);
-
+  // useEffect(() => {
+  //   if (query === '') {
+  //     setSearchQuery(favoriteHomes);
+  //   } else {
+  //     const filteredHomes = favoriteHomes.filter((home) =>
+  //       home.name.toLowerCase().includes(query.toLowerCase())
+  //     );
+  //     setSearchQuery(filteredHomes);
+  //   }
+  // }, [query]);
+  const [favHouses, setFavHouses] = useState<Home[]>([]);
   useEffect(() => {
     if (formPage === 'index') {
       setStateNavbar(true);
@@ -50,6 +73,38 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
     }
   }, [setStateNavbar]);
 
+  useEffect(() => {
+    
+    const favAllHouses = async() => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${Port.BASE_URL}/favorite`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        if (!response.ok) {
+
+          const errorData = await response.json();
+          console.log('errorDataAsset',errorData)
+          throw new Error(errorData.message || "Network response was not ok");
+        }
+
+        const data = await response.json();
+        setFavHouses(data.result);
+        console.log('API Response:', JSON.stringify(data, null, 2));
+        console.log('----------------------a',JSON.stringify(data.result, null, 2));
+      } catch (error) {
+        throw new Error(error as string);
+      }
+        }
+
+        favAllHouses()
+  }, []);
+
+  console.log(favHouses)
   return (
     <View className="flex-1 px-5">
       {/* Header */}
@@ -80,25 +135,24 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
       <TextF className="mt-3 pt-4 text-normalText text-lg mb-8">บ้านพักคนชราที่ชื่นชอบ</TextF>
       {/* Favorites List */}
       <ScrollView showsVerticalScrollIndicator={false}>
-        {searchQuery.map((home, index) => (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={1}
-            onPress={() => setActiveTab('detailnursingHouses')}
-          >
-            <NursingHomeCard
-              id={home.id}
-              name={home.name}
-              description={home.description}
-              price={home.price}
-              location={home.location}
-              imageUrl={home.imageUrl}
-              mapLink={home.mapLink}
-            />
-          </TouchableOpacity>
-        ))}
-        <View className="h-40"></View>
+        {favHouses.map((Home, index) => (
+              <TouchableOpacity
+                id='favNursingHomes'
+                key={index}
+                activeOpacity={1}
+                onPress={() => {
+                  (formPage === 'index' && setActiveTab('detailnursingHouses'),setHomeSelected(Home.NursingHouse.nh_id),console.log('idh',Home.NursingHouse.nh_id))
+                }}
+              >
+                {/* <NursingHomeCard datahouse={Home.NursingHouse} /> */}
+                <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
+              </TouchableOpacity>
+            ))}
+          <View className="h-40"></View>
       </ScrollView>
+
+
+
     </View>
   );
 };

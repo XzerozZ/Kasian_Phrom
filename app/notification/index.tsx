@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { FontAwesome6, MaterialCommunityIcons} from '@expo/vector-icons';
+import { FontAwesome6, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import  TextF  from '../components/TextF';
 
 interface Notification {
@@ -46,8 +46,8 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
         </TouchableOpacity>
         <Text
         style={{ fontFamily: 'SarabunBold' }}
-        className="text-2xl text-normalText pl-5 pr-2 ">แจ้งเตือน</Text>
-        <MaterialCommunityIcons name="bell" size={28} color="#070F2D" />
+        className="text-2xl text-normalText pl-5 pr-2 ">กล่องจดหมาย</Text>
+        <Ionicons name="mail" size={28} color="#070F2D" />
       </View>
 
       {/* Notification List */}

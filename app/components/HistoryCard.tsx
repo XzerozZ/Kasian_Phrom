@@ -5,6 +5,9 @@ import { Svg, Line } from 'react-native-svg'; // เพิ่ม Svg และ L
 import { Dimensions } from 'react-native';
 import { FontAwesome6, FontAwesome, MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import  TextF  from './TextF';
+import { useNumberFormat } from "@/app/NumberFormatContext";
+
+
 
 interface infoHistoryProp{
     history_id: string,
@@ -24,6 +27,8 @@ interface HistoryCardProps{
 const HistoryCard: React.FC<HistoryCardProps> = ({ data }) => {
 
 
+    const { addCommatoNumber } = useNumberFormat();
+    
 
     const getDate = (date: string) => {
         const d = new Date(date);
@@ -42,7 +47,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ data }) => {
             <View className={`w-3 h-full ${data.method == 'deposit'?'bg-ok':'bg-err'}`}></View>
             <View className='flex flex-row h-full justify-between items-center flex-1 pl-5'>
                 <TextF className='text-normalText text-lg flex-1'>{data.name === 'อัตโนมัติ' ? 'ออมเงิน' : data.name}</TextF>
-                <TextF className='text-normalText text-lg flex-1 text-center'>{data.money}</TextF>
+                <TextF className='text-normalText text-lg flex-1 text-center'>{addCommatoNumber(data.money)}</TextF>
                 <View className='flex flex-col gap-1 items-end flex-1'>
                     <TextF className='text-normalText text-lg '>{getTime(data.track_at)} น.</TextF>
                     <TextF className='text-normalText'>{getDate(data.track_at)}</TextF>
