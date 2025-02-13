@@ -41,8 +41,13 @@ interface CalRetirementProps{
   setActiveTab: (tab: string) => void;
   activeTab: string;
   setStateNavbar: (state: boolean) => void;
+  homePickInPlan: string;
+  setHomePickInPlan: (homePickInPlan: string) => void;
+  formClick: string;
+  setFormClick: (formClick: string) => void;
+
 }
-const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar}) => {
+const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar, homePickInPlan, setHomePickInPlan, formClick, setFormClick}) => {
 
   const formPage = 'calRetirement'
   const [box1Width, setBox1Width] = useState(0);
@@ -55,7 +60,11 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
   useEffect(() => {
     setStateNavbar(false);
+    if (formClick === 'default') {
     setState(1);
+    }else if (formClick === 'pickhome') {
+      setState(4);
+    }
   }, [])
 
   useEffect(() => {
@@ -118,7 +127,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
 
 const [homeSelected, setHomeSelected] = useState('');
 
-const [homePickInPlan, setHomePickInPlan] = useState('');
+
 
 const [dataInput, setDataInput] = useState({
   Name: '',
@@ -211,7 +220,9 @@ useEffect(() => {
           })
         }
         const dataHouse = await responseHouse.json();
-        setHomePickInPlan(dataHouse.result.NursingHouse.nh_id)
+        if (formClick !== 'pickhome') {
+          setHomePickInPlan(dataHouse.result.NursingHouse.nh_id)
+        }
       }
 
       if (dataAsset.result !== null) {
@@ -318,7 +329,7 @@ useEffect(() => {
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
             {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput} havePlant={havePlant}/>}
             {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset}/>}
-            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant}/>}
+            {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant} formClick={formClick}/>}
 
             
 
@@ -329,7 +340,7 @@ useEffect(() => {
       </>}
       {state === 5 && homeSelected === '' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState} setHomePickInPlan={setHomePickInPlan}/>}
       {state === 6 && homeSelected === '' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState}/>}
-      {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState}/>}
+      {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState} setFormClick={setFormClick}/>}
 
       {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant}/>}
     </>

@@ -37,6 +37,7 @@ interface DetailNursingHousesProps {
   homePickInPlan: string;
   setHomePickInPlan: (home: string) => void;
   setState: (state: number) => void;
+  setFormClick: (state: string) => void;
 }
 
 const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
@@ -48,29 +49,60 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   state,
   homePickInPlan,
   setHomePickInPlan,
-  setState
+  setState,
+  setFormClick
 }) => {
   const[detailHouses,setDetailHouses] = useState<Home>();
   const[checkFav, setCheckFav] = useState(false)
+  const[isAuth, setIsAuth] = useState(false)
+  const[havePlan, setHavePlan] = useState(false)
+  const[idPlant, setIdPlant] = useState('')
   const screenWidth = Dimensions.get('window').width;
   useEffect(() => {
-    setStateNavbar(false);
+    setStateNavbar(false);   
     
     const allopenHouses = async() => {
       try {
         const token = await AsyncStorage.getItem('token');
+
+        if (token !== null) {
+          setIsAuth(true);
+          const responseSelected = await fetch(`${Port.BASE_URL}/user/selected`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
+          },
+        })
+          if (!responseSelected.ok) {
+            const errorData = await responseSelected.json();
+            console.log('errorDataAsset', errorData);
+            throw new Error(errorData.message || "Network response was not ok");
+          }
+          
+          const dataOwnHouses = await responseSelected.json();
+          
+          setIdPlant(dataOwnHouses.result.NursingHouse.nh_id)
+        }
+
+        const responseP = await fetch(`${Port.BASE_URL}/user/plan`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const dataP = await responseP.json();
+        if (dataP.result === null) {
+          setHavePlan(false)
+        }else{
+          setHavePlan(true)
+        }
+
         const response = await fetch(`${Port.BASE_URL}/nursinghouses/${homeSelected}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
             // "Authorization": Bearer ${token}
-          },
-        });
-        const responseCheckFav = await fetch(`${Port.BASE_URL}/favorite/${homeSelected}`, {
-          method: "GET",
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${token}`
           },
         });
         if (!response.ok) {
@@ -79,17 +111,31 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
           console.log('errorDataAsset',errorData)
           throw new Error(errorData.message || "Network response was not ok");
         }
-
         const data = await response.json();
-        const dataFav = await responseCheckFav.json();
         setDetailHouses(data.result)
-        if (dataFav.status === 'Success'){
-          setCheckFav(true)
+
+
+
+
+
+        if(token !== null){
+          setIsAuth(true)
+          const responseCheckFav = await fetch(`${Port.BASE_URL}/favorite/${homeSelected}`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": `Bearer ${token}`
+            },
+          });
+          const dataFav = await responseCheckFav.json();
+          if (dataFav.status === 'Success'){
+            setCheckFav(true)
+          }
+          else{
+            setCheckFav(false)
+          }
         }
-        else{
-          setCheckFav(false)
-        }
-        // console.log('-----------12-',JSON.stringify(dataFav.status, null, 2));
+        
       } catch (error) {
         throw new Error(error as string);
       }
@@ -150,18 +196,29 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
       }
     }
   
-  
+    const [dateArray, setDateArray] = useState<{ day: string; time: string }[]>([]);
 
-    const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
-    let dateArray: { day: string; time: string }[] = [];
-    try {
-      dateArray = JSON.parse(dateString).map((item: string) => {
-        const [day, time] = item.split(': ');
-        return { day, time };
-      });
-    } catch (error) {
-      console.error('Error parsing Date:', error);
-    }
+    useEffect(() => {
+      const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
+      console.log('dateStringdateString',dateString)
+      try {
+        if (dateString.length === 0) {
+          setDateArray([]);
+          return;
+        }else{
+          const parsedArray: string[] = JSON.parse(dateString); // แปลง string เป็น array
+          const formattedArray = parsedArray.map((item) => {
+            const [day, time] = item.split(': '); 
+            return { day, time };
+          });
+          setDateArray(formattedArray); // อัปเดต state
+        }
+        
+      } catch (error) {
+        console.error('Error parsing Date:', error);
+      }
+    }, [detailHouses]); 
+    
 
     const [currentPage, setCurrentPage] = useState(0);
     const ProgressBar: React.FC<{ currentPage: number; totalPages: number }> = ({
@@ -235,12 +292,12 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               <TextF className=" text-center text-sm mt-1">ชื่อ</TextF>
             </View>
             <TextF className="text-lg text-normalText flex-1">{detailHouses?.name}</TextF>
-            <TouchableOpacity
+            {isAuth &&<TouchableOpacity
               className="mx-4"
               onPress={toggleFavorite}>
               <Ionicons name="heart" size={30} color={checkFav? '#FF5449' : '#B0B0B0'} 
               />
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
 
           {/* Address */}
@@ -331,6 +388,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
         </View>
 
         {/* Recommend Button */}
+        {isAuth  && (havePlan || formPage === 'calRetirement') && idPlant !== detailHouses?.nh_id &&
         <View className="p-5">
           <TouchableOpacity 
          onPress={() => {
@@ -341,7 +399,13 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               setHomeSelected('');
             }
           } else {
-            setActiveTab('index');
+            if (detailHouses?.nh_id) {
+              setActiveTab('calRetirement');
+              setFormClick('pickhome');
+              setHomePickInPlan(detailHouses.nh_id);
+              setState(4);
+              setHomeSelected('');
+            }
           }
         }}
           className="bg-primary rounded-lg py-3">
@@ -352,7 +416,8 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               {formPage === 'index' && 'แทนที่บ้านพัก'}
             </TextF>
           </TouchableOpacity>
-        </View>
+        </View>}
+        <View className="h-10"/>
       </ScrollView>
     </>
   );

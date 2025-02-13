@@ -22,9 +22,8 @@ interface infoHistoryProp{
 interface RecordProps{
   isDarkMode: boolean;
   reflesh: boolean;
-  planName: string;
 }
-const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh, planName }) => {
+const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
 
 
   const [infoHistory, setInfoHistory] = useState<infoHistoryProp[]>([]);

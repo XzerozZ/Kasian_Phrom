@@ -54,6 +54,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [imgProfile, setImgProfile] = useState('');
     const [imgInput, setImgInput] = useState<any | null>(null);
     const [refresh, setRefresh] = useState(false);
+    const [isGoogleAccount, setIsGoogleAccount] = useState(false);
 
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -76,9 +77,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.removeItem('token');
-            await GoogleSignin.signOut();
-            setActiveTab('main');
+            // await AsyncStorage.removeItem('token');
+            
+            // setActiveTab('main');
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",
@@ -88,12 +89,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             },
             });
             
-            
-            if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Network response was not ok");
-            }
-            await AsyncStorage.removeItem('token');
+            GoogleSignin.signOut();
+            AsyncStorage.removeItem('token');
             setActiveTab('main');
         } catch (error) {
             throw new Error( error as string);
@@ -123,6 +120,7 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                 console.log('dataname', dataname);
                 if(dataname !== null){
                     console.log(JSON.stringify(dataname.result , null , 2))
+                    setIsGoogleAccount(dataname.result.provider !== 'Credentials');
                     setUserName(dataname.result.uname); 
                     setOldUserName(dataname.result.uname); 
                     setFirstName(dataname.result.fname); 
@@ -327,7 +325,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                                 onChangeText={setUserName}
                                 className={`text-lg border-b pb-1 border-unselectInput w-full`}/>
                                 <View className='w-10 h-10 items-center justify-center border-b border-unselectInput'>
-                                    <FontAwesome6 name='pen' size={12} color={userName === oldName ? '#C9C9C9' : '#2A4296'} />
+                                    <FontAwesome6 name='pen' size={12} color={userName === oldName || userName === '' ? '#C9C9C9' : '#2A4296'} />
                                 </View>
                             </View>
                             <View className='flex flex-row items-end'>
@@ -364,7 +362,8 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                         onPress={handleUpdateProfile}
                         activeOpacity={1}
                         className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 
-                            ${(userName !== oldName || firstName !== oldFirstName || lastName !== oldLastName) ? 'bg-primary' : 'bg-unselectMenu'}`}
+                            ${(userName !== oldName || firstName !== oldFirstName || lastName !== oldLastName) && userName !== ''
+                                ? 'bg-primary' : 'bg-unselectMenu'}`}
                     >
                         <TextF className='text-white'>บันทึก</TextF>
                         <MaterialIcons name="save-alt" size={22} color='#fff'/>
@@ -372,12 +371,13 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                     </View>
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
                     <View className='flex flex-row justify-between mt-5'>
-                        <TextF className=' text-label pt-2'>ตั้งค่าบัญชี</TextF>
+                        <TextF className=' text-label pt-2'>{!isGoogleAccount ?'ตั้งค่าบัญชี': 'บัญชี'}</TextF>
                     </View>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>อีเมล</TextF>
                         <TextF className=' text-primary text-lg'>{email}</TextF>
                     </View>
+                    {!isGoogleAccount && <>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>รีเซ็ตรหัสผ่าน</TextF>
                         <View className='flex gap-8 w-8/12'>
@@ -420,6 +420,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                             <TextF className=' text-white'>เปลี่ยน</TextF>
                         </TouchableOpacity>
                     </View>
+                    </>}
                     <View className='w-full border-b mt-8 border-unselectInput'></View>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-label pt-2'>ตั้งค่าแอป</TextF>

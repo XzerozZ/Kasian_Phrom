@@ -25,7 +25,7 @@ const NursingHomeCard: React.FC<NursingHousesCard> = ({
           <TextF className="text font-bold text-black">{datahouse.name}</TextF>
         </View>
         <TextF className="text-oktext items-center mt-3">{datahouse.price} บาท/เดือน</TextF>
-        <View className="flex-row items-center w-full justify-end">
+        <View className="flex-row items-center w-full justify-end gap-1">
           <TextF className="text-sm text-label ml-1 ">{datahouse.province}</TextF>
           <FontAwesome5 name="map-marker-alt" size={12} color="#979797" />
         </View>

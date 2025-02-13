@@ -39,48 +39,53 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
   const[allHouses, setAllHouses] = useState<Home[]>([]);
   const[ownHouses, setOwnHouses] = useState<Home>();
   const [isAllHouses, setIsAllHouses] = useState(false)
+  const [showData, setShowData] = useState<Home[]>([]);
+  const [isAuth, setIsAuth] = useState(false);
   useEffect(() => {
     const allopenHouses = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-  
-        // เรียกใช้งาน API พร้อมกัน
-        const [response, responseOwnHouses] = await Promise.all([
-          fetch(`${Port.BASE_URL}/nursinghouses/Active`, {
-            method: "GET",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }),
-          fetch(`${Port.BASE_URL}/user/selected`, {
-            method: "GET",
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": `Bearer ${token}`,
-            },
-          }),
-        ]);
-  
-        // ตรวจสอบสถานะของ Response
-        if (!response.ok || !responseOwnHouses.ok) {
+        
+        const response = await fetch(`${Port.BASE_URL}/nursinghouses/Active`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) {
           const errorData = await response.json();
           console.log('errorDataAsset', errorData);
           throw new Error(errorData.message || "Network response was not ok");
         }
-  
-        // แปลงข้อมูลเป็น JSON
         const data = await response.json();
-        const dataOwnHouses = await responseOwnHouses.json();
         
-        // ตั้งค่า AllHouses ตาม isAllHouses
         if (isAllHouses === false) {
           setAllHouses(data.result);
         } else if (isAllHouses === true) {
           setAllHouses(data.result.slice(0, 1));
         }
-        // ตั้งค่า OwnHouses
-        setOwnHouses(dataOwnHouses.result.NursingHouse);
-        console.log('----------------------a',JSON.stringify(data.result, null, 2));
+
+        if (token !== null) {
+          setIsAuth(true);
+          const responseSelected = await fetch(`${Port.BASE_URL}/user/selected`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
+          },
+        })
+          if (!responseSelected.ok) {
+            const errorData = await responseSelected.json();
+            console.log('errorDataAsset', errorData);
+            throw new Error(errorData.message || "Network response was not ok");
+          }
+          
+          const dataOwnHouses = await responseSelected.json();
+          
+          setOwnHouses(dataOwnHouses.result.NursingHouse);
+        }
+
 
   
       } catch (error) {
@@ -91,6 +96,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
     // ตรวจสอบ formPage แล้วตั้งค่า State Navbar และเรียก API
     if (formPage === 'calRetirement') {
       setStateNavbar(false);
+      allopenHouses();
     } else {
       setStateNavbar(true);
       allopenHouses();
@@ -110,20 +116,21 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
 
   console.log('123--------',ownHouses);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (query === '') {
-  //     setSearchQuery(showData);
-  //     return;
-  //   }else{
-  //     const filteredHomes = showData.filter((home) =>
-  //     home.name.toLowerCase().includes(query.toLowerCase()) // เปรียบเทียบข้อความแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-  //   );
-  //   setSearchQuery(filteredHomes);
+    if (query === '') {
+      setSearchQuery(showData);
+      return;
+    }else{
+      const filteredHomes = showData.filter((home) =>
+      home.name.toLowerCase().includes(query.toLowerCase()) // เปรียบเทียบข้อความแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+        
+    );
+    setSearchQuery(filteredHomes);
 
-  // }
+  }
 
-  // }, [query]);
+  }, [query]);
 
 
   // useEffect(() => {
@@ -175,35 +182,36 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
   //       }
   //     }
   //   }, [queryFilter]);
-  // useEffect(() => {
-  //   if (queryFilter.location.length > 0) {
-  //     const filteredHomes = allHouses.filter((home) =>
-  //       queryFilter.location.some(location => home.location.toLowerCase().includes(location.toLowerCase()))
-  //     );
+
+  useEffect(() => {
+    if (queryFilter.location.length > 0) {
+      const filteredHomes = allHouses.filter((home) =>
+        queryFilter.location.some(location => home.province.toLowerCase().includes(location.toLowerCase()))
+      );
   
-  //     let filteredHomesP = filteredHomes;
-  //     if (queryFilter.startPrice !== '') {
-  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) >= parseInt(queryFilter.startPrice));
-  //     }
-  //     if (queryFilter.endPrice !== '') {
-  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) <= parseInt(queryFilter.endPrice));
-  //     }
+      let filteredHomesP = filteredHomes;
+      if (queryFilter.startPrice !== '') {
+        filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price.toString()) >= parseInt(queryFilter.startPrice));
+      }
+      if (queryFilter.endPrice !== '') {
+        filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price.toString()) <= parseInt(queryFilter.endPrice));
+      }
   
-  //     setShowData(filteredHomesP);
-  //     setSearchQuery(filteredHomesP);
-  //   } else {
-  //     let filteredHomesP = allHouses;
-  //     if (queryFilter.startPrice !== '') {
-  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) >= parseInt(queryFilter.startPrice));
-  //     }
-  //     if (queryFilter.endPrice !== '') {
-  //       filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price) <= parseInt(queryFilter.endPrice));
-  //     }
+      setShowData(filteredHomesP);
+      setSearchQuery(filteredHomesP);
+    } else {
+      let filteredHomesP = allHouses;
+      if (queryFilter.startPrice !== '') {
+        filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price.toString()) >= parseInt(queryFilter.startPrice));
+      }
+      if (queryFilter.endPrice !== '') {
+        filteredHomesP = filteredHomesP.filter((home) => parseInt(home.price.toString()) <= parseInt(queryFilter.endPrice));
+      }
   
-  //     setShowData(filteredHomesP);
-  //     setSearchQuery(filteredHomesP);
-  //   }
-  // }, [queryFilter, allHouses]);
+      setShowData(filteredHomesP);
+      setSearchQuery(filteredHomesP);
+    }
+  }, [queryFilter, allHouses]);
 
     const isNoFilter = queryFilter.startPrice === '' && queryFilter.endPrice === '' && queryFilter.location.length === 0;
 
@@ -276,9 +284,9 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         }
         <ScrollView
         showsVerticalScrollIndicator={false}>
-          <View className='flex flex-row mt-4 justify-between items-center'>
-          {ownHouses !== undefined && isNoFilter 
-          ? ownHouses?.nh_id === '00001'
+          <View className={`flex flex-row mt-4 items-center ${isAuth || !isNoFilter ? 'justify-between' : 'justify-end'}`}>
+          { isNoFilter 
+          ? ownHouses === undefined || ownHouses?.nh_id === '00001'
             ? (
               <View className='flex-row  text-lg justify-between'>
                 <View className='flex-row gap-3'>
@@ -316,14 +324,14 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               )
             }
 
-            <TouchableOpacity 
+            {isAuth && <TouchableOpacity 
             id='BtnFavorite'
             activeOpacity={1}
             onPress={() => setActiveTab('favnursingHouses')}
             className='w-44 h-10 bg-primary rounded-lg justify-center items-center flex flex-row gap-2'>
               <Ionicons name="heart" size={22} color='#fff'/>
               <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
           {query === '' && isNoFilter && ownHouses?.nh_id !== '00001' && ownHouses !== undefined &&
             <TouchableOpacity 
@@ -337,8 +345,8 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           }
           {ownHouses?.nh_id !== '00001' && (<View className='mt-8'></View>)}
           <View className=' flex-row text-lg justify-between'>
-            {query === '' &&  isNoFilter && ownHouses?.nh_id !== '00001' &&<TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
-            {ownHouses?.nh_id !== '00001' && (
+            {query === '' ||  !isNoFilter && ownHouses === undefined || ownHouses?.nh_id !== '00001' &&<TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
+            {/* {ownHouses === undefined || ownHouses?.nh_id === '00001' && (
               <View className='flex-row gap-3'>
                 <TouchableOpacity
                   id='BtnRecommendHouses'
@@ -360,11 +368,11 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
                   </View>
                 </TouchableOpacity>
               </View>
-            )}
+            )} */}
 
           </View>
           <View className='h-5'></View>
-          {allHouses.map((Home, index) => (
+          {searchQuery.map((Home, index) => (
             <TouchableOpacity
               id='recommendNursingHomes'
               key={index}

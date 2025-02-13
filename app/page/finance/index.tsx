@@ -10,9 +10,10 @@ interface FinanceProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  setGoAuth: (auth: boolean) => void;
 }
 
-const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setGoAuth }) => {
 
   const [news, setNews] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState(0);
@@ -89,7 +90,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           
         </View>
         <View className='mx-5'>
-          <AssessCard setActiveTab={setActiveTab} />
+          <AssessCard setActiveTab={setActiveTab} setGoAuth={setGoAuth}/>
         </View>
         <View className='px-5 mt-8'>
           <TextF className='text-label'>

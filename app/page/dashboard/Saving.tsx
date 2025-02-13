@@ -26,13 +26,11 @@ interface SavingProps{
   setDataPopup: (data: any) => void;
   reflesh: boolean;
   setReflesh: (reflesh: boolean) => void;
-  planName: string;
-  setPlanName: (planName: string) => void;
 }
 
 
 
-const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup, setDataPopup, reflesh, setReflesh, planName, setPlanName }) => {
+const Saving: React.FC<SavingProps> = ({ isDarkMode, setActiveTab, setStatePopup, setDataPopup, reflesh, setReflesh }) => {
 
 
 
@@ -103,7 +101,6 @@ console.log(optionsPriority)
 
         console.log('infoPlan',data.result)
         setInfoPlan(data.result)
-        setPlanName(data.result.plan_name)
         // console.log('response', JSON.stringify(response, null, 2));
         if (dataHouse?.result?.NursingHouse?.nh_id !== '00001' && 
           dataHouse?.result?.status !== "Completed") {  

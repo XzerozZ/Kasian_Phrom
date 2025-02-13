@@ -8,17 +8,24 @@ import TextF from './TextF';
 
 interface AssessCardProps {
   setActiveTab: (tab: string) => void;
+  setGoAuth: (state: boolean) => void;
 };
 
-const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
+const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab, setGoAuth }) => {
   const [riskId, setRiskId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const fadeAnim = useRef(new Animated.Value(0)).current; // สร้างค่าเริ่มต้น opacity = 0
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRiskId = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          setIsAuth(false);
+          return;
+        }
+        setIsAuth(true)
         const response = await fetch(`${Port.BASE_URL}/quiz`, {
           method: "GET",
           headers: {
@@ -90,7 +97,8 @@ const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
         <TouchableOpacity  
           id='BtnCardNoRisk'
           activeOpacity={1}
-          onPress={() => setActiveTab('assessmentRisk')}
+          onPress={() => isAuth?setActiveTab('assessmentRisk'):setGoAuth(true)}
+
         >
           <View className='flex h-32 justify-center gap-1 px-5'>
             <Text className={`text-center text-2xl py-2`} style={{ color:'#2A4296', fontFamily: 'SarabunBold' }}>
@@ -98,7 +106,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
             </Text>
           </View>
           <View className='flex-row items-center bg-neutral2 pr-4'> 
-            <Text className='text-end text-primary py-3 pr-3 ml-auto' style={{ fontFamily: 'SarabunBold' }}>ทำแบบประเมินความเสี่ยง</Text>
+            <Text className='text-end text-primary py-3 pr-3 ml-auto' style={{ fontFamily: 'SarabunBold' }}>{isAuth?'ทำแบบประเมินความเสี่ยง':'เข้าสู่ระบบเพื่อทำแบบประเมินความเสี่ยง'}</Text>
             <FontAwesome6 name="play" size={15} color={'#2A4296'} />
           </View>
         </TouchableOpacity>

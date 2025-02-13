@@ -72,14 +72,13 @@ interface dataPartProp{
 interface ReportProps{
   isDarkMode: boolean;
   reflesh: boolean;
-  planName: string;
 }
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, planName }) => {
+const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh }) => {
   const [statePart, setStatePart] = useState(false)
   const [infoPlan, setInfoPlan] = useState<InfoPlanProps>();
   const [dataAsset, setDataAsset] = useState<Asset[]>([])
@@ -136,6 +135,7 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, planName }) => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const responseAsset = await fetch(`${Port.BASE_URL}/asset`, {
           method: 'GET',
           headers: {
@@ -150,8 +150,12 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, planName }) => {
         });
   
         const data = await response.json();
+        if (data.result === null) {
+          return
+        }
         const dataAsset = await responseAsset.json();
         const dataHouse = await responseHouse.json();
+        
         setInfoPlan(data.result)
         setSeries([
           { value: data.result.saving , color: '#2A4296' },
@@ -214,7 +218,7 @@ console.log('series2:', series2)
     showsVerticalScrollIndicator={false}>
         <View className=' flex'>
           <View className='mt-5 flex justify-center items-center'>
-            <TextF className='text-2xl font-bold'>{planName}</TextF>
+            <TextF className='text-2xl font-bold'>{infoPlan?.plan_name}</TextF>
           </View>
           <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm'>
             <View className='flex w-9/12 max-w-96 max-h-96 my-4 items-center justify-center aspect-square'>
@@ -314,7 +318,7 @@ console.log('series2:', series2)
               <TextF className=' text-normalText text-lg'>{addCommatoNumber(infoPlan?.allretirementfund)}</TextF>
             </View>
             {/* ------------------------------------------------------------ */}
-            <ScrollView 
+            {dataAsset.length > 0 &&<ScrollView 
               id='ScrollViewDetail'
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -351,7 +355,7 @@ console.log('series2:', series2)
                     </View>
                   </View>
                 ))}
-            </ScrollView>
+            </ScrollView>}
           </View>
           {dataHouse !== undefined &&
           <View className='px-5 mt-5 gap-3'>

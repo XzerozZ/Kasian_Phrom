@@ -31,9 +31,9 @@ interface stateProps{
   setHomePickInPlan: (home: string) => void;
   oldAssetInput: any;
   havePlant: boolean;
+  formClick: string;
 }
-
-const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput, setActiveTab, dataAssetInput, homeSelected, setHomeSelected, homePickInPlan, setHomePickInPlan, oldAssetInput, havePlant }) => {
+const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput, setActiveTab, dataAssetInput, homeSelected, setHomeSelected, homePickInPlan, setHomePickInPlan, oldAssetInput, havePlant, formClick }) => {
 
 
 const [isFully, setIsFully] = useState(false);
@@ -489,8 +489,8 @@ const handleSaveEditPlant = async () => {
                 <TextF className="text font-bold text-black">{dataHausePick.name}</TextF>
               </View>
               <TextF className="text-oktext items-center mt-3">{dataHausePick.price} บาท/เดือน</TextF>
-              <View className="flex-row items-center w-full justify-end">
-                <TextF className="text-sm text-label ml-1 ">{dataHausePick.province === 'กรุงเทพมหานคร' ? 'กทม.' : dataHausePick.province}</TextF>
+              <View className="flex-row items-center w-full justify-end gap-1">
+                <TextF className="text-sm text-label ml-1 ">{dataHausePick.province}</TextF>
                 <FontAwesome5 name="map-marker-alt" size={12} color="#979797" />
               </View>
             </View>
