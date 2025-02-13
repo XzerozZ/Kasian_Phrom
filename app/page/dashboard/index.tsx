@@ -18,8 +18,9 @@ interface DashboardProps{
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
   setBackto: (backto: string) => void;
+  setFormClick: (formClick: string) => void;
 }
-const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick }) => {
   const [page, setPage] = useState(0) // 0 = Saving, 1 = Report, 2 = Record
   const indicators = [0, 1, 2];
   const animatedWidth = indicators.map(() => useRef(new Animated.Value(8)).current);
@@ -39,6 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
   useEffect(() =>{
     setStateNavbar(true)
     setBackto('dashboard')
+    setFormClick('default')
     const getToken = async () => {
       const token = await AsyncStorage.getItem('token');
       if (token !== undefined && token !== null ) {

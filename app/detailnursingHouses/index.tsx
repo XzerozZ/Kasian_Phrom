@@ -199,25 +199,50 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
     const [dateArray, setDateArray] = useState<{ day: string; time: string }[]>([]);
 
     useEffect(() => {
-      const dateString = detailHouses?.Date?.replace(/'/g, '"') ?? '[]';
-      console.log('dateStringdateString',dateString)
+      let dateString = detailHouses?.Date;
+    
+      // ตรวจสอบว่า dateString มีค่า และเป็น string หรือไม่
+      if (!dateString || typeof dateString !== 'string') {
+        setDateArray([]);
+        return;
+      }
+    
+      // แทนที่เครื่องหมาย ' ด้วย " (หากมี)
+      dateString = dateString.replace(/'/g, '"');
+    
+      console.log('dateString:', dateString);
+    
       try {
-        if (dateString.length === 0) {
+        // ตรวจสอบว่าเป็น JSON จริงหรือไม่
+        if (!dateString.startsWith('[')) {
+          console.warn('Invalid JSON format:', dateString);
           setDateArray([]);
           return;
-        }else{
-          const parsedArray: string[] = JSON.parse(dateString); // แปลง string เป็น array
-          const formattedArray = parsedArray.map((item) => {
-            const [day, time] = item.split(': '); 
-            return { day, time };
-          });
-          setDateArray(formattedArray); // อัปเดต state
         }
+    
+        // แปลง string เป็น array
+        const parsedArray: string[] = JSON.parse(dateString);
         
+        // ตรวจสอบว่าข้อมูลที่ได้เป็นอาร์เรย์จริงๆ
+        if (!Array.isArray(parsedArray)) {
+          console.warn('Parsed data is not an array:', parsedArray);
+          setDateArray([]);
+          return;
+        }
+    
+        // แปลงข้อมูลให้อยู่ในรูปแบบ { day, time }
+        const formattedArray = parsedArray.map((item) => {
+          const [day, time] = item.split(': ');
+          return { day, time };
+        });
+    
+        setDateArray(formattedArray);
       } catch (error) {
         console.error('Error parsing Date:', error);
+        setDateArray([]); // ตั้งค่าเริ่มต้นเมื่อมีข้อผิดพลาด
       }
-    }, [detailHouses]); 
+    }, [detailHouses]);
+    
     
 
     const [currentPage, setCurrentPage] = useState(0);

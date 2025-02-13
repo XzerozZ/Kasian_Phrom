@@ -285,7 +285,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         <ScrollView
         showsVerticalScrollIndicator={false}>
           <View className={`flex flex-row mt-4 items-center ${isAuth || !isNoFilter ? 'justify-between' : 'justify-end'}`}>
-          { isNoFilter 
+          { isNoFilter && query === ''
           ? ownHouses === undefined || ownHouses?.nh_id === '00001'
             ? (
               <View className='flex-row  text-lg justify-between'>
@@ -343,11 +343,10 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
               {ownHouses !==undefined && <NursingHomeCard datahouse={ownHouses} />}
             </TouchableOpacity>
           }
-          {ownHouses?.nh_id !== '00001' && (<View className='mt-8'></View>)}
           <View className=' flex-row text-lg justify-between'>
-            {query === '' ||  !isNoFilter && ownHouses === undefined || ownHouses?.nh_id !== '00001' &&<TextF className=" text-normalText">บ้านพักคนชรา</TextF>}
-            {/* {ownHouses === undefined || ownHouses?.nh_id === '00001' && (
-              <View className='flex-row gap-3'>
+            {query !== '' ||  !isNoFilter && ownHouses === undefined || ownHouses?.nh_id !== '00001' &&<TextF className=" text-normalText mt-8 text-lg">บ้านพักคนชรา</TextF>}
+            {ownHouses !== undefined && ownHouses?.nh_id !== '00001' && (
+              <View className='flex-row gap-3 mt-8'>
                 <TouchableOpacity
                   id='BtnRecommendHouses'
                   activeOpacity={1}
@@ -368,7 +367,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
                   </View>
                 </TouchableOpacity>
               </View>
-            )} */}
+            )}
 
           </View>
           <View className='h-5'></View>

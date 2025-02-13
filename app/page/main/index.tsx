@@ -57,9 +57,10 @@ interface MainProps {
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
   setBackto: (backto: string) => void;
+  setFormClick: (form: string) => void;
 }
 
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick }) => {
   
   
   
@@ -73,6 +74,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   const [dataUser, setDataUser] = useState<User>({});
 
   useEffect(() => {
+    setFormClick('default')
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');

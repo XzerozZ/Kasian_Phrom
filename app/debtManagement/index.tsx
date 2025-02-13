@@ -52,6 +52,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
   const [stateDelete, setStateDelete] = useState<any | null>(null);
   const [refresh, setRefresh] = useState(false);
   const [dataDebt, setDataDebt] = useState<DebtItem[]>([]);
+  const [debtSelect, setDebtSelect] = useState('');
 
   useEffect(() => {
     setStateNavbar(false);
@@ -243,11 +244,37 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
     <>
     {statePage === 'debtManagement' && 
     <>
-      <HeadTitle 
-      setActiveTab={setActiveTab} 
-      title='หนี้สิน' 
-      onPress={() => setActiveTab(backto)}/>
-      <ScrollView className='flex-1'>
+        <View 
+          id=' headTitleContainer'
+          className='flex-row mt-3 ml-5 h-14 items-center justify-between'>
+          <View className='flex-row items-center'>
+            <TouchableOpacity
+              id='BtnBack'
+              activeOpacity={1}
+              onPress={() => setActiveTab(backto)}
+              className=''>
+              <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
+            </TouchableOpacity>
+            <Text 
+            style={{ fontFamily: 'SarabunBold'}}
+            className=' text-normalText text-2xl ml-3 h-12 pt-2'>หนี้สิน</Text>
+          </View>
+          
+          <TouchableOpacity 
+          activeOpacity={1}
+          onPress={() => setStatePage('addDebt')}
+          className='flex-row gap-2 items-center'>
+            <FontAwesome6 name="plus" size={20} color='#2A4296'/>
+            <TextF className='mr-8 text-lg py-2 text-primary'>เพิ่มหนี้สิน</TextF>
+          </TouchableOpacity>
+      </View>
+      {dataDebt.length === 0 
+      ?<>
+      <View className='flex-1 items-center mt-20'>
+        <TextF className='text-label text-lg p-2'>ไม่มีข้อมูลหนี้สิน</TextF>
+      </View>
+      </>
+      :<ScrollView className='flex-1'>
         <View className=' flex'>
           <View className='mt-2 flex justify-center items-center bg-bg_debt mx-8 p-3 pt-4 pb-5 rounded-3xl shadow'>
             <View className='flex w-full items-center gap-5'>
@@ -339,7 +366,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                     <View className="flex flex-row gap-2 w-full mt-5">
                       <TouchableOpacity 
                       activeOpacity={1}
-                      onPress={() => setStatePage('addDebt')}
+                      onPress={() => {setStatePage('addDebt'), setDebtSelect(item.loan.loan_id)}}
                       className="flex-1 items-center justify-center bg-primary rounded-lg h-12">
                         <TextF className="text-lg py-2 text-white">แก้ไขข้อมูลหนี้สิน</TextF>
                       </TouchableOpacity>
@@ -355,12 +382,12 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                 ))}
               </View>
             ))}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={1}
               onPress={() => setStatePage('addDebt')}
               className="flex-1 flex-row gap-3 items-center justify-center bg-neutral rounded-lg border-dashed border-2 h-24 border-primary">
               <Text style={{ fontFamily: "SarabunBold" }} className="text-xl py-2 text-primary">เพิ่มข้อมูลหนี้สิน</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -370,7 +397,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
 
 
 
-      </ScrollView>
+      </ScrollView>}
       {stateConfirm !== null && 
       <TouchableOpacity 
       activeOpacity={1}
@@ -451,7 +478,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       </>
     }
     {statePage === 'addDebt' && <>
-      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage} refresh={refresh} setRefresh={setRefresh} />
+      <AddDebt isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStatePage={setStatePage} refresh={refresh} setRefresh={setRefresh} debtSelect={debtSelect} setDebtSelect={setDebtSelect}/>
     </>}
 
     </>

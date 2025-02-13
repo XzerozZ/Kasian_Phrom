@@ -32,8 +32,9 @@ interface stateProps{
   oldAssetInput: any;
   havePlant: boolean;
   formClick: string;
+  setFormClick: (form: string) => void;
 }
-const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput, setActiveTab, dataAssetInput, homeSelected, setHomeSelected, homePickInPlan, setHomePickInPlan, oldAssetInput, havePlant, formClick }) => {
+const state4: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setDataInput, setActiveTab, dataAssetInput, homeSelected, setHomeSelected, homePickInPlan, setHomePickInPlan, oldAssetInput, havePlant, formClick, setFormClick }) => {
 
 
 const [isFully, setIsFully] = useState(false);
@@ -78,14 +79,16 @@ useEffect(() => {
 
 
 useEffect(() => {
-  if (dataInput.Expected_monthly_expenses !== '' && dataInput.Annual_expense_increase !== '' && dataInput.Annual_savings_return !== '' && dataInput.Investment_return !== '' && homePickInPlan !== '') {
+  if (dataInput.Expected_monthly_expenses !== '' && dataInput.Annual_expense_increase !== '' && dataInput.Annual_savings_return !== '' && dataInput.Investment_return !== '' && (dataHausePick !== null || homePickInPlan === '00001')) {
     setIsFully(true);
   } else {
     setIsFully(false);
   }
-}, [dataInput, homePickInPlan]);
+}, [dataInput, dataHausePick, homePickInPlan]);
 
-
+const resetCommato = (text: string) => {
+  return text.replace(/,/g, '');
+}
 
 
 
@@ -133,19 +136,19 @@ const handleCreatePlan = async () => {
     const formData = new FormData();
     formData.append("planname", dataInput.Name);
     formData.append("birthdate", dataInput.Birth_date);
-    formData.append("retirementage", dataInput.Retirement_age);
-    formData.append("expectlifespan", dataInput.Exp_lifespan);
-    formData.append("currentsavings", dataInput.Current_savings);
-    formData.append("currentsavingsreturns", dataInput.Current_savings_returns);
-    formData.append("monthlyincome", dataInput.Monthly_income);
-    formData.append("monthlyexpenses", dataInput.Monthly_expenses); //
-    formData.append("currenttotalinvestment", dataInput.Current_total_investment);
-    formData.append("investmentreturn", dataInput.Investment_return);
-    formData.append("expectedinflation", dataInput.Expected_inflation);
-    formData.append("expectedmonthlyexpenses", dataInput.Expected_monthly_expenses); //
-    formData.append("annualexpenseincrease", dataInput.Annual_expense_increase);
-    formData.append("annualsavingsreturn", dataInput.Annual_savings_return);
-    formData.append("annualinvestmentreturn", dataInput.Annual_investment_return);
+    formData.append("retirementage", resetCommato(dataInput.Retirement_age));
+    formData.append("expectlifespan", resetCommato(dataInput.Exp_lifespan));
+    formData.append("currentsavings", resetCommato(dataInput.Current_savings));
+    formData.append("currentsavingsreturns", resetCommato(dataInput.Current_savings_returns));
+    formData.append("monthlyincome", resetCommato(dataInput.Monthly_income));
+    formData.append("monthlyexpenses", resetCommato(dataInput.Monthly_expenses)); //
+    formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
+    formData.append("investmentreturn", resetCommato(dataInput.Investment_return));
+    formData.append("expectedinflation", resetCommato(dataInput.Expected_inflation));
+    formData.append("expectedmonthlyexpenses", resetCommato(dataInput.Expected_monthly_expenses)); //
+    formData.append("annualexpenseincrease", resetCommato(dataInput.Annual_expense_increase));
+    formData.append("annualsavingsreturn", resetCommato(dataInput.Annual_savings_return));
+    formData.append("annualinvestmentreturn", resetCommato(dataInput.Annual_investment_return));
 
     console.log(token,'formData:', formData);
     console.log(JSON.stringify(dataAssetInput, null, 2));
@@ -196,7 +199,7 @@ const handleUpdateAsset = async (dataAsset: DataAsset, token:String): Promise<vo
     formData.append("type", dataAsset.type);
     formData.append("totalcost", dataAsset.Total_money);
     formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
-    // formData.append("status", dataAsset.Status ?'In_Progress':'Waiting');
+    formData.append("status", dataAsset.Status ?'In_Progress':'Paused');
     
     console.log('formDataAsset:', formData);
     const response = await fetch(`${Port.BASE_URL}/asset/${dataAsset.asset_id}`, {
@@ -255,19 +258,19 @@ const handleSaveEditPlant = async () => {
     const formData = new FormData();
     formData.append("planname", dataInput.Name);
     formData.append("birthdate", dataInput.Birth_date);
-    formData.append("retirementage", dataInput.Retirement_age);
-    formData.append("expectlifespan", dataInput.Exp_lifespan);
-    // formData.append("currentsavings", dataInput.Current_savings);
-    formData.append("currentsavingsreturns", dataInput.Current_savings_returns);
-    formData.append("monthlyincome", dataInput.Monthly_income);
-    formData.append("monthlyexpenses", dataInput.Monthly_expenses);
-    // formData.append("currenttotalinvestment", dataInput.Current_total_investment);
-    formData.append("investmentreturn", dataInput.Investment_return);
-    formData.append("expectedinflation", dataInput.Expected_inflation);
-    formData.append("expectedmonthlyexpenses", dataInput.Expected_monthly_expenses);
-    formData.append("annualexpenseincrease", dataInput.Annual_expense_increase);
-    formData.append("annualsavingsreturn", dataInput.Annual_savings_return);
-    formData.append("annualinvestmentreturn", dataInput.Annual_investment_return);
+    formData.append("retirementage", resetCommato(dataInput.Retirement_age));
+    formData.append("expectlifespan", resetCommato(dataInput.Exp_lifespan));
+    // formData.append("currentsavings", resetCommato(dataInput.Current_savings));
+    formData.append("currentsavingsreturns", resetCommato(dataInput.Current_savings_returns));
+    formData.append("monthlyincome", resetCommato(dataInput.Monthly_income));
+    formData.append("monthlyexpenses", resetCommato(dataInput.Monthly_expenses)); //
+    // formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
+    formData.append("investmentreturn", resetCommato(dataInput.Investment_return));
+    formData.append("expectedinflation", resetCommato(dataInput.Expected_inflation));
+    formData.append("expectedmonthlyexpenses", resetCommato(dataInput.Expected_monthly_expenses)); //
+    formData.append("annualexpenseincrease", resetCommato(dataInput.Annual_expense_increase));
+    formData.append("annualsavingsreturn", resetCommato(dataInput.Annual_savings_return));
+    formData.append("annualinvestmentreturn", resetCommato(dataInput.Annual_investment_return));
 
     console.log(token,'formData:', formData);
     console.log(JSON.stringify(dataAssetInput, null, 2));
@@ -316,6 +319,7 @@ const handleSaveEditPlant = async () => {
       },
     });
     console.log('responseAddHouse',responseAddHouse)
+    setFormClick('default')
     setActiveTab('dashboard');
   } catch (error) {
     throw new Error( error as string);
@@ -469,9 +473,9 @@ const handleSaveEditPlant = async () => {
               id='NursingHousesBtn'
               activeOpacity={1}
               onPress={() => setState(5)}
-              className={`flex-1 h-14 rounded-lg justify-center items-center flex-row gap-3 ${homePickInPlan !== '' && homePickInPlan !== '00001' ? 'bg-primary':'bg-neutral'}`}>
-                <FontAwesome6 name="person-cane" size={22} color={homePickInPlan !== '' && homePickInPlan !== '00001' ?'#FCFCFC':'#2A4296'} />
-                <TextF className={`text-lg ${homePickInPlan  !== '' && homePickInPlan !== '00001' ? 'text-neutral':'text-primary'}`}>บ้านพักคนชรา</TextF>
+              className={`flex-1 h-14 rounded-lg justify-center items-center flex-row gap-3 ${dataHausePick !== null ? 'bg-primary':'bg-neutral'}`}>
+                <FontAwesome6 name="person-cane" size={22} color={dataHausePick !== null ?'#FCFCFC':'#2A4296'} />
+                <TextF className={`text-lg ${dataHausePick !== null ? 'text-neutral':'text-primary'}`}>บ้านพักคนชรา</TextF>
               </TouchableOpacity>
             </View>
           </View>
@@ -497,7 +501,8 @@ const handleSaveEditPlant = async () => {
           </View>}
     </View>
     <View className='h-5 '></View>
-    <WideBtn id='saveCalRetirementData' activeOpacity={1} text='บันทึก' disabled={!isFully} onPress={havePlant ? handleSaveEditPlant :handleCreatePlan}/>
+    {!havePlant ? <WideBtn id='saveCalRetirementData' activeOpacity={1} text='สร้างแผน' disabled={!isFully} onPress={handleCreatePlan}/>
+    :<WideBtn id='saveCalRetirementData' activeOpacity={1} text='บันทึก' disabled={!isFully} onPress={handleSaveEditPlant }/>}
   </View>
   )
 }

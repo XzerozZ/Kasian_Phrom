@@ -13,7 +13,7 @@ return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 // Provider สำหรับใช้ในแอป
-export const NumberFormatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const NumberFormatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <NumberFormatContext.Provider value={{ addCommatoNumber }}>
       {children}
@@ -29,3 +29,5 @@ export const useNumberFormat = () => {
   }
   return context;
 };
+
+export default NumberFormatProvider;

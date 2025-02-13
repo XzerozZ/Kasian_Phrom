@@ -110,11 +110,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
                         "Authorization": `Bearer ${token}`
                     },
                 });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.log('errorDataAsset', errorData);
-                    throw new Error(errorData.message || "Network response was not ok");
-                }
+                // if (!response.ok) {
+                //     const errorData = await response.json();
+                //     console.log('errorData', errorData);
+                //     throw new Error(errorData.message || "Network response was not ok");
+                // }
     
                 const dataname = await response.json();
                 console.log('dataname', dataname);
