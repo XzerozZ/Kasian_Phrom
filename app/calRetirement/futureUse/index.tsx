@@ -7,6 +7,8 @@ import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
 import CheckBox from '../../components/checkBox';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import MoveMoney from './MoveMoney';
+import { BlurView } from 'expo-blur';
 
 // import 
 
@@ -23,15 +25,18 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
   const scrollViewRef = useRef<ScrollView>(null);
   const { addCommatoNumber } = useNumberFormat();
-
+  const [isNewAsset, setIsNewAsset] = useState(true);
+  const [statePopupDel, setStatePopupDel] = useState(false);
+  const [statePopupMoveMoney, setStatePopupMoveMoney] = useState(false);
   const [newDataAssetInput, setNewDataAssetInput] = useState({
     Name: '',
     Total_money: '',
     End_year: '',
     type: 'home',
     Status: true,
+    current_money: 0,
   })
-
+console.log(JSON.stringify(dataAssetInput, null,2 ))
   const categories = [
     { id: 1, tag:'home', label: 'บ้าน' },
     { id: 2, tag:'child', label: 'บุตร'},
@@ -50,12 +55,19 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
   useEffect(() => {
     if (dataEditAsset !== null) {
-      console.log(newDataAssetInput);
-      setNewDataAssetInput(dataAssetInput[dataEditAsset]);
+      const assetData = dataAssetInput[dataEditAsset];
+      console.log('assetData',assetData);
+      
+      setNewDataAssetInput(assetData);
+      if (!assetData.hasOwnProperty('asset_id')) {
+        setIsNewAsset(true);
+      }else{
+        setIsNewAsset(false);
+      }
     }
   }, []);
 
-
+console.log('isNewAsset------------',isNewAsset)
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
       setIsFully(true);
@@ -95,6 +107,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       End_year: '',
       type: 'home',
       Status: true,
+      current_money: 0,
 
     });
   
@@ -111,6 +124,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       End_year: '',
       type: 'home',
       Status: true,
+      current_money: 0,
     });
     setType('');
     setStateFutureUse(false);
@@ -146,6 +160,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       End_year: '',
       type: 'home',
       Status: true,
+      current_money: 0,
     });
     setType('');
     setStateFutureUse(false);
@@ -163,18 +178,124 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       End_year: '',
       type: 'home',
       Status: true,
+      current_money: 0,
     });
     setType('');
     setStateFutureUse(false);
   }
 
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
+  useEffect(() => {
+    if (statePopupDel || statePopupMoveMoney) {
+      // แสดง Popup (fade-in + scale-up)
+      Animated.parallel([
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+
+  }, [statePopupDel, statePopupMoveMoney]);
+
+  const onClose =() => {
+    Animated.parallel([
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.8,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setStatePopupDel(false);
+      setStatePopupMoveMoney(false);
+    });
+  }
 
   return (
+    <>
+    
+    
     <View 
     id='CalRetirementFutureUse'
-    style={{ position : 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'white' }}
+    style={{ position : 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 20, backgroundColor: 'white' }}
     className='flex-1 pt-10'>
+      {statePopupMoveMoney && 
+      <TouchableOpacity 
+      activeOpacity={1}
+      onPress={()=>onClose()}
+      className=' absolute flex-1 h-screen w-full justify-center items-center z-30' style={{ flex: 1, top: 0, left:0}}>
+      <BlurView
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        intensity={40}
+        tint="prominent" // หรือใช้ "dark", "extraLight"
+      />
+      <Animated.View 
+      style={[
+        { opacity: opacityAnim, transform: [{ scale: scaleAnim }] }
+      ]}
+      onStartShouldSetResponder={() => true}
+      onTouchEnd={(event) => event.stopPropagation()}
+      className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center'>
+          <MoveMoney/>
+      </Animated.View>
+    </TouchableOpacity>}
+      {statePopupDel && 
+      <TouchableOpacity 
+      activeOpacity={1}
+      onPress={()=>onClose()}
+      className=' absolute flex-1 h-screen w-full justify-center items-center z-30' style={{ flex: 1, top: 0, left:0}}>
+      <BlurView
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        intensity={40}
+        tint="prominent" // หรือใช้ "dark", "extraLight"
+      />
+      <Animated.View 
+      style={[
+        { opacity: opacityAnim, transform: [{ scale: scaleAnim }] }
+      ]}
+      onStartShouldSetResponder={() => true}
+      onTouchEnd={(event) => event.stopPropagation()}
+      className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center'>
+          <TextF className='text-lg text-normalText px-3 text-center'>คุณต้องการลบทรัพย์สิน <TextF className='text-primary'>{newDataAssetInput.Name}</TextF> ใช่หรือไม่</TextF>
+          <View className='w-full flex flex-row px-3 gap-3 mt-14'>
+            <TouchableOpacity 
+            onPress={()=>onClose()}
+            className=' flex-1 h-14 border-primary border justify-center items-center rounded-md'>
+              <TextF className='text-lg text-primary'>ยกเลิก</TextF>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            onPress={()=>handleDelAsset()}
+            className='flex-1 h-14 bg-err justify-center items-center rounded-md '>
+              <TextF className='text-lg text-white'>ยืนยัน</TextF>
+            </TouchableOpacity>
+          </View>
+      </Animated.View>
+    </TouchableOpacity>}
       <View className='flex-row mt-3 ml-5 h-14 items-center'>
           <TouchableOpacity
               id='BtnBackToCalRetirementState3'
@@ -258,8 +379,8 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                     const currentYear = new Date().getFullYear() + 543; // ปี พ.ศ.
                     const validatedValue = parseInt(numericText, 10);
                     const finalValue =
-                      !isNaN(validatedValue) && validatedValue < currentYear
-                        ? String(currentYear)
+                      !isNaN(validatedValue) && validatedValue < currentYear+1
+                        ? String(currentYear+1)
                         : numericText;
                     setNewDataAssetInput({ ...newDataAssetInput, End_year: finalValue });
                   }}
@@ -268,7 +389,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
               </View>
             </View>
             
-            {havePlant && 
+            {!isNewAsset && 
             <>
               <View className='w-full h-[1] bg-neutral2'></View>
               
@@ -360,7 +481,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
         className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none'>
           <TouchableOpacity
           id='BtnCancelFutureUse'
-          onPress={()=> dataEditAsset !== null ? handleDelAsset() : setStateFutureUse(false)}
+          onPress={()=> dataEditAsset !== null ? newDataAssetInput.current_money > 0 ? setStatePopupMoveMoney(true) : setStatePopupDel(true) : setStateFutureUse(false)}
           className='flex-1 h-14 rounded-lg border border-err justify-center items-center'>
             <TextF className='text-err text-lg'>{dataEditAsset !== null ? 'ลบ' : 'ยกเลิก'}</TextF>
           </TouchableOpacity>
@@ -372,7 +493,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
           </TouchableOpacity>
         </View>
       </View>
-     
+      </>
   )
 }
 

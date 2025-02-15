@@ -17,23 +17,33 @@ import NursingHouses from '../page/nursingHouses';
 import DetailNursingHouses from '../detailnursingHouses';
 import FavNursingHouses from '../favnursingHouses';
 
-
-  interface LayoutEvent {
-    nativeEvent: {
-      layout: {
-        width: number;
-      };
-    };
-  }
-
-  interface Asset {
-    asset_id:string
-    Total_money: string;
-    End_year: string;
+interface delTo {
+  asset_id: string;
+  giveTo:{
     type: string;
-    Name: string;
-    Status: boolean
+    name: string;
+    amount: number;
   }
+}
+
+
+interface LayoutEvent {
+  nativeEvent: {
+    layout: {
+      width: number;
+    };
+  };
+}
+
+interface Asset {
+  asset_id:string
+  Total_money: string;
+  End_year: string;
+  type: string;
+  Name: string;
+  Status: boolean
+  current_money: string;
+}
 
 
 interface CalRetirementProps{
@@ -63,7 +73,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
     if (formClick === 'pickhome') {
       setState(4);
     }else{
-      setState(1);
+      setState(3);
     }
   }, [])
 
@@ -146,7 +156,7 @@ const [dataInput, setDataInput] = useState({
   Annual_savings_return: '1.25',
   Annual_investment_return: '5',
 })
-
+const [delToAsset, setDelToAsset] = useState<delTo[]>([])
 
 const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
 const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
@@ -233,7 +243,8 @@ useEffect(() => {
           Total_money: item.total_cost.toString(),
           End_year: (parseInt(item.end_year)+543).toString(),
           type: item.type,
-          Status: item.status === 'In_Progress' ? true : false
+          Status: item.status === 'In_Progress' ? true : false,
+          current_money: item.current_money,
         }));
         setOldAssetInput(assets)
         setDataAssetInput(assets);
@@ -328,7 +339,7 @@ useEffect(() => {
           className={`flex-1`}>
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
             {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput} havePlant={havePlant}/>}
-            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset}/>}
+            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset} setDelToAsset={setDelToAsset}/>}
             {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant} formClick={formClick} setFormClick={setFormClick}/>}
 
             

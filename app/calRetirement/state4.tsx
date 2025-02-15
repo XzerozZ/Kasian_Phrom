@@ -99,6 +99,7 @@ const handleAddAsset = async (dataAsset: DataAsset, token:String): Promise<void>
     formData.append("type", dataAsset.type);
     formData.append("totalcost", dataAsset.Total_money);
     formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
+
     console.log('formDataAsset:', formData);
     const response = await fetch(`${Port.BASE_URL}/asset`, {
       method: "POST",
