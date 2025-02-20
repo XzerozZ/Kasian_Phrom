@@ -4,12 +4,16 @@ import React, { createContext, useContext } from "react";
 const NumberFormatContext = createContext<{ addCommatoNumber: (num: any) => string } | undefined>(undefined);
 
 // ฟังก์ชันเพิ่มเครื่องหมายจุลภาค (,) ให้ตัวเลข
-const addCommatoNumber = (num: any) => {
-  if (num === undefined || num === null) {
+const addCommatoNumber = (num: any, decimalPlaces: number = 0) => {
+  if (num === undefined || num === null || isNaN(Number(num))) {
     return "0";
   }
 
-return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // แปลงเป็นตัวเลข, ปัดเศษทศนิยม, และแปลงเป็นสตริง
+  const roundedNum = Number(num).toFixed(decimalPlaces);
+
+  // เพิ่ม comma คั่นหลักพัน
+  return roundedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 // Provider สำหรับใช้ในแอป

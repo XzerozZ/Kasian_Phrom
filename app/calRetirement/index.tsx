@@ -17,14 +17,7 @@ import NursingHouses from '../page/nursingHouses';
 import DetailNursingHouses from '../detailnursingHouses';
 import FavNursingHouses from '../favnursingHouses';
 
-interface delTo {
-  asset_id: string;
-  giveTo:{
-    type: string;
-    name: string;
-    amount: number;
-  }
-}
+
 
 
 interface LayoutEvent {
@@ -41,7 +34,7 @@ interface Asset {
   End_year: string;
   type: string;
   Name: string;
-  Status: boolean
+  Status: string;
   current_money: string;
 }
 
@@ -156,13 +149,12 @@ const [dataInput, setDataInput] = useState({
   Annual_savings_return: '1.25',
   Annual_investment_return: '5',
 })
-const [delToAsset, setDelToAsset] = useState<delTo[]>([])
 
 const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
 const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
 const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
 const [havePlant, setHavePlant] = useState(false)
-
+const [refresh, setRefresh] = useState(false);
 
 const scrollViewRef = useRef<ScrollView>(null);
 
@@ -243,7 +235,7 @@ useEffect(() => {
           Total_money: item.total_cost.toString(),
           End_year: (parseInt(item.end_year)+543).toString(),
           type: item.type,
-          Status: item.status === 'In_Progress' ? true : false,
+          Status: item.status,
           current_money: item.current_money,
         }));
         setOldAssetInput(assets)
@@ -262,7 +254,7 @@ useEffect(() => {
   };
   
   getToken();
-}, []);
+}, [refresh]);
 
 
 
@@ -339,7 +331,7 @@ useEffect(() => {
           className={`flex-1`}>
             {state === 1 && <State1 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput}/>}
             {state === 2 && <State2 isDarkMode={isDarkMode} setState={setState} scrollViewRef={scrollViewRef} dataInput={dataInput} setDataInput={setDataInput} havePlant={havePlant}/>}
-            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset} setDelToAsset={setDelToAsset}/>}
+            {state === 3 && <State3 isDarkMode={isDarkMode} setState={setState} dataAssetInput={dataAssetInput} setStateFutureUse={setStateFutureUse} setDataAssetInput={setDataAssetInput} setDataEditAsset={setDataEditAsset}/>}
             {state === 4 && <State4 isDarkMode={isDarkMode} setState={setState} dataInput={dataInput} setDataInput={setDataInput} setActiveTab={setActiveTab} dataAssetInput={dataAssetInput} homeSelected={homeSelected} setHomeSelected={setHomeSelected} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} oldAssetInput={oldAssetInput} havePlant={havePlant} formClick={formClick} setFormClick={setFormClick}/>}
 
             
@@ -353,7 +345,7 @@ useEffect(() => {
       {state === 6 && homeSelected === '' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState}/>}
       {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState} setFormClick={setFormClick}/>}
 
-      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant}/>}
+      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant} refresh={refresh} setRefresh={setRefresh}/>}
     </>
   )
 }

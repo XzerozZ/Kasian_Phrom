@@ -7,11 +7,20 @@ import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
 import CheckBox from '../../components/checkBox';
 import { useNumberFormat } from "@/app/NumberFormatContext";
-import MoveMoney from './MoveMoney';
+import MoveMoney from './moveMoney';
 import { BlurView } from 'expo-blur';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '@/Port';
 
 // import 
-
+interface delTo {
+  asset_id: string;
+  giveTo:{
+    type: string;
+    name: string;
+    amount: number;
+  }
+}
 interface futureUseProps{
   isDarkMode: boolean;
   setStateFutureUse: (state: boolean) => void
@@ -20,23 +29,27 @@ interface futureUseProps{
   dataEditAsset: number | null;
   setDataEditAsset: (data: number | null) => void;
   havePlant: boolean;
+  refresh: boolean;
+  setRefresh: (state: boolean) => void;
 }
-const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset, havePlant }) => {
+const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, dataAssetInput, setDataAssetInput, dataEditAsset, setDataEditAsset, havePlant, refresh, setRefresh }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
   const { addCommatoNumber } = useNumberFormat();
   const [isNewAsset, setIsNewAsset] = useState(true);
   const [statePopupDel, setStatePopupDel] = useState(false);
   const [statePopupMoveMoney, setStatePopupMoveMoney] = useState(false);
+  
+  const [delToAsset, setDelToAsset] = useState<delTo[]>([])
   const [newDataAssetInput, setNewDataAssetInput] = useState({
     Name: '',
     Total_money: '',
     End_year: '',
     type: 'home',
-    Status: true,
+    Status: 'In_Progress',
     current_money: 0,
   })
-console.log(JSON.stringify(dataAssetInput, null,2 ))
+// console.log(JSON.stringify(dataAssetInput, null,2 ))
   const categories = [
     { id: 1, tag:'home', label: 'บ้าน' },
     { id: 2, tag:'child', label: 'บุตร'},
@@ -56,18 +69,17 @@ console.log(JSON.stringify(dataAssetInput, null,2 ))
   useEffect(() => {
     if (dataEditAsset !== null) {
       const assetData = dataAssetInput[dataEditAsset];
-      console.log('assetData',assetData);
-      
       setNewDataAssetInput(assetData);
-      if (!assetData.hasOwnProperty('asset_id')) {
+  
+      if (!assetData.hasOwnProperty("asset_id")) {
         setIsNewAsset(true);
-      }else{
+      } else {
         setIsNewAsset(false);
       }
     }
-  }, []);
+  }, [dataEditAsset,dataAssetInput]);
 
-console.log('isNewAsset------------',isNewAsset)
+
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
       setIsFully(true);
@@ -106,7 +118,7 @@ console.log('isNewAsset------------',isNewAsset)
       Total_money: '',
       End_year: '',
       type: 'home',
-      Status: true,
+      Status: 'In_Progress',
       current_money: 0,
 
     });
@@ -123,7 +135,7 @@ console.log('isNewAsset------------',isNewAsset)
       Total_money: '',
       End_year: '',
       type: 'home',
-      Status: true,
+      Status: 'In_Progress',
       current_money: 0,
     });
     setType('');
@@ -159,7 +171,7 @@ console.log('isNewAsset------------',isNewAsset)
       Total_money: '',
       End_year: '',
       type: 'home',
-      Status: true,
+      Status: 'In_Progress',
       current_money: 0,
     });
     setType('');
@@ -167,22 +179,22 @@ console.log('isNewAsset------------',isNewAsset)
     
   }
 
-  const handleDelAsset = () => {
-    const newData: any[] = dataAssetInput.filter((_: any, index: number) => index !== dataEditAsset);
-    setDataAssetInput(newData);
+  // const handleDelAsset = () => {
+  //   const newData: any[] = dataAssetInput.filter((_: any, index: number) => index !== dataEditAsset);
+  //   setDataAssetInput(newData);
 
-    setDataEditAsset(null);
-    setNewDataAssetInput({
-      Name: '',
-      Total_money: '',
-      End_year: '',
-      type: 'home',
-      Status: true,
-      current_money: 0,
-    });
-    setType('');
-    setStateFutureUse(false);
-  }
+  //   setDataEditAsset(null);
+  //   setNewDataAssetInput({
+  //     Name: '',
+  //     Total_money: '',
+  //     End_year: '',
+  //     type: 'home',
+  //     Status: 'In_Progress',
+  //     current_money: 0,
+  //   });
+  //   setType('');
+  //   setStateFutureUse(false);
+  // }
 
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -222,7 +234,51 @@ console.log('isNewAsset------------',isNewAsset)
       setStatePopupDel(false);
       setStatePopupMoveMoney(false);
     });
+    setDelToAsset([])
   }
+
+  const handleDelAsset = () => {
+    try {
+      const deleteAsset = async () => {
+        const token = await AsyncStorage.getItem('token');
+        const formData = new FormData();
+        delToAsset.forEach((item) => {
+          formData.append("type", item.giveTo.name !== 'เงินเกษียณ' ? item.giveTo.name !== 'บ้านพักคนชรา' ? 'nursingHouses' : 'asset' : 'retirement');
+          formData.append("name", item.giveTo.name);
+          formData.append("amount", item.giveTo.amount.toString());
+        });
+        const response = await fetch(`${Port.BASE_URL}/asset/${delToAsset[0].asset_id}`, {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          },
+          body: formData,
+        });
+        const data = await response.json();
+        console.log('data', data);
+        onClose();
+
+        setDataEditAsset(null);
+        setNewDataAssetInput({
+          Name: '',
+          Total_money: '',
+          End_year: '',
+          type: 'home',
+          Status: 'In_Progress',
+          current_money: 0,
+        });
+        setType('');
+        setStateFutureUse(false);
+      };
+      deleteAsset();
+      setRefresh(!refresh);
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
 
   return (
     <>
@@ -235,7 +291,6 @@ console.log('isNewAsset------------',isNewAsset)
       {statePopupMoveMoney && 
       <TouchableOpacity 
       activeOpacity={1}
-      onPress={()=>onClose()}
       className=' absolute flex-1 h-screen w-full justify-center items-center z-30' style={{ flex: 1, top: 0, left:0}}>
       <BlurView
         style={{
@@ -254,8 +309,8 @@ console.log('isNewAsset------------',isNewAsset)
       ]}
       onStartShouldSetResponder={() => true}
       onTouchEnd={(event) => event.stopPropagation()}
-      className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center'>
-          <MoveMoney/>
+      className='w-10/12 bg-neutral rounded-2xl shadow-lg flex items-center py-5'>
+          <MoveMoney onClose={onClose} newDataAssetInput={newDataAssetInput} delToAsset={delToAsset} setDelToAsset={setDelToAsset} handleDelAsset={handleDelAsset}/>
       </Animated.View>
     </TouchableOpacity>}
       {statePopupDel && 
@@ -388,8 +443,7 @@ console.log('isNewAsset------------',isNewAsset)
                 />
               </View>
             </View>
-            
-            {!isNewAsset && 
+            {!isNewAsset && newDataAssetInput.Status !== 'Completed' && 
             <>
               <View className='w-full h-[1] bg-neutral2'></View>
               
@@ -400,7 +454,15 @@ console.log('isNewAsset------------',isNewAsset)
                 <View 
                   id='BtnChangeNotification'
                   className='flex flex-row gap-5 justify-center items-center'>
-                      <CheckBox toggle={newDataAssetInput.Status} setToggle={(status) => setNewDataAssetInput({ ...newDataAssetInput, Status: status })}/>
+                      <CheckBox 
+                        toggle={newDataAssetInput.Status === 'In_Progress'} 
+                        setToggle={(value) => 
+                          setNewDataAssetInput(prevState => ({
+                            ...prevState,
+                            Status: value ? 'In_Progress' : 'Paused'
+                          }))
+                        } 
+                      />
                 </View>
               </View>
             </>}

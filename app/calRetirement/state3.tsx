@@ -6,14 +6,7 @@ import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDe
 import WideBtn from '../components/WideBtn';
 import { useNumberFormat } from "@/app/NumberFormatContext";
 
-interface delTo {
-  asset_id: string;
-  giveTo:{
-    type: string;
-    name: string;
-    amount: number;
-  }
-}
+
 interface AssetItem {
   Name: string;
   Total_money: number;
@@ -34,9 +27,8 @@ interface stateProps{
   setStateFutureUse: (state: boolean) => void;
   setDataAssetInput: (data: any) => void;
   setDataEditAsset: (data: number) => void;
-  setDelToAsset: React.Dispatch<React.SetStateAction<delTo[]>>;
 }
-const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, setStateFutureUse, setDataAssetInput, setDataEditAsset, setDelToAsset }) => {
+const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, setStateFutureUse, setDataAssetInput, setDataEditAsset }) => {
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const [isFully, setIsFully] = useState(false);
@@ -73,7 +65,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
     }
   };
 
-
+console.log('dataAssetInput',dataAssetInput)
 
   return (
     <View 
@@ -123,8 +115,8 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1 font-bold">{item.Name}</TextF>
                             <View className="mx-1 flex flex-row gap-2 items-center">
-                              <View className={ `px-3 rounded-lg ${item.Status?'bg-primary2':'bg-unselectMenu'}`}>
-                                <TextF className=" text-neutral text-lg py-1">{item.Status?'ดำเนินการ':'หยุดพัก'}</TextF>
+                              <View className={ `px-3 rounded-lg ${item.Status === 'In_Progress' ?'bg-primary2':item.Status === 'Completed' ? 'bg-oktext':'bg-unselectMenu'}`}>
+                                <TextF className=" text-neutral text-lg py-1">{item.Status === 'In_Progress' ?'ดำเนินการ': item.Status === 'Completed' ? 'สำเร็จแล้ว':'หยุดพัก'}</TextF>
                               </View>
                               {/* <FontAwesome6 name="pen" size={12} color="#F68D2B" /> */}
                             </View>
@@ -134,7 +126,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
                             <TextF className="text-primary text-lg py-1">{addCommatoNumber(item.Total_money)} <TextF className='text-normalText'>บาท</TextF></TextF>
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
-                            <TextF className="text-normalText text-lg py-1">ออมเงินไปแล้ว</TextF>
+                            <TextF className="text-normalText text-lg py-1">เงินที่ออมได้</TextF>
                             <TextF className="text-primary text-lg py-1">{addCommatoNumber(item.current_money)} <TextF className='text-normalText'>บาท</TextF></TextF>
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
