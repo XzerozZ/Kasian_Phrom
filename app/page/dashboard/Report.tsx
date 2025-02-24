@@ -170,17 +170,17 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh }) => {
           setDataHouse(dataHouse.result);
           setDataPart(prev => [...prev, { title: 'บ้านพักคนชรา', amount: dataHouse.result.current_money }]);
         }
+        const sortAsset = dataAsset.result.sort((a: any, b: any) => new Date(a.CreatedAt).getTime() - new Date(b.CreatedAt).getTime());
         
         if (dataAsset?.result) {
-          console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2));
-          setDataAsset(dataAsset.result);
+          setDataAsset(sortAsset);
         
-          dataAsset.result.forEach((item: any) => {
+          sortAsset.forEach((item: any) => {
             setDataPart(prev => [...prev, { title: item.name, amount: item.current_money }]);
           });
         
           setSeries2(prevSeries => {
-            const newSeries = dataAsset.result.map((item: any, index:number) => ({
+            const newSeries = sortAsset.map((item: any, index:number) => ({
               value: item.total_cost,
               color: colorsCat[index % colorsCat.length],
             }));
