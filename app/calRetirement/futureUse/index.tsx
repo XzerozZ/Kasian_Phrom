@@ -243,10 +243,11 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
         const token = await AsyncStorage.getItem('token');
         const formData = new FormData();
         delToAsset.forEach((item) => {
-          formData.append("type", item.giveTo.name !== 'เงินเกษียณ' ? item.giveTo.name !== 'บ้านพักคนชรา' ? 'nursingHouses' : 'asset' : 'retirement');
+          formData.append("type", item.giveTo.name !== 'เงินเกษียณ' ? item.giveTo.name !== 'บ้านพักคนชรา' ?  'asset' : 'house' : 'retirementplan');
           formData.append("name", item.giveTo.name);
           formData.append("amount", item.giveTo.amount.toString());
         });
+        console.log(formData)
         const response = await fetch(`${Port.BASE_URL}/asset/${delToAsset[0].asset_id}`, {
           method: 'DELETE',
           headers: {
@@ -402,7 +403,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
                     placeholderTextColor={'#B0B0B0'}
                     keyboardType='numeric'
                     value={addCommatoNumber(newDataAssetInput.Total_money)}
-                    onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Total_money: text})}
+                    onChangeText={(text)=>setNewDataAssetInput({...newDataAssetInput, Total_money: text.replace(/,/g, '')})}
                     onBlur={() => {
                       const numericText = newDataAssetInput.Total_money.replace(/[^0-9]/g, '');
                       setNewDataAssetInput({ ...newDataAssetInput, Total_money: numericText });

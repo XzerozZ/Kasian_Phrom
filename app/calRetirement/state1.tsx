@@ -168,7 +168,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='RetirementAgeInput'
-                      value={addCommatoNumber(dataInput.Retirement_age)}
+                      value={dataInput.Retirement_age}
                       keyboardType='numeric'
                       maxLength={2}
                       onChangeText={(text) => {
@@ -194,7 +194,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='ExpLifespanInput'
-                      value={addCommatoNumber(dataInput.Exp_lifespan)}
+                      value={dataInput.Exp_lifespan}
                       keyboardType='numeric'
                       maxLength={3}
                       onChangeText={(text) => {

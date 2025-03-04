@@ -353,7 +353,7 @@ const handleSaveEditPlant = async () => {
                       value={addCommatoNumber(dataInput.Expected_monthly_expenses)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Expected_monthly_expenses: text });
+                        setDataInput({ ...dataInput, Expected_monthly_expenses: text.replace(/,/g, '') });
                       }}
                       className={`h-16 text-end text-lg text-primary pr-2`}/>
                       <TextF className={` text-lg text-primary`}>บาท</TextF>
@@ -370,7 +370,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualExpenseIncreaseInput'
-                      value={addCommatoNumber(dataInput.Annual_expense_increase)}
+                      value={dataInput.Annual_expense_increase}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -402,7 +402,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualSavingsReturnInput'
-                      value={addCommatoNumber(dataInput.Annual_savings_return)}
+                      value={dataInput.Annual_savings_return}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -434,7 +434,7 @@ const handleSaveEditPlant = async () => {
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='AnnualInvestmentReturnInput'
-                      value={addCommatoNumber(dataInput.Annual_investment_return)}
+                      value={dataInput.Annual_investment_return}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {

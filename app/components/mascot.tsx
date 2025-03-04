@@ -19,7 +19,7 @@ const Mascot: React.FC<MascotProps> = ({children,className,  ...rest}) => {
         {...rest}
         >{children}
         <Image
-            source={Logo}
+            source={Logo2}
             className="w-full h-full object-cover rounded-md"
         />
         </View>

@@ -10,13 +10,12 @@ const addCommatoNumber = (num: any, decimalPlaces: number = 0) => {
   }
 
   // แปลงเป็นตัวเลข, ปัดเศษทศนิยม, และแปลงเป็นสตริง
-  const roundedNum = Number(num).toFixed(decimalPlaces);
+  const roundedNum = Math.floor(Number(num) * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces);
 
   // เพิ่ม comma คั่นหลักพัน
-  return roundedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return roundedNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-// Provider สำหรับใช้ในแอป
 const NumberFormatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <NumberFormatContext.Provider value={{ addCommatoNumber }}>

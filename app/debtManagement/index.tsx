@@ -9,7 +9,7 @@ import AddDebt from './addDebt';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
-
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 
 interface DebtManagementProps{
@@ -53,6 +53,9 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
   const [refresh, setRefresh] = useState(false);
   const [dataDebt, setDataDebt] = useState<DebtItem[]>([]);
   const [debtSelect, setDebtSelect] = useState('');
+  const { addCommatoNumber } = useNumberFormat();
+
+
 
   useEffect(() => {
     setStateNavbar(false);
@@ -279,19 +282,19 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
           <View className='mt-2 flex justify-center items-center bg-bg_debt mx-8 p-3 pt-4 pb-5 rounded-3xl shadow'>
             <View className='flex w-full items-center gap-5'>
               <TextF className='text-lg'>ต้องชำระอีกในเดือนนี้</TextF>
-              <TextF className='text-3xl scale-125'>{infoDebt?.total_transaction_amount}</TextF>
+              <TextF className='text-3xl scale-125'>{addCommatoNumber(infoDebt?.total_transaction_amount)}</TextF>
               <TextF>บาท</TextF>
             </View>
             <View className='mt-5 w-11/12 h-[2] bg-err'></View>
             <TextF className='text-lg my-3 py-3'>หนี้สินทั้งหมด</TextF>
             <View className='flex flex-row w-full gap-3 '>
                 <View className='flex-1 items-center gap-3 pt-5'>
-                <TextF className='text-3xl scale-125'>{infoDebt?.total_loan}</TextF>
+                <TextF className='text-3xl scale-125'>{addCommatoNumber(infoDebt?.total_loan)}</TextF>
                 <TextF>รายการ</TextF>
               </View>
               <View className=' w-[2] bg-err'></View>
               <View className='flex-1 items-center gap-3 pt-5'>
-                <TextF className='text-3xl scale-125'>{infoDebt?.total_amount}</TextF>
+                <TextF className='text-3xl scale-125'>{addCommatoNumber(infoDebt?.total_amount)}</TextF>
                 <TextF>บาท</TextF>
               </View>
             </View>
@@ -336,7 +339,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                     </View>
                     <View className="flex flex-row gap-2 items-center justify-between"> 
                       <View className="flex flex-row gap-2 items-end">
-                        <TextF className={`text-2xl font-bold ${item.status === 'pending' || item.status === 'success' ? 'text-primary':item.status === 'late'?'text-err':item.status === 'rest'?'text-label':''}`}>{item.loan.monthly_expenses}</TextF>
+                        <TextF className={`text-2xl font-bold ${item.status === 'pending' || item.status === 'success' ? 'text-primary':item.status === 'late'?'text-err':item.status === 'rest'?'text-label':''}`}>{addCommatoNumber(item.loan.monthly_expenses)}</TextF>
                         <TextF className="text-lg ">บาท</TextF>
                       </View>
                       <TouchableOpacity
@@ -352,14 +355,14 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
                     <View className="flex flex-row justify-between gap-2 mt-5">
                       <TextF className="text-lg">เหลือ</TextF>
                       <View className="flex flex-row gap-2 items-end">
-                        <TextF className="text-lg">{item.loan.remaining_months}</TextF>
+                        <TextF className="text-lg">{addCommatoNumber(item.loan.remaining_months)}</TextF>
                         <TextF className="text-lg">เดือน</TextF>
                       </View>
                     </View>
                     <View className="flex flex-row justify-between">
                       <TextF className="text-lg">คิดเป็นเงินที่ต้องชำระอีก</TextF>
                       <View className="flex flex-row gap-3 items-end">
-                        <TextF className="text-lg">{item.total_amount}</TextF>
+                        <TextF className="text-lg">{addCommatoNumber(item.total_amount)}</TextF>
                         <TextF className="text-lg">บาท</TextF>
                       </View>
                     </View>

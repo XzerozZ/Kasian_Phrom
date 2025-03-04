@@ -40,6 +40,7 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
 
   const [dataAssetNow, setDataAssetNow] = useState<{ asset_id: string; Name: string; Total_money: string; End_year: string; type: string; Status: string; current_money: string; }[]>([]);
   const [isHaveHome, setIsHaveHome] = useState(false);
+  const [stateConfirm, setStateConfirm] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -75,6 +76,7 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
         if (dataHouse.result.NursingHouse.nh_id !== '00001' && dataHouse.result.status === 'In_Progress') {
           setIsHaveHome(true);
         }
+
         setSelectedOptionPriority(optionsPriority[0].title);
 
       } catch (e) {
@@ -86,11 +88,18 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
 
 
 
-  const setOption = () => {
 
+  const setOption = () => {
+    if (optionsPriority.length === 0) {
+      return;
+    }
     setOptionsPriority((prev) => {
       let newOptions = [...prev];
-  
+
+      if ( !prev.some(opt => opt.title === 'เงินเกษียณ')) {
+        newOptions.unshift({ title: 'เงินเกษียณ' });
+      }
+      
       if (isHaveHome && !prev.some(opt => opt.title === 'บ้านพักคนชรา')) {
         newOptions.push({ title: 'บ้านพักคนชรา' });
       }
@@ -103,14 +112,14 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
       const setOption = newOptions.filter((item) => 
         !delToAsset.find((asset) => asset.giveTo.name === item.title)
       ).filter((item) => item.title !== newDataAssetInput.Name);
-      console.log('setOption',setOption)
+
+      console.log('setOption--------------***********',setOption)
       setSelectedOptionPriority(setOption[0].title)
       return setOption;
     });
-    
+  
   }
 
-  console.log('delToAsset',delToAsset)
 
 
 
@@ -129,10 +138,10 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
       });
       return newDelTo;
     });
-    
     setStatePage(0)
     resetFrom()
   };
+
   const resetFrom = () => {
     setIsFill(false);
     setAmount('');
@@ -143,9 +152,9 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
  useEffect(() => {
   if (isFill){
     if (editMoveMoney !== null){
-      setAmount((parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount).toLocaleString())
+      setAmount((newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount).toLocaleString().replace(/[,]/g, ''))
     }else{
-      setAmount((newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0)).toLocaleString())
+      setAmount((newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0)).toLocaleString().replace(/[,]/g, ''))
     }
   }
  }),[isFill]
@@ -173,6 +182,7 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
 };
 
 const handleDel = () => {
+
   setDelToAsset((prev) => {
     let newDelTo = [...prev];
     newDelTo = newDelTo.filter((item) => item.giveTo.name !== editMoveMoney?.giveTo.name);
@@ -185,26 +195,19 @@ const handleDel = () => {
 
 useEffect(() => {
   if (isSelected && dataAssetNow.length > 0) {
-    const numAsset = dataAssetNow.length+1; // ใช้ dataAssetNow.length แทน setOptionsPriority.length
+    let numAsset = dataAssetNow.length;
+    if (isHaveHome) { numAsset +=1 }
     const moneyPerAsset = Math.floor(
-      parseInt(addCommatoNumber(newDataAssetInput.current_money || "0"))/ numAsset 
+      parseInt(addCommatoNumber(newDataAssetInput.current_money || "0").replace(/[,]/g, ''))/ numAsset 
     );
-
+    const Remnant = (parseInt(addCommatoNumber(newDataAssetInput.current_money || "0").replace(/[,]/g, ''))) - moneyPerAsset * numAsset
     setDelToAsset([
       {
       asset_id: newDataAssetInput.asset_id,
       giveTo: {
         type: 'เงินเกษียณ',
         name: 'เงินเกษียณ',
-        amount: isNaN(moneyPerAsset) ? 0 : moneyPerAsset,
-      },
-      },
-      {
-      asset_id: newDataAssetInput.asset_id,
-      giveTo: {
-        type: 'บ้านพักคนชรา',
-        name: 'บ้านพักคนชรา',
-        amount: isNaN(moneyPerAsset) ? 0 : moneyPerAsset,
+        amount: isNaN(moneyPerAsset) ? 0 : moneyPerAsset + Remnant,
       },
       },
       ...dataAssetNow
@@ -218,9 +221,62 @@ useEffect(() => {
         },
       }))
     ]);
+    if (isHaveHome) {
+      setDelToAsset((prev) => [
+      prev[0],
+      {
+        asset_id: newDataAssetInput.asset_id,
+        giveTo: {
+        type: 'บ้านพักคนชรา',
+        name: 'บ้านพักคนชรา',
+        amount: isNaN(moneyPerAsset) ? 0 : moneyPerAsset,
+        },
+      },
+      ...prev.slice(1),
+      ]);
+    }
   }
 }, [isSelected, dataAssetNow, newDataAssetInput.current_money]);
 
+
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+  useEffect(() => {
+    if (stateConfirm) {
+      // แสดง Popup (fade-in + scale-up)
+      Animated.parallel([
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+
+  }, [stateConfirm]);
+
+  const onCloseConfirm =() => {
+    Animated.parallel([
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.8,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setStateConfirm(false);
+    });
+  }
 
 
 
@@ -258,7 +314,7 @@ useEffect(() => {
           <ScrollView className={`w-full overflow-auto mt-2 pb-2 ${delToAsset.length !== dataAssetNow.length+1 ?' max-h-[160]':' max-h-[220]'}`}>
             {delToAsset.map((item, index) => (
               <TouchableOpacity 
-              onPress={() => {setEditMoveMoney(item),setSelectedOptionPriority(item.giveTo.type),setAmount(item.giveTo.amount.toLocaleString()),setStatePage(1)}}
+              onPress={() => {setEditMoveMoney(item),setSelectedOptionPriority(item.giveTo.type),setAmount(item.giveTo.amount.toLocaleString().replace(/[,]/g, '')),setStatePage(1)}}
               key={index} className="w-full flex-row justify-between items-center px-5 py-3 bg-unselectInput rounded-lg mt-2">
                 <View className="flex-row items-center w-1/2 justify-center">
                   <TextF className=" text-normalText text-lg">{item.giveTo.name}</TextF> 
@@ -269,8 +325,8 @@ useEffect(() => {
               </TouchableOpacity>
             ))}
           </ScrollView>
-          {delToAsset.length !== dataAssetNow.length+1 && parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) > 0 &&
-          <TouchableOpacity 
+          {(delToAsset.length !== (isHaveHome ? dataAssetNow.length+1 : dataAssetNow.length) && parseInt(addCommatoNumber(newDataAssetInput.current_money).replace(/[,]/g, '')) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) > 0)
+          &&<TouchableOpacity 
           onPress={() => {setStatePage(1),setOption()}}
             className='w-full flex-row justify-center items-center px-5 h-12 border border-dashed border-primary rounded-lg mt-5'>
             <TextF  className='text-primary'>เพิ่ม</TextF>
@@ -288,9 +344,9 @@ useEffect(() => {
             </TouchableOpacity>
             <TouchableOpacity 
             id='BtnSaveFutureUse'
-            onPress={()=> handleDelAsset()}
+            onPress={()=> setStateConfirm(true)}
             className={`flex-1 h-12 rounded-lg justify-center items-center bg-err`}>
-              <TextF className='text-neutral text-lg'>ยืนยันการลบ</TextF>
+              <TextF className='text-neutral text-lg'>ลบ</TextF>
             </TouchableOpacity>
           </View>
           
@@ -302,14 +358,14 @@ useEffect(() => {
       <>
         <TextF className='text-normalText text-lg'>
           เงินที่ค้างอยู่ <Text style={{fontFamily: 'SarabunBold'}} className='text-primary text-xl'>
-            {editMoveMoney !== null ? parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount 
-            : parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0)}
+            {editMoveMoney !== null ? addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount) 
+            : addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0))}
             </Text> บาท
         </TextF>
         <View className='w-full justify-between items-center px-10'>
           <TextF  className='text-label w-full mt-2'>ประเภท</TextF> 
           <View className='w-full h-10 mt-3'>
-              <DropdownCustom options={editMoveMoney !== null? [] : optionsPriority} selectedOption={selectedOptionPriority} setSelectedOption={setSelectedOptionPriority}/>
+            <DropdownCustom options={editMoveMoney !== null? [] : optionsPriority} selectedOption={selectedOptionPriority} setSelectedOption={setSelectedOptionPriority}/>
           </View>
           <TextF  className='text-label w-full mt-5'>จำนวน</TextF>
           <TextInput
@@ -320,16 +376,15 @@ useEffect(() => {
             onChangeText={(text)=>{
               let numericText = 0;
               if (editMoveMoney !== null){
-                numericText = parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount ;
+                numericText = parseInt(addCommatoNumber(newDataAssetInput.current_money).replace(/[,]/g, '')) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0) + editMoveMoney.giveTo.amount ;
               }else{
-                numericText = parseInt(addCommatoNumber(newDataAssetInput.current_money)) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0);
+                numericText = parseInt(addCommatoNumber(newDataAssetInput.current_money).replace(/[,]/g, '')) - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0);
               }
-              if (parseInt(text) >= numericText) {
-                setAmount(numericText.toLocaleString());
+              if (parseInt(text.replace(/[,]/g, '')) >= numericText) {
                 setIsFill(true)
               }else{
-              setAmount( text.replace(/[^0-9]/g, ''))
-              setIsFill(false)
+                setAmount( text.replace(/[^0-9]/g, '').replace(/[,]/g, ''))
+                setIsFill(false)
               }}}
             className={`h-12 text-lg text-primary pl-5 w-full border-b border-unselectMenu`}/>
         </View>
@@ -352,12 +407,66 @@ useEffect(() => {
           </TouchableOpacity>
           <TouchableOpacity 
           id='BtnSaveFutureUse'
-          onPress={()=> amount ? editMoveMoney !== null ?handleEditMoneyToMove():(handleAddMoneyToMove()) : null}
+          onPress={()=> amount ? editMoveMoney !== null ? handleEditMoneyToMove(): handleAddMoneyToMove() : null}
           className={`flex-1 h-12 rounded-lg justify-center items-center ${amount ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>บันทึก</TextF>
           </TouchableOpacity>
         </View>
 
+      </>}
+      {stateConfirm &&
+      <>
+      <BlurView
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+              intensity={80}
+              tint="extraLight" // หรือใช้ "dark", "extraLight"
+            />
+        <Animated.View 
+        style={[
+          { opacity: opacityAnim, transform: [{ scale: scaleAnim }], top:'30%'}
+        ]}
+        onStartShouldSetResponder={() => true}
+        onTouchEnd={(event) => event.stopPropagation()}
+        className='w-10/12 bg-neutral rounded-2xl shadow-lg flex items-center py-5 absolute'>
+            <View
+            className='w-full h-52 w-500 justify-center items-center'>
+              <View
+                className=' h-18 flex justify-center items-center mt-5 px-5 gap-10 bg-none'>
+                
+                {parseInt(addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0)).replace(/[,]/g, '')) > 0 ?
+                <View className='w-full items-center px-5 gap-3'>
+                  <TextF  className='text-err text-xl'>คุณยังมีเงินค้างอยู่</TextF>
+                  <TextF  className='text-err text-2xl'>{addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0))} บาท</TextF>
+                  <TextF  className='text-err '>หากลบแล้วจะไม่สามารถกู้คืนได้</TextF>
+                </View>
+                :<View className='w-full items-center px-5'>
+                  <TextF  className='text-err text-xl'>ยืนยันการลบ</TextF>
+                  <TextF  className='text-err '>หากลบแล้วจะไม่สามารถกู้คืนได้</TextF>
+                </View>
+                }
+                <View className='flex flex-row gap-4'>
+                  <TouchableOpacity
+                  onPress={() => {onCloseConfirm()}}
+                  className='flex-1 h-12 rounded-lg border border-primary justify-center items-center'>
+                    <TextF className='text-primary text-lg'>ยกเลิก</TextF>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                  id='BtnSaveFutureUse'
+                  onPress={()=> handleDelAsset()}
+                  className={`flex-1 h-12 rounded-lg justify-center items-center bg-err`}>
+                    <TextF className='text-neutral text-lg'>ยืนยันการลบ</TextF>
+                  </TouchableOpacity>
+                </View>
+                
+              </View>
+            </View>
+        </Animated.View>
       </>}
     </>
   )

@@ -318,7 +318,8 @@ console.log(optionsPriority)
             placeholderTextColor={'#B0B0B0'}
             keyboardType="numeric"
             value={addCommatoNumber(amount)}
-            onChangeText={setAmount}
+            onChangeText={(text)=>{
+              setAmount(text.replace(/,/g, ''))}}
             className={`h-12 mx-5 px-3 mt-5 bg-neutral border-b text-primary ${amount == '' ?'border-unselectInput' :'border-primary'}`}/>
 
 

@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '../../Port';
 import HeadTitle from '../components/headTitle';
 import { useMemo } from 'react';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 
 
 interface AddDebtProps{
@@ -39,6 +40,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
   ];
 
   const isMore = useMemo(() => !categories.some(category => category.tag === newDataAssetInput.type), [newDataAssetInput.type]);
+  const { addCommatoNumber } = useNumberFormat();
   
   useEffect(() => {
     if (isMore) {
@@ -259,7 +261,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
             <View className='flex flex-row  justify-between items-center h-16'>
               <View> 
                 <TextF className='text-lg text-normalText'>จำนวนเงินที่ต้องผ่อน/เดือน</TextF>
-                <TextF className='text-sm text-label py-1'>เริ่มนับตั้งแต่เดือนปัจจุบันเป็นต้นไป</TextF>
+                <TextF className='text-xs text-label'>เริ่มนับตั้งแต่เดือนปัจจุบันเป็นต้นไป</TextF>
               </View>
               <View className='w-18 flex flex-row justify-center items-center'>
                   <TextInput 
@@ -267,9 +269,9 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                     placeholderTextColor={'#B0B0B0'}
                     keyboardType='numeric'
                     readOnly={debtSelect !== ''}
-                    value={newDataAssetInput.installmentPerMonth}
+                    value={addCommatoNumber(newDataAssetInput.installmentPerMonth)}
                     onChangeText={(text) =>
-                      setNewDataAssetInput(prev => ({ ...prev, installmentPerMonth: text }))
+                      setNewDataAssetInput(prev => ({ ...prev, installmentPerMonth: text.replace(/,/g, '') }))
                     }
                     className={`h-16 text-end text-lg pr-2  ${debtSelect !== '' ? 'text-label':'text-primary '}`}
                   />
@@ -289,9 +291,9 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                   maxLength={4}
                   keyboardType="numeric"
                   readOnly={debtSelect !== ''}
-                  value={newDataAssetInput.monthAmount}
+                  value={addCommatoNumber(newDataAssetInput.monthAmount)}
                   onChangeText={(text) =>
-                    setNewDataAssetInput(prev => ({ ...prev, monthAmount: text }))
+                    setNewDataAssetInput(prev => ({ ...prev, monthAmount: text.replace(/,/g, '') }))
                   }
                   className={`h-16 text-end text-lg pr-2 ${debtSelect !== '' ? 'text-label':'text-primary '}`}
                   />
