@@ -5,8 +5,8 @@ import Svg, { Defs, ClipPath, Path, Rect, Circle } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '@/Port';
 import { BlurView } from 'expo-blur';
-import TextF from '../../components/TextF';
-import DropdownCustom from '../../components/DropdownCustom';
+import TextF from '../components/TextF';
+import DropdownCustom from '../components/DropdownCustom';
 import { CheckBox } from '@rneui/themed';
 import { useNumberFormat } from "@/app/NumberFormatContext";
 
@@ -121,7 +121,7 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
   }
 
 
-
+console.log('newDataAssetInput:', newDataAssetInput)
 
   const handleAddMoneyToMove = () => {
     
@@ -146,6 +146,7 @@ const MoveMoney: React.FC<MoveMoneyProps> = ({ onClose, newDataAssetInput, delTo
     setIsFill(false);
     setAmount('');
     setEditMoveMoney(null)
+    
   }
   
 
@@ -221,7 +222,7 @@ useEffect(() => {
         },
       }))
     ]);
-    if (isHaveHome) {
+    if (isHaveHome && newDataAssetInput.Name != 'บ้านพักคนชรา') {
       setDelToAsset((prev) => [
       prev[0],
       {
@@ -286,7 +287,7 @@ useEffect(() => {
       <View className='w-full h-[450] justify-between'>
         <View className='w-full items-center px-5'>
           <TextF className='text-normalText text-lg '>
-            ตอนนี้คุณมีเงินค้างอยู่ในทรัพย์สินนี้ 
+            {newDataAssetInput.Name == 'บ้านพักคนชรา'?'ตอนนี้คุณมีเงินค้างอยู่ที่บ้านพักคนชรา':'ตอนนี้คุณมีเงินค้างอยู่ในทรัพย์สินนี้'}
             <Text style={{fontFamily: 'SarabunBold'}} className='text-primary text-xl'> {addCommatoNumber(newDataAssetInput.current_money)} </Text> 
             บาท
           </TextF>
@@ -342,12 +343,19 @@ useEffect(() => {
             className='flex-1 h-12 rounded-lg border border-primary justify-center items-center'>
               <TextF className='text-primary text-lg'>ยกเลิก</TextF>
             </TouchableOpacity>
-            <TouchableOpacity 
+            {newDataAssetInput.Name == 'บ้านพักคนชรา'
+            ?<TouchableOpacity 
+            id='BtnSaveFutureUse'
+            onPress={()=> setStateConfirm(true)}
+            className={`flex-1 h-12 rounded-lg justify-center items-center bg-primary`}>
+              <TextF className='text-neutral text-lg'>ย้าย</TextF>
+            </TouchableOpacity>
+            :<TouchableOpacity 
             id='BtnSaveFutureUse'
             onPress={()=> setStateConfirm(true)}
             className={`flex-1 h-12 rounded-lg justify-center items-center bg-err`}>
               <TextF className='text-neutral text-lg'>ลบ</TextF>
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
           
         </View>
@@ -442,12 +450,12 @@ useEffect(() => {
                 {parseInt(addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0)).replace(/[,]/g, '')) > 0 ?
                 <View className='w-full items-center px-5 gap-3'>
                   <TextF  className='text-err text-xl'>คุณยังมีเงินค้างอยู่</TextF>
-                  <TextF  className='text-err text-2xl'>{addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0))} บาท</TextF>
+                  <TextF  className={`text-2xl ${newDataAssetInput.Name == 'บ้านพักคนชรา'?'text-primary':'text-err'}`}>{addCommatoNumber(newDataAssetInput.current_money - delToAsset.reduce((acc, item) => acc + item.giveTo.amount, 0))} บาท</TextF>
                   <TextF  className='text-err '>หากลบแล้วจะไม่สามารถกู้คืนได้</TextF>
                 </View>
                 :<View className='w-full items-center px-5'>
-                  <TextF  className='text-err text-xl'>ยืนยันการลบ</TextF>
-                  <TextF  className='text-err '>หากลบแล้วจะไม่สามารถกู้คืนได้</TextF>
+                  <TextF  className={`text-xl ${newDataAssetInput.Name == 'บ้านพักคนชรา'?'text-primary':'text-err'}`}>{newDataAssetInput.Name == 'บ้านพักคนชรา'?'ยืนยันการย้าย':'ยืนยันการลบ'}</TextF>
+                  <TextF  className={`text-err`}>หากลบแล้วจะไม่สามารถกู้คืนได้</TextF>
                 </View>
                 }
                 <View className='flex flex-row gap-4'>
@@ -459,8 +467,8 @@ useEffect(() => {
                   <TouchableOpacity 
                   id='BtnSaveFutureUse'
                   onPress={()=> handleDelAsset()}
-                  className={`flex-1 h-12 rounded-lg justify-center items-center bg-err`}>
-                    <TextF className='text-neutral text-lg'>ยืนยันการลบ</TextF>
+                  className={`flex-1 h-12 rounded-lg justify-center items-center ${newDataAssetInput.Name == 'บ้านพักคนชรา'?'bg-primary':'bg-err'}`}>
+                    <TextF className='text-neutral text-lg'>{newDataAssetInput.Name == 'บ้านพักคนชรา'?'ยืนยันการย้าย':'ยืนยันการลบ'}</TextF>
                   </TouchableOpacity>
                 </View>
                 

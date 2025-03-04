@@ -7,7 +7,7 @@ import WideBtn from '../../components/WideBtn';
 import { useMemo } from 'react';
 import CheckBox from '../../components/checkBox';
 import { useNumberFormat } from "@/app/NumberFormatContext";
-import MoveMoney from './moveMoney';
+import MoveMoney from '../moveMoney';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '@/Port';
