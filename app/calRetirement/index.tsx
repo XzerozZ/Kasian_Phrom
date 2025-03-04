@@ -18,22 +18,25 @@ import DetailNursingHouses from '../detailnursingHouses';
 import FavNursingHouses from '../favnursingHouses';
 
 
-  interface LayoutEvent {
-    nativeEvent: {
-      layout: {
-        width: number;
-      };
-    };
-  }
 
-  interface Asset {
-    asset_id:string
-    Total_money: string;
-    End_year: string;
-    type: string;
-    Name: string;
-    Status: boolean
-  }
+
+interface LayoutEvent {
+  nativeEvent: {
+    layout: {
+      width: number;
+    };
+  };
+}
+
+interface Asset {
+  asset_id:string
+  Total_money: string;
+  End_year: string;
+  type: string;
+  Name: string;
+  Status: string;
+  current_money: string;
+}
 
 
 interface CalRetirementProps{
@@ -63,7 +66,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
     if (formClick === 'pickhome') {
       setState(4);
     }else{
-      setState(1);
+      setState(4); // 1
     }
   }, [])
 
@@ -147,12 +150,11 @@ const [dataInput, setDataInput] = useState({
   Annual_investment_return: '5',
 })
 
-
 const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
 const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
 const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
 const [havePlant, setHavePlant] = useState(false)
-
+const [refresh, setRefresh] = useState(false);
 
 const scrollViewRef = useRef<ScrollView>(null);
 
@@ -233,10 +235,13 @@ useEffect(() => {
           Total_money: item.total_cost.toString(),
           End_year: (parseInt(item.end_year)+543).toString(),
           type: item.type,
-          Status: item.status === 'In_Progress' ? true : false
+          Status: item.status,
+          current_money: item.current_money,
         }));
         setOldAssetInput(assets)
         setDataAssetInput(assets);
+      console.log('----------------------------------------------------->>>>>>>>>');
+
       }
 
     } catch (error) {
@@ -251,7 +256,7 @@ useEffect(() => {
   };
   
   getToken();
-}, []);
+}, [refresh]);
 
 
 
@@ -342,7 +347,7 @@ useEffect(() => {
       {state === 6 && homeSelected === '' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={setState}/>}
       {homeSelected !== '' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={state} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setState={setState} setFormClick={setFormClick}/>}
 
-      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant}/>}
+      {stateFutureUse && <FutureUse isDarkMode={isDarkMode} setStateFutureUse={setStateFutureUse} dataAssetInput={dataAssetInput} setDataAssetInput={setDataAssetInput} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} havePlant={havePlant} refresh={refresh} setRefresh={setRefresh}/>}
     </>
   )
 }

@@ -42,7 +42,7 @@ interface Asset {
   end_year: string;
   type: string;
   name: string;
-  status: boolean
+  status: string
   monthly_expenses: string;
   
 }
@@ -170,17 +170,17 @@ const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh }) => {
           setDataHouse(dataHouse.result);
           setDataPart(prev => [...prev, { title: 'บ้านพักคนชรา', amount: dataHouse.result.current_money }]);
         }
+        const sortAsset = dataAsset.result.sort((a: any, b: any) => new Date(a.CreatedAt).getTime() - new Date(b.CreatedAt).getTime());
         
         if (dataAsset?.result) {
-          console.log('dataAsset.result:', JSON.stringify(dataAsset.result, null, 2));
-          setDataAsset(dataAsset.result);
+          setDataAsset(sortAsset);
         
-          dataAsset.result.forEach((item: any) => {
+          sortAsset.forEach((item: any) => {
             setDataPart(prev => [...prev, { title: item.name, amount: item.current_money }]);
           });
         
           setSeries2(prevSeries => {
-            const newSeries = dataAsset.result.map((item: any, index:number) => ({
+            const newSeries = sortAsset.map((item: any, index:number) => ({
               value: item.total_cost,
               color: colorsCat[index % colorsCat.length],
             }));
@@ -327,7 +327,7 @@ console.log('series2:', series2)
                   <View 
                   id={'dataAsset'}
                   key={index} 
-                  className='flex w-56 h-33 rounded-xl border border-neutral2 shadow-sm bg-neutral p-3 justify-between mr-3'>
+                  className={`flex w-56 h-33 rounded-xl border border-neutral2 shadow-sm p-3 justify-between mr-3 ${item.status === 'Paused'?'bg-slate-200' : 'bg-neutral'}`}>
                     <View className='flex flex-row justify-between items-center'>
                       <View className='flex flex-row gap-2'>
                         {item.type == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" /> }
@@ -337,6 +337,7 @@ console.log('series2:', series2)
                         {item.type == 'marry' && <Ionicons name="heart" size={22} color="#070F2D" /> }
                         {item.type == 'emergencyMoney' && <FontAwesome5 name="hospital-alt" size={18} color="#070F2D" /> }
                         <TextF className='text-normalTextF text-lg'>{item.name}</TextF>
+                        {item.status === 'Paused' && <TextF className='text-label'>[ หยุดพัก ]</TextF>}
                       </View>
                       <View 
                       style={{backgroundColor: colorsCat[index % colorsCat.length]}}

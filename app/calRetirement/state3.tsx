@@ -6,11 +6,14 @@ import { FontAwesome6, FontAwesome5, FontAwesome, MaterialIcons, Ionicons, AntDe
 import WideBtn from '../components/WideBtn';
 import { useNumberFormat } from "@/app/NumberFormatContext";
 
+
 interface AssetItem {
   Name: string;
   Total_money: number;
   End_year: number;
   type: string;
+  Status: string;
+  current_money: number;
 }
 
 interface GroupedAssets {
@@ -62,7 +65,7 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
     }
   };
 
-
+console.log('dataAssetInput',dataAssetInput)
 
   return (
     <View 
@@ -108,16 +111,23 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
                       activeOpacity={1} 
                       onPress={() => handleEditAsset(item)}
                       className="flex">
-                        <View className="bg-neutral rounded-xl py-4 px-4 gap-2">
+                        <View className={` rounded-xl py-4 px-4 gap-2 bg-neutral`}>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1 font-bold">{item.Name}</TextF>
-                            <View className="mx-1">
-                              <FontAwesome6 name="pen" size={12} color="#F68D2B" />
+                            <View className="mx-1 flex flex-row gap-2 items-center">
+                              <View className={ `px-3 rounded-lg ${item.Status === 'In_Progress' ?'bg-primary2':item.Status === 'Completed' ? 'bg-oktext':'bg-unselectMenu'}`}>
+                                <TextF className=" text-neutral text-lg py-1">{item.Status === 'In_Progress' ?'ดำเนินการ': item.Status === 'Completed' ? 'สำเร็จแล้ว':'หยุดพัก'}</TextF>
+                              </View>
+                              {/* <FontAwesome6 name="pen" size={12} color="#F68D2B" /> */}
                             </View>
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1">ราคา</TextF>
                             <TextF className="text-primary text-lg py-1">{addCommatoNumber(item.Total_money)} <TextF className='text-normalText'>บาท</TextF></TextF>
+                          </View>
+                          <View className="flex flex-row gap-2 w-full justify-between items-center">
+                            <TextF className="text-normalText text-lg py-1">เงินที่ออมได้</TextF>
+                            <TextF className="text-primary text-lg py-1">{addCommatoNumber(item.current_money)} <TextF className='text-normalText'>บาท</TextF></TextF>
                           </View>
                           <View className="flex flex-row gap-2 w-full justify-between items-center">
                             <TextF className="text-normalText text-lg py-1">ปีที่ต้องการใช้เงิน</TextF>

@@ -54,7 +54,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       keyboardType="decimal-pad"
                       readOnly={havePlant}
                       onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Current_savings: text });
+                        setDataInput({ ...dataInput, Current_savings: text.replace(/,/g, '') });
                       }}
                       className={`h-16 text-end text-lg  pr-2 ${havePlant ? 'text-label': 'text-primary'}`}/>
                       <TextF className={` text-lg ${havePlant ? 'text-label': 'text-primary'}`}>บาท</TextF>
@@ -71,7 +71,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Current_savings_returnsInput'
-                      value={addCommatoNumber(dataInput.Current_savings_returns)}
+                      value={dataInput.Current_savings_returns}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -81,7 +81,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                         if (text.length == 0) {
                           text = '0';
                         }
-                        setDataInput({ ...dataInput, Current_savings_returns: text });
+                        setDataInput({ ...dataInput, Current_savings_returns: text});
                       }}
                       onFocus={() => {
                         scrollViewRef.current?.scrollTo({
@@ -119,7 +119,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       value={addCommatoNumber(dataInput.Monthly_income)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Monthly_income: text });
+                        setDataInput({ ...dataInput, Monthly_income: text.replace(/,/g, '') });
                       }}
                       onFocus={() => {
                         scrollViewRef.current?.scrollTo({
@@ -145,7 +145,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       value={addCommatoNumber(dataInput.Monthly_expenses)}
                       keyboardType='numeric'
                       onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Monthly_expenses: text });
+                        setDataInput({ ...dataInput, Monthly_expenses: text.replace(/,/g, '') });
                       }}
                       onFocus={() => {
                         scrollViewRef.current?.scrollTo({
@@ -179,7 +179,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       keyboardType='numeric'
                       readOnly={havePlant}
                       onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Current_total_investment: text });
+                        setDataInput({ ...dataInput, Current_total_investment: text.replace(/,/g, '') });
                       }}
                       onFocus={() => {
                         scrollViewRef.current?.scrollTo({
@@ -202,7 +202,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Investment_returnInput'
-                      value={addCommatoNumber(dataInput.Investment_return)}
+                      value={dataInput.Investment_return}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
@@ -212,7 +212,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                         if (text.length == 0) {
                           text = '0';
                         }
-                        setDataInput({ ...dataInput, Investment_return: text });
+                        setDataInput({ ...dataInput, Investment_return: text.replace(/,/g, '') });
                       }}
                       onFocus={() => {
                         scrollViewRef.current?.scrollTo({
@@ -251,7 +251,7 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 <View className='w-18 flex flex-row justify-center items-center'>
                     <TextInput
                       id='Expected_inflationInput'
-                      value={addCommatoNumber(dataInput.Expected_inflation)}
+                      value={dataInput.Expected_inflation}
                       keyboardType='numeric'
                       maxLength={4}
                       onChangeText={(text) => {
