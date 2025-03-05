@@ -9,15 +9,15 @@ const Logo3 = require('../../assets/Mascot/M_mooStandup.png');
 
 
 interface MascotProps{
-    children: any;
     className?: string;
+    fromP?: string;
     }
-const Mascot: React.FC<MascotProps> = ({children,className,  ...rest}) => {
+const Mascot: React.FC<MascotProps> = ({className, fromP,  ...rest}) => {
     return (
         <View 
         className={className}
         {...rest}
-        >{children}
+        >
         <Image
             source={Logo2}
             className="w-full h-full object-cover rounded-md"

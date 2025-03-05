@@ -112,9 +112,16 @@ const handleLogin = async () => {
 
     setActiveTab('main');
   } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    } else {
+      console.log(error);
+    }
     if (error instanceof Error && error.message === "invalid email") {
       setTypePopup("emailIsInvalid");
-    } else if (error instanceof Error && error.message === "invalid password") {
+    }else if (error instanceof Error && error.message === "invalid email format") {
+      setTypePopup("emailFormatIsInvalid");
+    }else if (error instanceof Error && error.message === "invalid password") {
       setTypePopup("passIsInvalid");
     }else{
       throw new Error( error as string);

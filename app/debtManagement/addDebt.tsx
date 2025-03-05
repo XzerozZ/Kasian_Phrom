@@ -77,6 +77,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       monthAmount: String(data.result.remaining_months),
       type: data.result.type,
     }));
+    setType(data.result.type);
     setIsInstallment(data.result.installment);
   }
   if (debtSelect !== ''){
@@ -84,7 +85,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
   }
   
   }, [debtSelect]);
-  console.log(newDataAssetInput);
+  console.log('newDataAssetInput',newDataAssetInput);
 
 
   const handleSave = async () => {

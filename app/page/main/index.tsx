@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '../../../Port';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../../components/mascot';
 
 const Logo = require('../../../assets/images/logo.png');
 
@@ -271,38 +272,40 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
           }
           <TextF className=' mt-6 text-label'>บริการที่น่าสนใจ </TextF>
 
-          
-          <View className= {`flex-row mt-5 ${isAuth ?' justify-between':''}`}>
-            {menu.slice(0, 4).map((item, index) => (
-              <TouchableOpacity
-                id={'Btn'+item.tag} // BtnnursingHouses Btnfinance BtnassessmentRisk BtncalRetirement
-                key={index}
-                activeOpacity={1}
-                className="w-[25%] items-center"
-                onPress={() => setActiveTab(item.tag)}
-              >
-                <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
-                  {item.icon}
-                </View>
-                <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <View className=" flex-row mt-5">
-            {menu.slice(4).map((item, index) => (
-              <TouchableOpacity
-                id={'Btn'+item.tag}
-                key={index + 4}
-                activeOpacity={1}
-                className="w-[25%] items-center"
-                onPress={() => setActiveTab(item.tag)}
-              >
-                <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
-                  {item.icon}
-                </View>
-                <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
-              </TouchableOpacity>
-            ))}
+          <View className=' relative'>
+            <View className= {`flex-row mt-5 ${isAuth ?' justify-between':''}`}>
+              {menu.slice(0, 4).map((item, index) => (
+                <TouchableOpacity
+                  id={'Btn'+item.tag} // BtnnursingHouses Btnfinance BtnassessmentRisk BtncalRetirement
+                  key={index}
+                  activeOpacity={1}
+                  className="w-[25%] items-center"
+                  onPress={() => setActiveTab(item.tag)}
+                >
+                  <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
+                    {item.icon}
+                  </View>
+                  <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <View className=" flex-row mt-5">
+              {menu.slice(4).map((item, index) => (
+                <TouchableOpacity
+                  id={'Btn'+item.tag}
+                  key={index + 4}
+                  activeOpacity={1}
+                  className="w-[25%] items-center"
+                  onPress={() => setActiveTab(item.tag)}
+                >
+                  <View className={`${item.bg} h-16 w-16 rounded-2xl justify-center items-center`}>
+                    {item.icon}
+                  </View>
+                  <TextF className="pt-3 text-center text-normalText">{item.text}</TextF>
+                </TouchableOpacity>
+              ))}
+            </View>
+              <View className=' absolute'><Mascot fromP={'main'} className=''></Mascot></View>
           </View>
 
           <View className='flex-row justify-between mt-8'>
