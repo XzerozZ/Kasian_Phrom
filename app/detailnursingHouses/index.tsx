@@ -4,7 +4,7 @@ import { FontAwesome6, FontAwesome, Fontisto, Ionicons, FontAwesome5 } from "@ex
 import TextF from "../components/TextF";
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Clipboard from '@react-native-clipboard/clipboard';
+// import Clipboard from '@react-native-clipboard/clipboard';
 
 interface Home {
   nh_id: string,
@@ -361,7 +361,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               name="copy-outline" 
               size={25} 
               color="#979797" 
-              onPress={() => Clipboard.setString(detailHouses?.phone_number || '')}
+              // onPress={() => Clipboard.setString(detailHouses?.phone_number || '')}
             />
             <FontAwesome 
               name="phone" size={25} color="#979797" className="mx-4" 

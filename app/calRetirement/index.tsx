@@ -66,7 +66,7 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
     if (formClick === 'pickhome') {
       setState(4);
     }else{
-      setState(4); // 1
+      setState(1); // 1
     }
   }, [])
 
