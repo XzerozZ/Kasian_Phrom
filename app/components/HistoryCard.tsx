@@ -46,7 +46,10 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ data }) => {
         className='flex flex-row justify-between items-center h-28 border-t border-banner'>
             <View className={`w-3 h-full ${data.method == 'deposit'?'bg-ok':'bg-err'}`}></View>
             <View className='flex flex-row h-full justify-between items-center flex-1 pl-5'>
-                <TextF className='text-normalText text-lg flex-1'>{data.name === 'อัตโนมัติ' ? 'ออมเงิน' : data.name}</TextF>
+                <View className='flex-1 flex-col gap-1 '>
+                    <TextF className='text-normalText text-lg'>{data.type === 'saving_money' ? 'ออมเงิน' : 'ลงทุน'}</TextF>
+                    <TextF className='text-primary text-sm'>{data.name}</TextF>
+                </View>
                 <TextF className='text-normalText text-lg flex-1 text-center'>{addCommatoNumber(data.money)}</TextF>
                 <View className='flex flex-col gap-1 items-end flex-1'>
                     <TextF className='text-normalText text-lg '>{getTime(data.track_at)} น.</TextF>

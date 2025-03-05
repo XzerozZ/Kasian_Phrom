@@ -273,7 +273,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
     <>
       {/* Header */}
       <View className="flex-row items-center p-4">
-        <TouchableOpacity onPress={() => formPage==='index'? setActiveTab("nursingHouses"):setHomeSelected('')}>
+        <TouchableOpacity onPress={() => formPage==='index'? setActiveTab("nursingHouses"): formPage==='dashboard'?setActiveTab("dashboard"):  setHomeSelected('')}>
           <FontAwesome6 name="angle-left" size={28} color="#070F2D" />
         </TouchableOpacity>
         <Text 

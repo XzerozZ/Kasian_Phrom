@@ -35,7 +35,7 @@ SplashScreen.preventAutoHideAsync();
 
 function index() {
 
-  const formPage = 'index'
+  const [formPage, setFormPage] = useState('index');
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const styles = isDarkMode ? theme.dark : theme.light;
@@ -46,7 +46,6 @@ function index() {
   const [stateLoading, setStateLoading] = useState(false); // true = loading, false = loaded ใช้ setStateLoading ตอนที่หน้าแอปโหลดข้อมูลเสร็จ (Default = true)
   const [loading, setLoading] = useState(true);
   const [backto, setBackto] = useState('main');
-  const [goAuth, setGoAuth] = useState(false);
   const [homePickInPlan, setHomePickInPlan] = useState('');
   const [formClick, setFormClick] = useState('default');
 
@@ -86,8 +85,8 @@ function index() {
             {activeTab =='auth' && <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick}/>}
             {activeTab =='nursingHouses' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={() => {}} setHomePickInPlan={() => {}}/>}
-            {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick}/>}
-            {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setGoAuth={setGoAuth}/>}
+            {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick} setHomeSelected={setHomeSelected}/>}
+            {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} formClick={formClick} setFormClick={setFormClick}/>}
@@ -102,7 +101,7 @@ function index() {
           </View>
           {stateNavbar && !loading &&
           <View className='w-full'>
-            <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab}/>
+            <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setFormPage={setFormPage}/>
           </View>}
       </NumberFormatProvider>
     </>

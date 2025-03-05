@@ -426,7 +426,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                         <TextF className=' text-label pt-2'>ตั้งค่าแอป</TextF>
                     </View>
                     <View className='gap-5 mt-5'>
-                        <View className='flex flex-row justify-between mt-5'>
+                        {/* <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>สกุลเงินหลัก</TextF>
                             <View className='w-1/2'>
                                 <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
@@ -439,7 +439,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                             className=' absolute w-1/2'>
                                 <DropdownCustom options={optionsLanguage} selectedOption={selectedLanguage} setSelectedOption={setSelectedLanguage}/>
                             </View>
-                        </View>
+                        </View> */}
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>ธีม</TextF>
                             <View className='flex flex-row gap-5'>

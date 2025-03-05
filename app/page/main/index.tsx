@@ -272,7 +272,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
           <TextF className=' mt-6 text-label'>บริการที่น่าสนใจ </TextF>
 
           
-          <View className=" flex-row justify-between mt-5">
+          <View className= {`flex-row mt-5 ${isAuth ?' justify-between':''}`}>
             {menu.slice(0, 4).map((item, index) => (
               <TouchableOpacity
                 id={'Btn'+item.tag} // BtnnursingHouses Btnfinance BtnassessmentRisk BtncalRetirement

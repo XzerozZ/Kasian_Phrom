@@ -72,13 +72,15 @@ interface dataPartProp{
 interface ReportProps{
   isDarkMode: boolean;
   reflesh: boolean;
+  setActiveTab: (tab: string) => void;
+  setHomeSelected: (id: string) => void;  
 }
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh }) => {
+const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, setActiveTab, setHomeSelected }) => {
   const [statePart, setStatePart] = useState(false)
   const [infoPlan, setInfoPlan] = useState<InfoPlanProps>();
   const [dataAsset, setDataAsset] = useState<Asset[]>([])
@@ -392,10 +394,14 @@ console.log('series2:', series2)
                   <TextF className='text-normalText text-lg'>เงินที่ต้องเก็บ/เดือน</TextF>
                   <TextF className=' text-normalText text-lg'>{addCommatoNumber(dataHouse.monthly_expenses)} บาท</TextF>
                 </View>
-                <View className='w-full flex flex-row gap-1 justify-end'>
+                <TouchableOpacity 
+                onPress={() => {
+                  (setActiveTab('detailnursingHouses'),setHomeSelected(dataHouse?.NursingHouse.nh_id))
+                }}
+                className='w-full flex flex-row gap-1 justify-end'>
                     <TextF className='text-accent'>ดูรายละเอียด</TextF>
                     <FontAwesome6 name="caret-right" size={18} color='#F68D2B'/>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>}

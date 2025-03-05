@@ -291,7 +291,7 @@ console.log(optionsPriority)
     </View>
     <View className='flex flex-row justify-between items-start mt-10 h-12 px-5 z-50'>
         <View className='flex-1 items-start'>
-          <TextF className='text-lg'>รูปแบบการออม</TextF>
+          <TextF className='text-lg'>{isDiposit ?'รูปแบบการออม':'รูปแบบการถอน'}</TextF>
         </View>
         <View className='flex-1 items-end'>
           <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
@@ -299,7 +299,7 @@ console.log(optionsPriority)
     </View>
     <View className='flex flex-row justify-between items-start mt-10 h-12 px-5 relative'>
       <View className='flex-1 items-start'>
-        <TextF className='text-lg'>ประเภทการออม</TextF>
+        <TextF className='text-lg'>{isDiposit ?'ประเภทการออม':'ประเภทการถอน'}</TextF>
       </View>
       <View className='flex-1 items-end'>
         <DropdownCustom options={selectedOption === 'ลงทุน' ? [] : optionsPriority} selectedOption={selectedOptionPriority} setSelectedOption={setSelectedOptionPriority}/>
