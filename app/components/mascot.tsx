@@ -356,7 +356,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             useNativeDriver: true,
             }),
             Animated.timing(translateYCoin, {
-            toValue: -10,
+            toValue: 6,
             duration: 1000,
             useNativeDriver: true,
             }),
