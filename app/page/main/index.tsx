@@ -217,18 +217,21 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                 </TouchableOpacity>
               </View>
             </View>
-            <View className='flex-1 justify-between'>
-              <View className='flex justify-between px-5 gap-1'>
-                <TextF className='text-2xl text-primary py-2'>สวัสดี, คุณ {dataUser?.uname}</TextF>
-                <TextF className='text-2xl text-primary py-2'>{DateThai}</TextF>
-              </View>
-              <View className='flex-row justify-between px-5'>
-                {/* {quotes.map((quote, index) => (  */}
-                  <View className='flex-1'>
+            <View className='flex-row justify-between '>
+              <View className='flex-1 justify-between'>
+                <View className='flex justify-between px-5 gap-1'>
+                  <TextF className='text-2xl text-primary py-2'>สวัสดี, คุณ {dataUser?.uname}</TextF>
+                  <TextF className='text-2xl text-primary py-2'>{DateThai}</TextF>
+                </View>
+                <View className='flex-row justify-between px-5'>
+                  {/* {quotes.map((quote, index) => (  */}
+                    <View className='flex-1'>
 
-                  </View>
-                {/* ))} */}
+                    </View>
+                  {/* ))} */}
+                </View>
               </View>
+              <Mascot fromP={'main'} type={'normal'} className='w-44 h-40 mt-5'/>
             </View>
           </LinearGradient>
         </View>
@@ -305,7 +308,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                 </TouchableOpacity>
               ))}
             </View>
-              <View className=' absolute'><Mascot fromP={'main'} className=''></Mascot></View>
+              
           </View>
 
           <View className='flex-row justify-between mt-8'>

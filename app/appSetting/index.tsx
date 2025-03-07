@@ -8,6 +8,7 @@ import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImagePicker from 'react-native-image-crop-picker';
+import Mascot from '../components/mascot';
 import {
     GoogleSignin,
     statusCodes,
@@ -283,11 +284,14 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
 
     return (
         <> 
-            <HeadTitle 
-            id='HeadTitleSetting'
-            setActiveTab={setActiveTab} 
-            onPress={() => setActiveTab('profile')}
-            title='ตั้งค่า'/>
+            <View className='w-full flex flex-row items-center justify-between h-16 pr-20'>
+                <HeadTitle 
+                id='HeadTitleSetting'
+                setActiveTab={setActiveTab} 
+                onPress={() => setActiveTab('profile')}
+                title='ตั้งค่า'/>
+                <Mascot fromP={'setting'} type={'normal'} className='w-32 h-40 mr-32 z-50'/>
+            </View>
             <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
             <ScrollView 
             id='ProfileContainer'

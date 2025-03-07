@@ -5,6 +5,7 @@ import AssessCard from '@/app/components/AssessCard';
 import FinanceCard from '@/app/components/FinArticleCard';
 import Port from '@/Port';
 import FinanceDetail from '@/app/financeDetail/index';
+import Mascot from '@/app/components/mascot';
 
 interface FinanceProps{
   isDarkMode: boolean;
@@ -76,18 +77,19 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
   } 
 
   return (
-    <>
-      <ScrollView 
-      id='FinanceContainer'
-      showsVerticalScrollIndicator={false}
-      className='flex-1 bg-neutral w-full'>
-        <View className='flex-row mt-3 ml-5 h-14 items-center bg-neutral1'>
+    <View className='flex-1 bg-neutral w-full relative'>
+      <View className='flex-row mt-3 ml-5 h-14 items-center bg-neutral1 justify-between'>
           <Text 
             style={{ fontFamily: 'SarabunBold'}}
             className=' text-normalText text-2xl ml-3 h-12 pt-2'>คู่มือการเงิน
           </Text>
-          
-        </View>
+          <Mascot fromP={'finance'} type={'normal'} className='w-32 h-40 mr-20 z-50'/>
+      </View>
+      <ScrollView 
+      id='FinanceContainer'
+      showsVerticalScrollIndicator={false}
+      className='flex-1 bg-neutral w-full'>
+        
         <View className='mx-5'>
           <AssessCard setActiveTab={setActiveTab}/>
         </View>
@@ -108,7 +110,8 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
         </View>
         <View className='h-40'></View>
       </ScrollView>
-    </>
+      
+    </View>
   )
 }
 

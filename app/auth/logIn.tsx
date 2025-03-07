@@ -4,6 +4,7 @@ import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Mascot from '../components/mascot';
 import {
   GoogleSignin,
   statusCodes,
@@ -199,11 +200,13 @@ const handleLogin = async () => {
         className='w-96  items-end px-10 mt-3'>
           <TextF className='text-primary'>ลืมรหัสผ่าน</TextF>
         </TouchableOpacity>
+        
         <TouchableOpacity
         activeOpacity={1}
         onPress={handleLogin}
-        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center relative ${ email && password ?'bg-primary':'bg-unselectMenu'} `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
+          <View style={{position:'absolute', top: -50, left:0}} className=''><Mascot fromP={'login'} type={'normal'} className='w-40 h-36'/></View>
         </TouchableOpacity>
       </View>
       <View className='w-full items-center px-10 my-5 '>
@@ -213,8 +216,8 @@ const handleLogin = async () => {
         activeOpacity={1}
         onPress={googleSignIn}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
-          <Image 
-          source={google} 
+          <Image
+          source={google}
           style={outStyles.imageGoogle}
           className='h-10 w-10'/><TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>

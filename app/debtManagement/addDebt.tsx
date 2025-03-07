@@ -9,6 +9,7 @@ import Port from '../../Port';
 import HeadTitle from '../components/headTitle';
 import { useMemo } from 'react';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../components/mascot';
 
 
 interface AddDebtProps{
@@ -315,11 +316,13 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
           className='flex-1 h-14 rounded-lg border border-err justify-center items-center'>
             <TextF className='text-err text-lg'>ยกเลิก</TextF>
           </TouchableOpacity>
+          
           <TouchableOpacity 
           id='BtnSaveFutureUse'
           onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
-          className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
+          className={`flex-1 h-14 rounded-lg justify-center items-center relative ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
+            <View style={{position:'absolute', top:-90, right:-30 }} className=''><Mascot fromP={'addDept'} type={'normal'} className='w-48 h-40'/></View>
           </TouchableOpacity>
         </View>
     </>

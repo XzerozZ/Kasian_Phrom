@@ -10,6 +10,7 @@ import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../components/mascot';
 
 
 interface DebtManagementProps{
@@ -265,7 +266,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
           
           <TouchableOpacity 
           activeOpacity={1}
-          onPress={() => setStatePage('addDebt')}
+          onPress={() => {setStatePage('addDebt'),setDebtSelect('')}}
           className='flex-row gap-2 items-center'>
             <FontAwesome6 name="plus" size={20} color='#2A4296'/>
             <TextF className='mr-8 text-lg py-2 text-primary'>เพิ่มหนี้สิน</TextF>
@@ -424,7 +425,8 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       onStartShouldSetResponder={() => true}
       onTouchEnd={(event) => event.stopPropagation()}
       className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center'>
-          <TextF className='text-lg text-normalText px-3 text-center'>คุณได้ชำระหนี้สินของเดือน {getShotMonthYear(stateConfirm.created_at)} จำนวน {stateConfirm.loan.monthly_expenses} แล้วใช่หรือไม่</TextF>
+          <View style={{position:'absolute', top:-60, right:-30 }} className=''><Mascot fromP={'payDept'} type={'normal'} className='w-48 h-40'/></View>
+          <TextF className='text-lg text-normalText text-center px-10'>คุณได้ชำระหนี้สินของเดือน <TextF className='text-primary text-xl'>{getShotMonthYear(stateConfirm.created_at)}</TextF> จำนวน <TextF className='text-primary text-xl'>{stateConfirm.loan.monthly_expenses}</TextF> บาท แล้วใช่หรือไม่</TextF>
           <View className='w-full flex flex-row px-3 gap-3 mt-14'>
             <TouchableOpacity 
             onPress={()=>onClose()}
@@ -463,6 +465,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
       onStartShouldSetResponder={() => true}
       onTouchEnd={(event) => event.stopPropagation()}
       className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center'>
+          <View style={{position:'absolute', top:-60, right:-30 }} className=''><Mascot fromP={'delDept'} type={'normal'} className='w-48 h-40'/></View>
           <TextF className='text-lg text-normalText px-3 text-center'>คุณต้องการลบข้อมูลหนี้สิน <TextF className='text-primary'>{stateDelete.loan.name}</TextF> ใช่หรือไม่</TextF>
           <View className='w-full flex flex-row px-3 gap-3 mt-14'>
             <TouchableOpacity 

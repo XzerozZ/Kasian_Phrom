@@ -21,6 +21,7 @@ import DetailNursingHouses from './detailnursingHouses';
 import FavNursingHouses from './favnursingHouses';
 import DebtManagement from './debtManagement';
 import WhatKasianPhrom from './whatKasianPhrom';
+import Mascot from './components/mascot';
 
 
 
@@ -29,12 +30,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import FinanceDetail from './financeDetail';
 import NumberFormatProvider from "./NumberFormatContext";
+import { useNumbers } from "./NumberProvider";
+import { NumberProvider } from "./NumberProvider";
 
 SplashScreen.preventAutoHideAsync();
 
 
 function index() {
-
   const [formPage, setFormPage] = useState('index');
   const [stateNavbar, setStateNavbar] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -76,7 +78,7 @@ function index() {
 
     <>
       <NumberFormatProvider>
-
+        <NumberProvider>
           <View 
           id='MixContainer'
           style={{position:'relative'}}
@@ -103,6 +105,7 @@ function index() {
           <View className='w-full'>
             <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setFormPage={setFormPage}/>
           </View>}
+        </NumberProvider>
       </NumberFormatProvider>
     </>
   )

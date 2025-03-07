@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { FontAwesome6, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import  TextF  from '../components/TextF';
+import Mascot from '../components/mascot';
 
 interface Notification {
   id: number;
@@ -36,18 +37,21 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
       {/* Header */}
       <View 
       id='NotificationHeader'
-      className="flex flex-row items-center px-4 py-4 mt-6 border-b border-gray-300">
-        <TouchableOpacity 
-          id='BtnNotiBack'
-          activeOpacity={1}
-          onPress={()=>setActiveTab('main')}
-          className=''>
-          <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
-        </TouchableOpacity>
-        <Text
-        style={{ fontFamily: 'SarabunBold' }}
-        className="text-2xl text-normalText pl-5 pr-2 ">กล่องจดหมาย</Text>
-        <Ionicons name="mail" size={28} color="#070F2D" />
+      className="flex flex-row items-center px-4 py-4 mt-6 border-b border-gray-300 h-16 justify-between relative">
+        <View className='flex flex-row items-center'>
+          <TouchableOpacity 
+            id='BtnNotiBack'
+            activeOpacity={1}
+            onPress={()=>setActiveTab('main')}
+            className=''>
+            <FontAwesome6 name="angle-left" size={28} color='#070F2D'/>
+          </TouchableOpacity>
+          <Text
+          style={{ fontFamily: 'SarabunBold' }}
+          className="text-2xl text-normalText pl-5 pr-2 ">กล่องจดหมาย</Text>
+          <Ionicons name="mail" size={28} color="#070F2D" />
+        </View>
+        <View style={{ position:'absolute',bottom:0, right:0 }}><Mascot fromP={'noti'} type={'normal'} className='w-32 h-40 z-50'/></View>
       </View>
 
       {/* Notification List */}
