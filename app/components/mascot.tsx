@@ -87,6 +87,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
     const opacityEF_hearts = useRef(new Animated.Value(0)).current;
     const scaleEF_hearts = useRef(new Animated.Value(1)).current;
     const opacityM_bigHeart = useRef(new Animated.Value(0)).current;
+    const opacityCoin = useRef(new Animated.Value(0)).current;
     const translateYCoin = useRef(new Animated.Value(-50)).current;
 
 
@@ -342,6 +343,13 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
     }
     const giveCoine = () => {
         Animated.sequence([
+            Animated.timing(opacityCoin, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+            }),
+        ]).start();
+        Animated.sequence([
             Animated.timing(translateYCoin, {
             toValue: 30,
             duration: 1000,
@@ -354,14 +362,14 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }),
         ]).start();
     }
-
+console.log(isPress)
 
 
     return (
         <TouchableOpacity 
         className={className}
         activeOpacity={1}
-        onPress={() => (onAnimetion && isPress ? {} : (onActiveMascot(), setOnAnimetion(true)))}
+        onPress={() => (onAnimetion && isPress !== undefined ? {} : (onActiveMascot(), setOnAnimetion(true)))}
         {...rest}
         >
 
@@ -370,7 +378,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
         <Image source={T_save} className="w-full h-full object-contain rounded-md absolute"/>
         <Image source={T_travel} className="w-full h-full object-contain rounded-md absolute"/> */}
         
-        {<Animated.View style={[{ opacity: opacityEF_hearts, transform: [{ translateY: translateYCoin}] }]} className='w-full h-full items-center mx-auto absolute'><Image source={M_coin} className={`w-10 h-10 object-contain rounded-md absolute`}/></Animated.View>}
+        {<Animated.View style={[{ opacity: opacityCoin, transform: [{ translateY: translateYCoin}] }]} className='w-full h-full items-center mx-auto absolute'><Image source={M_coin} className={`w-10 h-10 object-contain rounded-md absolute`}/></Animated.View>}
 
 
         {mascotBody === 'standup' &&<Image source={M_mooStandup} className="w-full h-full object-contain rounded-md absolute"/>}
