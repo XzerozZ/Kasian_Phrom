@@ -362,14 +362,14 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }),
         ]).start();
     }
-console.log(isPress)
+console.log('isPress',isPress)
 
 
     return (
         <TouchableOpacity 
         className={className}
         activeOpacity={1}
-        onPress={() => (onAnimetion && isPress !== undefined ? {} : (onActiveMascot(), setOnAnimetion(true)))}
+        onPress={() => ((!onAnimetion && isPress) ? (onActiveMascot(), setOnAnimetion(true)) : {} )}
         {...rest}
         >
 

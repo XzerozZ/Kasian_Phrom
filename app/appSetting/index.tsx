@@ -290,7 +290,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                 setActiveTab={setActiveTab} 
                 onPress={() => setActiveTab('profile')}
                 title='ตั้งค่า'/>
-                <View style={{position:'absolute', bottom: -60, right:20}} ><Mascot fromP={'setting'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
+                <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'setting'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
             </View>
             <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
             <ScrollView 

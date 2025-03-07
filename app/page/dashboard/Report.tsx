@@ -223,14 +223,14 @@ console.log('series2:', series2)
           <View className='mt-5 flex justify-center items-center'>
             <TextF className='text-2xl font-bold'>{infoPlan?.plan_name}</TextF>
           </View>
-          <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm'>
+          <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm relative'>
             <View className='flex w-9/12 max-w-96 max-h-96 my-4 items-center justify-center aspect-square'>
               <ChartCir series={series} series2={series2}/>
-              <View style={{position:'absolute', bottom: -50, left:-70}} ><Mascot fromP={'dashboard'} type={'normal'} isPress={true} className='w-48 h-44'/></View>
             </View>
             <View className='flex w-full items-end '>
               <TextF className='text-label mr-5 text-sm'>กราฟแสดงสัดส่วนจำนวนเงิน</TextF>
             </View>
+            <View style={{position:'absolute', bottom: -20, left:-20}} ><Mascot fromP={'dashboard'} type={'normal'} isPress={true} className='w-48 h-44'/></View>
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='flex flex-row justify-between items-center'>

@@ -83,7 +83,7 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
             style={{ fontFamily: 'SarabunBold'}}
             className=' text-normalText text-2xl ml-3 h-12 pt-2'>คู่มือการเงิน
           </Text>
-          <View style={{position:'absolute', bottom: -50, right:20}} ><Mascot fromP={'finance'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
+          <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'finance'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
       </View>
       <ScrollView 
       id='FinanceContainer'
