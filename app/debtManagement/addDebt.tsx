@@ -309,7 +309,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       </ScrollView>
       </KeyboardAvoidingView>
       <View
-        className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none'>
+        className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none relative'>
           <TouchableOpacity
           id='BtnCancelFutureUse'
           onPress={()=>setStatePage('debtManagement')}
@@ -319,11 +319,13 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
           
           <TouchableOpacity 
           id='BtnSaveFutureUse'
+          activeOpacity={1}
           onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
           className={`flex-1 h-14 rounded-lg justify-center items-center relative ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
-            <View style={{position:'absolute', top:-90, right:-30 }} className=''><Mascot fromP={'addDept'} type={'normal'} className='w-48 h-40'/></View>
+            <View style={{position:'absolute', top:-90, right:-30 }}><Mascot fromP={'addDept'} type={'normal'} className='w-48 h-40 z-50'/></View>
           </TouchableOpacity>
+           
         </View>
     </>
   )

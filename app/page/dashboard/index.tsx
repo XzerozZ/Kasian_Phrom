@@ -3,6 +3,7 @@ import { View, Text, Button, Image, StyleSheet, Animated, TouchableOpacity, Scro
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
+import Mascot from '@/app/components/mascot';
 
 import  TextF  from '../../components/TextF';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,8 +29,8 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
   const [isAuth, setIsAuth] = useState(false);
   const [textAuth, setTextAuth] = useState<string>('');
 
-  const [statePopup, setStatePopup] = useState(false);
-  const [dataPopup, setDataPopup] = useState<any>('');
+  const [statePopup, setStatePopup] = useState(false); // false
+  const [dataPopup, setDataPopup] = useState<any>(''); // ''
   
   const [reflesh, setReflesh] = useState(false);
   const [havePlan, setHavePlan] = useState(false);
@@ -117,12 +118,12 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       Animated.parallel([
         Animated.timing(opacityAnim, {
           toValue: 1,
-          duration: 300,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.timing(scaleAnim, {
           toValue: 1,
-          duration: 300,
+          duration: 500,
           useNativeDriver: true,
         }),
       ]).start();
@@ -132,18 +133,18 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
         Animated.parallel([
           Animated.timing(opacityAnim, {
             toValue: 0,
-            duration: 300,
+            duration: 500,
             useNativeDriver: true,
           }),
           Animated.timing(scaleAnim, {
             toValue: 0.8,
-            duration: 300,
+            duration: 500,
             useNativeDriver: true,
           }),
         ]).start(() => {
           setDataPopup("");
         });
-      }, 2000);
+      }, 4000);
     }
   }, [dataPopup]);
 
@@ -259,6 +260,20 @@ const Dashboard: React.FC<DashboardProps> = ({ isDarkMode, setActiveTab, setStat
       { opacity: opacityAnim, transform: [{ scale: scaleAnim }] }
     ]}
     className='w-10/12 h-80 bg-neutral rounded-2xl shadow-lg flex justify-center items-center gap-3'>
+      <View style={{position:'absolute', top: 20}}>
+        <Mascot 
+          fromP={ dataPopup === 'Successfully_deposited_money_into_savings_account'?'dashboardPopup_Successfully_deposited'
+          :dataPopup === 'Successfully_deposited_money_into_investment_account'?'dashboardPopup_Successfully_deposited'
+          :dataPopup === 'Successfully_withdraw_money_from_savings_account'?'dashboardPopup_Successfully_withdraw'
+          :dataPopup === 'Successfully_withdraw_money_from_investment_account'?'dashboardPopup_Successfully_withdraw'
+          :dataPopup === 'Insufficient_savings'?'dashboardPopup_Insufficient'
+          :dataPopup === 'Insufficient_investment'?'dashboardPopup_Insufficient'
+          :'main'
+          } 
+          type={'normal'} 
+          className='w-48 h-44'/>
+      </View>
+      <View className='h-24'></View>
       {dataPopup === 'Insufficient_savings' || dataPopup === 'Insufficient_investment' 
       ?<FontAwesome6 
         name="circle-xmark" 

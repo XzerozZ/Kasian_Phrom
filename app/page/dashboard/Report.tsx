@@ -226,7 +226,7 @@ console.log('series2:', series2)
           <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm'>
             <View className='flex w-9/12 max-w-96 max-h-96 my-4 items-center justify-center aspect-square'>
               <ChartCir series={series} series2={series2}/>
-              <View style={{position:'absolute', bottom: -50, left:-70}} className=''><Mascot fromP={'dashboard'} type={'normal'} className='w-48 h-40'/></View>
+              <View style={{position:'absolute', bottom: -50, left:-70}} ><Mascot fromP={'dashboard'} type={'normal'} isPress={true} className='w-48 h-44'/></View>
             </View>
             <View className='flex w-full items-end '>
               <TextF className='text-label mr-5 text-sm'>กราฟแสดงสัดส่วนจำนวนเงิน</TextF>

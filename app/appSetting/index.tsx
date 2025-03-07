@@ -284,13 +284,13 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
 
     return (
         <> 
-            <View className='w-full flex flex-row items-center justify-between h-16 pr-20'>
+            <View className='w-full flex flex-row items-center justify-between h-16 pr-20 relative'>
                 <HeadTitle 
                 id='HeadTitleSetting'
                 setActiveTab={setActiveTab} 
                 onPress={() => setActiveTab('profile')}
                 title='ตั้งค่า'/>
-                <Mascot fromP={'setting'} type={'normal'} className='w-32 h-40 mr-32 z-50'/>
+                <View style={{position:'absolute', bottom: -60, right:20}} ><Mascot fromP={'setting'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
             </View>
             <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
             <ScrollView 

@@ -51,7 +51,7 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
           className="text-2xl text-normalText pl-5 pr-2 ">กล่องจดหมาย</Text>
           <Ionicons name="mail" size={28} color="#070F2D" />
         </View>
-        <View style={{ position:'absolute',bottom:0, right:0 }}><Mascot fromP={'noti'} type={'normal'} className='w-32 h-40 z-50'/></View>
+        <View style={{position:'absolute', bottom: -40, right:20}} ><Mascot fromP={'noti'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
       </View>
 
       {/* Notification List */}

@@ -231,7 +231,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   {/* ))} */}
                 </View>
               </View>
-              <Mascot fromP={'main'} type={'normal'} className='w-44 h-40 mt-5'/>
+              <View style={{position:'absolute', top: 25, right:0}} ><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-48 h-44 z-50'/></View>
             </View>
           </LinearGradient>
         </View>
