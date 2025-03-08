@@ -78,9 +78,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
+
             // await AsyncStorage.removeItem('token');
-            
+            // AsyncStorage.removeItem('u_id');
             // setActiveTab('main');
+
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",
@@ -92,10 +94,12 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             
             GoogleSignin.signOut();
             AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
             setActiveTab('main');
         } catch (error) {
             GoogleSignin.signOut();
             AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
             setActiveTab('main');
             throw new Error( error as string);
         }

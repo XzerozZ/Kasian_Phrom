@@ -56,7 +56,7 @@ function index() {
 
   const [selectedId, setSelectedId] = useState(0);
   const newsId = selectedId;
-  const [messageNoti, setMessageNoti] = useState('--');
+  const [messageNoti, setMessageNoti] = useState('');
 
   const [isAuth, setIsAuth] = useState(false);
   const [loaded] = useFonts({
@@ -74,9 +74,11 @@ function index() {
     const connectWebSocket = async () => {
       if (isAuth) {
         const token = await AsyncStorage.getItem('token');
+        const u_id = await AsyncStorage.getItem('u_id');
         console.log('Token:', token);
+        console.log('u_id:', u_id);
 
-        const ws = new WebSocket(`${Port.WebSocket_URL}/ws`);
+        const ws = new WebSocket(`${Port.WebSocket_URL}/ws/${u_id}`);
 
         ws.onopen = () => {
           console.log('Connected to the server');

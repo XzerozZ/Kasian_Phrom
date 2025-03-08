@@ -80,6 +80,9 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
+        const u_id = await AsyncStorage.getItem('u_id');
+        console.log(token)
+        console.log(u_id)
         if (token) {
           setIsAuth(true);
         
@@ -113,6 +116,8 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
 
 
 
+        }else{
+          setIsAuth(false);
         }
       } catch (error) {
         console.error('Failed to fetch token from storage', error);

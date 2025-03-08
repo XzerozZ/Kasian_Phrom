@@ -16,7 +16,7 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const opacityAnim = useRef(new Animated.Value(0)).current;
-    const translateYAnim = useRef(new Animated.Value(-140)).current;
+    const translateYAnim = useRef(new Animated.Value(-140)).current; //-140
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y;
@@ -84,15 +84,15 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
     };
 
     const handlePressOut = () => {
-        // intervalRef.current = setInterval(() => {
-        //     setCountDown(prevCount => {
-        //         if (prevCount <= 0) {
-        //             clearInterval(intervalRef.current!);
-        //             return 0;
-        //         }
-        //         return prevCount - 1;
-        //     });
-        // }, 1000);
+        intervalRef.current = setInterval(() => {
+            setCountDown(prevCount => {
+                if (prevCount <= 0) {
+                    clearInterval(intervalRef.current!);
+                    return 0;
+                }
+                return prevCount - 1;
+            });
+        }, 1000);
         console.log('Button Pressed Out');
     };
 

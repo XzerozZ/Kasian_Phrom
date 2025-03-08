@@ -344,9 +344,9 @@ console.log(optionsPriority)
 
         <TouchableOpacity 
         id='BtnConfirm'
-        activeOpacity={amount == '' ? 1 : 0.5}
-        className={`mt-5 mx-5 p-3 rounded-xl shadow-sm flex justify-center items-center h-14 ${amount == '' ?' bg-unselectMenu' :' bg-primary'}`}
-        onPress={() => amount == '' ? {} : handleManageMoney() } >
+        activeOpacity={amount == '' || amount == '0' ? 1 : 0.5}
+        className={`mt-5 mx-5 p-3 rounded-xl shadow-sm flex justify-center items-center h-14 ${amount == '' || amount == '0' ?' bg-unselectMenu' :' bg-primary'}`}
+        onPress={() => amount == '' || amount == '0' ? {} : handleManageMoney() } >
             <TextF className='text-white'>ยืนยัน</TextF>
         </TouchableOpacity>
 

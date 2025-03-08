@@ -109,6 +109,7 @@ const handleLogin = async () => {
 
     const data = await response.json();
     await AsyncStorage.setItem('token', data.result.token);
+    await AsyncStorage.setItem('u_id', data.result.u_id);
     console.log("Login Success:", data);
 
     setActiveTab('main');
