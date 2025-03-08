@@ -17,6 +17,7 @@ interface infoHistoryProp{
     category: string,
     money: number,
     track_at: string
+    TransferFrom: string,
 }
 
 interface HistoryCardProps{
@@ -44,11 +45,16 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ data }) => {
         <View 
         id='HistoryCardContainer'
         className='flex flex-row justify-between items-center h-28 border-t border-banner'>
-            <View className={`w-3 h-full ${data.method == 'deposit'?'bg-ok':'bg-err'}`}></View>
+            <View className={`w-3 h-full ${data.TransferFrom !== ''?'bg-accent':data.method == 'deposit'?' bg-oktext':'bg-err'}`}></View>
             <View className='flex flex-row h-full justify-between items-center flex-1 pl-5'>
                 <View className='flex-1 flex-col gap-1 '>
-                    <TextF className='text-normalText text-lg'>{data.type === 'saving_money' ? 'ออมเงิน' : 'ลงทุน'}</TextF>
-                    <TextF className='text-primary text-sm'>{data.name}</TextF>
+                    <TextF className='text-normalText text-lg'>{data.type === 'saving_money' ? data.method == 'deposit'?'ออมเงิน':'ถอนเงินออม' : data.method == 'deposit'? 'ลงทุน':'ถอนเงินลงทุน'}</TextF>
+                    <View className='flex flex-row gap-2 items-center h-6 '>
+                        {data.TransferFrom !== '' && <TextF className='text-primary text-sm '>{data.TransferFrom}</TextF>} 
+                        {data.TransferFrom !== '' && <TextF className=' text-accent text-sm '><FontAwesome6 name="arrow-right-long" size={14} /></TextF>} 
+                        <TextF className='text-primary text-sm'>{data.name}</TextF>
+                    </View>
+                    
                 </View>
                 <TextF className='text-normalText text-lg flex-1 text-center'>{addCommatoNumber(data.money)}</TextF>
                 <View className='flex flex-col gap-1 items-end flex-1'>

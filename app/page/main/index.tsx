@@ -59,9 +59,11 @@ interface MainProps {
   setStateNavbar: (state: boolean) => void;
   setBackto: (backto: string) => void;
   setFormClick: (form: string) => void;
+  isAuth: boolean;
+  setIsAuth: (auth: boolean) => void;
 }
 
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick, isAuth, setIsAuth }) => {
   
   
   
@@ -69,7 +71,6 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   const { addCommatoNumber } = useNumberFormat();
   
   const [menu, setMenu] = useState<MenuItem[]>([]);
-  const [isAuth, setIsAuth] = useState(false);
   const [havePlant, setHavePlant] = useState(false);
   const [infoPlan, setInfoPlan] = useState<any>(null);
   const [dataUser, setDataUser] = useState<User>({});

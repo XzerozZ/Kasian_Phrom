@@ -7,6 +7,7 @@ import DebtManagement from '../../debtManagement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Port from '@/Port';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../../components/mascot';
 
 interface InfoPlanProps{
   allRequiredFund: number;
@@ -17,6 +18,7 @@ interface InfoPlanProps{
   saving: number;
   stillneed: number;
   plan_name: string;
+  plan_saving: number;
 }
 
 interface SavingProps{
@@ -152,10 +154,11 @@ console.log(optionsPriority)
 
 
     useEffect(() => {
+      console.log('>?>?>?>?>?',!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ'), infoPlan?.plan_saving, (infoPlan?.allRequiredFund ?? 0))
       if(selectedOption === 'ลงทุน'){
         setSelectedOptionPriority('เงินเกษียณ')
       }else{
-        if(!isDiposit){
+        if(!isDiposit|| (!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ') || (infoPlan?.plan_saving ?? 0 >= (infoPlan?.allRequiredFund ?? 0))) ){
           setSelectedOptionPriority('เงินเกษียณ')
           setOptionsPriority(optionsPriority.filter((item) => item.title !== 'อัตโนมัติ'))
         }else{
@@ -164,7 +167,7 @@ console.log(optionsPriority)
           setSelectedOptionPriority('อัตโนมัติ')
         }
         }
-    }, [selectedOption, isDiposit]);
+    }, [selectedOption, isDiposit, infoPlan?.plan_saving, infoPlan?.allRequiredFund]);
 
 
     const handleManageMoney = () => {
@@ -251,7 +254,23 @@ console.log(optionsPriority)
     <View className=' flex'>
       <View className='mt-5 flex justify-center items-center'>
       </View>
+      {(infoPlan?.all_money ?? 0) >= (infoPlan?.allRequiredFund ?? 0) && !optionsPriority.some((item) => item.title !== 'เงินเกษียณ')?
       <View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
+        <View className='flex w-full items-center gap-5'>
+          <TextF className='text-lg'>คุณเก็บเงินได้ครบตามแผนแล้ว</TextF>
+          <TextF className='text-4xl text-primary'>{addCommatoNumber(infoPlan?.all_money)}</TextF>
+          <TextF>บาท</TextF>
+        </View>
+        <View className='mt-5 w-11/12 h-[2] bg-primary'></View>
+        <View className='flex flex-row w-full gap-3 relative'>
+          <View className='flex-1 items-center gap-3 pt-5'>
+            <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผน</TextF>
+            <TextF className='text-2xl '>{addCommatoNumber(infoPlan?.allRequiredFund)}</TextF>
+            <TextF>บาท</TextF>
+          </View>
+        </View>
+      </View>
+      :<View className='mt-5 flex justify-center items-center bg-bgAuth mx-8 p-3 pt-4 pb-5 rounded-3xl shadow-sm'>
         <View className='flex w-full items-center gap-5'>
           <TextF className='text-lg'>จำนวนเงินที่ต้องเก็บตามแผนในเดือนนี้</TextF>
           <TextF className={`text-3xl scale-125 items-center justify-center flex ${infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? 'text-oktext' : ''}`}>{infoPlan?.monthly_expenses !== undefined && Number(infoPlan.monthly_expenses) < 0 ? `+ ${addCommatoNumber(Math.abs(infoPlan.monthly_expenses))}`: addCommatoNumber(infoPlan?.monthly_expenses)}</TextF>
@@ -271,7 +290,7 @@ console.log(optionsPriority)
             <TextF>บาท</TextF>
           </View>
         </View>
-      </View>
+      </View>}
     </View>
     <View className='flex flex-row justify-center items-center mt-3 w-full px-5'>
       <TouchableOpacity 

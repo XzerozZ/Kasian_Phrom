@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Button, Image, StyleSheet, Animated, ScrollView, StatusBar } from 'react-native';
 import { theme } from '../globalStyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Port from '../Port';
 
 import LoadingPage from './loadingPage';
 
@@ -22,6 +24,7 @@ import FavNursingHouses from './favnursingHouses';
 import DebtManagement from './debtManagement';
 import WhatKasianPhrom from './whatKasianPhrom';
 import Mascot from './components/mascot';
+import NotiCard from './components/NotiCard';
 
 
 
@@ -53,6 +56,7 @@ function index() {
 
   const [selectedId, setSelectedId] = useState(0);
   const newsId = selectedId;
+  const [messageNoti, setMessageNoti] = useState('--');
 
   const [isAuth, setIsAuth] = useState(false);
   const [loaded] = useFonts({
@@ -60,6 +64,51 @@ function index() {
     SarabunRegular: require('../assets/fonts/Sarabun-Regular.ttf'),
     SarabunBold: require('../assets/fonts/Sarabun-Bold.ttf'),
   });
+
+
+
+  // var ws = useRef(new WebSocket(`${Port.WebSocket_URL}/ws`)).current;
+
+
+  useEffect(() => {
+    const connectWebSocket = async () => {
+      if (isAuth) {
+        const token = await AsyncStorage.getItem('token');
+        console.log('Token:', token);
+
+        const ws = new WebSocket(`${Port.WebSocket_URL}/ws`);
+
+        ws.onopen = () => {
+          console.log('Connected to the server');
+          // ws.send(JSON.stringify({ token }));
+        };
+
+        ws.onclose = (e) => {
+          console.log('Disconnected. Check internet or server.', e);
+        };
+
+        ws.onerror = (e) => {
+          console.log('WebSocket Error:', (e as any).message);
+        };
+
+        ws.onmessage = (e) => {
+          console.log('Message received:', e.data);
+          setMessageNoti(e.data);
+        };
+
+        return () => {
+          ws.close();
+        };
+      }
+    };
+
+    connectWebSocket();
+    return () => {
+      console.log('Cleaning up WebSocket connection...');
+    };
+  }, [isAuth]);
+
+
 
   useEffect(() => {
     if (loaded) {
@@ -71,7 +120,6 @@ function index() {
   if (!loaded) {
     return null;
   }
-  
 
 
   return (
@@ -85,7 +133,7 @@ function index() {
           className='w-full pt-10 flex-1 bg-neutral'>
             {loading && <LoadingPage stateLoading={stateLoading} setStateLoading={setStateLoading} setLoading={setLoading}/>}
             {activeTab =='auth' && <Auth isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
-            {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick}/>}
+            {activeTab =='main' && <Main isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick} isAuth={isAuth} setIsAuth={setIsAuth}/>}
             {activeTab =='nursingHouses' && <NursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={() => {}} setHomePickInPlan={() => {}}/>}
             {activeTab =='dashboard' && <Dashboard isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setBackto={setBackto} setFormClick={setFormClick} setHomeSelected={setHomeSelected}/>}
             {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
@@ -100,6 +148,7 @@ function index() {
             {activeTab =='debtManagement' && <DebtManagement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} backto={backto}/>}
             {activeTab =='whatKasianPhrom' && <WhatKasianPhrom isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             
+            {messageNoti !== '' && <NotiCard messageNoti={messageNoti} setMessageNoti={setMessageNoti} setActiveTab={setActiveTab}/>}
           </View>
           {stateNavbar && !loading &&
           <View className='w-full'>

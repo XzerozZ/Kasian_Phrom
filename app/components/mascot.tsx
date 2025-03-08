@@ -106,7 +106,6 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
                     },
                 });
                 const dataPlan = await responsePlan.json();
-                console.log((dataPlan.result))
                 if (dataPlan.result !== null) {
                     setIsHavePlan(true);
                     const percentMoney = dataPlan.result.all_money/dataPlan.result.allRequiredFund*100;
@@ -133,7 +132,6 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
         
     }, []);
 
-    console.log('------------------++++++++++++++++++*************///////////////',mascotAccessory, mascotBody, listASTier2[Math.floor(numbers[0] * (listASTier2.length))])
 
     useEffect(() => {
         const randomValue = Math.random() < 0.5 ? 'standup' : 'sitdown';
@@ -270,9 +268,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
 
     const onActiveMascot=()=>{
         
-        console.log('Mascot clicked!')
         const randomValue = Math.random();
-        console.log('randomValue<><><><>',randomValue)
         if (randomValue < 0.5){
             Animated.sequence([
                 Animated.timing(opacityEF_hearts, {
@@ -362,7 +358,6 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }),
         ]).start();
     }
-console.log('isPress',isPress)
 
 
     return (

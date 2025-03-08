@@ -18,6 +18,7 @@ interface infoHistoryProp{
   category: string,
   money: number,
   track_at: string
+  TransferFrom: string,
 }
 interface RecordProps{
   isDarkMode: boolean;
@@ -111,7 +112,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
                 }
                 <TextF className={`text-lg ${items.reduce((sum, item) => sum + item.money, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
                   {items.reduce((sum, item) => sum + item.money, 0) > 0 ?`${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`
-                  :items.reduce((sum, item) => sum + item.money, 0) > 0 ?  `+ ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}` 
+                  :items.reduce((sum, item) => sum + item.money, 0) > 0 ? `+ ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}` 
                   : `- ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`}
                 </TextF>
               </View>

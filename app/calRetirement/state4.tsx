@@ -253,8 +253,8 @@ const handleSaveEditPlant = async () => {
     formData.append("currentsavingsreturns", resetCommato(dataInput.Current_savings_returns));
     formData.append("monthlyincome", resetCommato(dataInput.Monthly_income));
     formData.append("monthlyexpenses", resetCommato(dataInput.Monthly_expenses)); //
-    // formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
-    formData.append("investmentreturn", resetCommato(dataInput.Investment_return));
+    formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
+    formData.append("investmentreturn", resetCommato(dataInput.Investment_return)); //-
     formData.append("expectedinflation", resetCommato(dataInput.Expected_inflation));
     formData.append("expectedmonthlyexpenses", resetCommato(dataInput.Expected_monthly_expenses)); //
     formData.append("annualexpenseincrease", resetCommato(dataInput.Annual_expense_increase));
@@ -341,7 +341,6 @@ const handleSaveEditPlant = async () => {
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   useEffect(() => {
     if (statePopupMoveMoney) {
-      // แสดง Popup (fade-in + scale-up)
       Animated.parallel([
         Animated.timing(opacityAnim, {
           toValue: 1,

@@ -174,7 +174,6 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       placeholderTextColor={'#B0B0B0'}
                       value={addCommatoNumber(dataInput.Current_total_investment)}
                       keyboardType='numeric'
-                      readOnly={havePlant}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Current_total_investment: text.replace(/,/g, '') });
                       }}
@@ -184,8 +183,8 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                               animated: true,
                           });
                       }}
-                      className={`h-16 text-end text-lg pr-2 ${havePlant ? 'text-label': 'text-primary'}`}/>
-                      <TextF className={` text-lg ${havePlant ? 'text-label': 'text-primary'}`}>บาท</TextF>
+                      className={`h-16 text-end text-lg pr-2 text-primary`}/>
+                      <TextF className={` text-lg text-primary`}>บาท</TextF>
                 </View>
               </View>
 

@@ -94,6 +94,9 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             AsyncStorage.removeItem('token');
             setActiveTab('main');
         } catch (error) {
+            GoogleSignin.signOut();
+            AsyncStorage.removeItem('token');
+            setActiveTab('main');
             throw new Error( error as string);
         }
     };
