@@ -67,18 +67,43 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
 
   useEffect(() => {
-    if (dataEditAsset !== null) {
-      const assetData = dataAssetInput.find((asset:any ) => asset.asset_id === dataEditAsset);
-      setNewDataAssetInput(assetData);
-  
-      if (!assetData.hasOwnProperty("asset_id")) {
-        setIsNewAsset(true);
-      } else {
-        setIsNewAsset(false);
-      }
-    }
-  }, [dataEditAsset,dataAssetInput]);
+    const fetchData = async () => {
+      if (dataEditAsset !== null) {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${Port.BASE_URL}/asset/${dataEditAsset}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        const data = await response.json();
+        const assetData = data.result;
 
+        // const assetData = dataAssetInput.find((asset:any ) => asset.asset_id === dataEditAsset);
+        setNewDataAssetInput({
+          Name: assetData.name,
+          Total_money: assetData.total_cost.toString(),
+          End_year: (parseInt(assetData.end_year) + 543).toString(),
+          type: assetData.type,
+          Status: assetData.status,
+          current_money: assetData.current_money,
+        });
+        if (assetData.type !== 'home' && assetData.type !== 'child' && assetData.type !== 'car' && assetData.type !== 'travel' && assetData.type !== 'marry' && assetData.type !== 'emergencyMoney') {
+          setType(assetData.type);
+        }
+
+        if (!assetData.hasOwnProperty("asset_id")) {
+          setIsNewAsset(true);
+        } else {
+          setIsNewAsset(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dataEditAsset, dataAssetInput]);
+  console.log('dataEditAssetOOOOOOOOOOOOOOOOOOOOOOOOOO',newDataAssetInput)
 
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
@@ -120,7 +145,6 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       type: 'home',
       Status: 'In_Progress',
       current_money: 0,
-
     });
   
     setType('');

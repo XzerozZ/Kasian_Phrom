@@ -74,8 +74,10 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   const [havePlant, setHavePlant] = useState(false);
   const [infoPlan, setInfoPlan] = useState<any>(null);
   const [dataUser, setDataUser] = useState<User>({});
+  const [isReadNoti, setIsReadNoti] = useState(false);
 
   useEffect(() => {
+    getRandomQuote();
     setFormClick('default')
     const fetchToken = async () => {
       try {
@@ -100,8 +102,17 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             },
           });
 
+          const responseNoti = await fetch(`${Port.BASE_URL}/notification`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+
           const dataPlan = await responsePlan.json();
           const dataUser = await responseUser.json();
+          const dataNoti = await responseNoti.json();
 
           console.log(dataPlan.result)
           if (dataPlan.result !== null) {
@@ -113,7 +124,9 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             setDataUser(dataUser.result)
           }
 
-
+          if (dataNoti.result !== null) {
+            setIsReadNoti(dataNoti.result.some((noti: any) => noti.is_read === false));
+          }
 
 
         }else{
@@ -174,6 +187,37 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
     const MonthName = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     const DayName = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
     const DateThai = `วัน${DayName[DayNow]} ที่ ${DateNow} ${MonthName[MonthNow]} พ.ศ. ${YearNow+543}`;
+
+
+    const [quotes, setQuotes] = useState<string>();
+    const motivationalQuotes  = [
+      "การวางแผนวันนี้ สร้างอิสรภาพในวันหน้า",
+      "ทุกการออม เป็นก้าวสำคัญสู่อนาคตที่มั่นคง",
+      "เก็บน้อยแต่สม่ำเสมอ ดีกว่าเก็บมากแต่ไม่ต่อเนื่อง",
+      "ความสำเร็จไม่ได้เกิดจากความฝัน แต่เกิดจากการลงมือทำ",
+      "คุณอยู่บนเส้นทางที่ถูกต้องแล้ว มุ่งหน้าต่อไป!",
+      "วันนี้คุณเข้าใกล้เป้าหมายมากขึ้นอีกก้าว",
+      "ออมก่อน ใช้ทีหลัง สูตรง่ายๆ สู่ความมั่งคั่ง",
+      "ความมั่งคั่งเกิดจากนิสัยเล็กๆ ที่ทำทุกวัน",
+      "เงินทำงานให้คุณ เมื่อคุณวางแผนให้มัน",
+      "หนึ่งก้าวในวันนี้ หนึ่งก้าวสู่เกษียณอย่างมั่นคง",
+      "เส้นทางสู่ความมั่งคั่งเริ่มต้นที่การตัดสินใจเล็กๆ ทุกวัน",
+      "เก็บวันละนิด ชีวิตไม่ติดหนี้",
+      "ลงทุนในตัวเองวันนี้ รับผลตอบแทนในอนาคต",
+      "ความสำเร็จไม่ใช่เรื่องบังเอิญ แต่เกิดจากการวางแผน",
+      "การวางแผนการเงินที่ดี คือการวางแผนชีวิตที่ดี",
+      "ทุกบาทที่ออม คือรอยยิ้มในวันเกษียณ",
+      "ออมเงินคือการให้ของขวัญกับตัวเองในอนาคต",
+      "เงิน 1 บาทของวันนี้ อาจมีค่ามากกว่า 10 บาทในอนาคต",
+      "วางแผนเหมือนจะอยู่ร้อยปี ใช้ชีวิตเหมือนจะอยู่วันสุดท้าย",
+      "ความมั่นคงทางการเงิน เริ่มจากการตัดสินใจในวันนี้"
+    ]
+
+    function getRandomQuote() {
+      // สุ่มเลขระหว่าง 0 ถึงความยาวของอาเรย์ - 1
+      const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+      setQuotes(motivationalQuotes[randomIndex]);
+    }
   
     
   return (
@@ -212,11 +256,12 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   onPress={()=> isAuth ? setActiveTab('notification') : setActiveTab('auth')}
                   className=''>
                   {isAuth ? 
-                  <View className='flex-row items-center gap-2'>
+                  <View style={{zIndex:100000}} className='flex-row items-center gap-2'>
                     <Ionicons name="mail" size={30} color="#2A4296" />
+                    {isReadNoti && 
                     <View 
                     style={{top:-2, right:-3}}
-                    className='absolute w-4 h-4 bg-accent border-2 border-white rounded-full'></View>
+                    className='absolute w-4 h-4 bg-accent border-2 border-white rounded-full'></View>}
                   </View>
                   :<TextF className='text-primary text-lg'>เข้าสู่ระบบ</TextF>}
                   
@@ -225,19 +270,16 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             </View>
             <View className='flex-row justify-between '>
               <View className='flex-1 justify-between'>
-                <View className='flex justify-between px-5 gap-1'>
-                  <TextF className='text-2xl text-primary py-2'>สวัสดี, คุณ {dataUser?.uname}</TextF>
-                  <TextF className='text-2xl text-primary py-2'>{DateThai}</TextF>
-                </View>
-                <View className='flex-row justify-between px-5'>
-                  {/* {quotes.map((quote, index) => (  */}
-                    <View className='flex-1'>
-
-                    </View>
-                  {/* ))} */}
+                <View className='flex justify-between gap-1 mt-3'>
+                  {isAuth ? 
+                  <>
+                    <TextF className='text-2xl text-primary py-2 px-5'>สวัสดี, คุณ {dataUser?.uname}</TextF>
+                    <TextF className='text-2xl text-primary py-2 px-5'>{DateThai}</TextF>
+                  </>:<TextF className='text-2xl text-primary py-2 px-5 my-5'>ยินดีต้อนรับสู่เกษียณพร้อม</TextF>}
+                  <View className='flex-row gap-2 px-5'><FontAwesome6 name="quote-left" size={12} color="#6780D6"/><TextF className='py-1 text-xl text-primary2 w-80'>{quotes}</TextF><FontAwesome6 name="quote-right" size={12} color="#6780D6"/></View>
                 </View>
               </View>
-              <View style={{position:'absolute', top: 25, right:-15}} ><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-48 h-44 z-50'/></View>
+            <View style={{position:'absolute', top: -10, right:-30}} className='' ><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-44 h-40 overflow-hidden'/></View>
             </View>
           </LinearGradient>
         </View>

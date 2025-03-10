@@ -38,6 +38,16 @@ import { NumberProvider } from "./NumberProvider";
 
 SplashScreen.preventAutoHideAsync();
 
+interface messageProp{
+  id: string;
+  message: string;
+  balance: number;
+  is_read: boolean;
+  created_at: string;
+  type: string;
+  user_id: string;
+}
+
 
 function index() {
   const [formPage, setFormPage] = useState('index');
@@ -53,10 +63,20 @@ function index() {
   const [backto, setBackto] = useState('main');
   const [homePickInPlan, setHomePickInPlan] = useState('');
   const [formClick, setFormClick] = useState('default');
+  
+  const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
+  const [stateFutureUse, setStateFutureUse] = useState(false);
 
   const [selectedId, setSelectedId] = useState(0);
   const newsId = selectedId;
-  const [messageNoti, setMessageNoti] = useState('');
+  // const [messageNoti, setMessageNoti] = useState<messageProp | undefined>({"id":"93a7cef6-5454-4b8a-b9b1-50131f9c7802",
+  //   "user_id":"5f4b4e3a-1aa7-41bb-a8e9-111abd5f99da",
+  //   "message":"สุดยอดมาก สินทรัพย์ A9 ได้เสร็จสิ้นแล้ว",
+  //   "type":"asset","balance":500,"is_read":false,
+  //   "created_at":"2025-03-10T04:52:21.87691856Z"});
+
+  const [messageNoti, setMessageNoti] = useState<messageProp | undefined>(undefined);
+
 
   const [isAuth, setIsAuth] = useState(false);
   const [loaded] = useFonts({
@@ -95,7 +115,7 @@ function index() {
 
         ws.onmessage = (e) => {
           console.log('Message received:', e.data);
-          setMessageNoti(e.data);
+          setMessageNoti(JSON.parse(e.data));
         };
 
         return () => {
@@ -141,16 +161,16 @@ function index() {
             {activeTab =='finance' && <Finance isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='profile' && <Profile isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='appSetting' && <Setting isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
-            {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} formClick={formClick} setFormClick={setFormClick}/>}
+            {activeTab =='calRetirement' && <CalRetirement isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} formClick={formClick} setFormClick={setFormClick} dataEditAsset={dataEditAsset} setDataEditAsset={setDataEditAsset} stateFutureUse={stateFutureUse} setStateFutureUse={setStateFutureUse}/>}
             {activeTab =='assessmentRisk' && <AssessmentRisk isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             {activeTab =='financeDetail' && <FinanceDetail isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setSelectedId={setSelectedId} newsId={newsId} refreshing={refreshing} setRefreshing={setRefreshing}/>}
-            {activeTab =='notification' && <NotificationScreen isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
+            {activeTab =='notification' && <NotificationScreen isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} setFormClick={setFormClick} setDataEditAsset={setDataEditAsset} setStateFutureUse={setStateFutureUse}/>}
             {activeTab =='detailnursingHouses' && <DetailNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} homeSelected={homeSelected} setHomeSelected={setHomeSelected} formPage={formPage} state={null} setState={()=>{}} homePickInPlan={homePickInPlan} setHomePickInPlan={setHomePickInPlan} setFormClick={setFormClick}/>}
             {activeTab =='favnursingHouses' && <FavNursingHouses isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} setHomeSelected={setHomeSelected} formPage={formPage} setState={() => {}}/>}
             {activeTab =='debtManagement' && <DebtManagement isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar} backto={backto}/>}
             {activeTab =='whatKasianPhrom' && <WhatKasianPhrom isDarkMode={isDarkMode} setActiveTab={setActiveTab} setStateNavbar={setStateNavbar}/>}
             
-            {messageNoti !== '' && <NotiCard messageNoti={messageNoti} setMessageNoti={setMessageNoti} setActiveTab={setActiveTab}/>}
+            {messageNoti !== undefined && <NotiCard messageNoti={messageNoti} setMessageNoti={setMessageNoti} setActiveTab={setActiveTab}/>}
           </View>
           {stateNavbar && !loading &&
           <View className='w-full'>

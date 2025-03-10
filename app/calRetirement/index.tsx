@@ -48,14 +48,18 @@ interface CalRetirementProps{
   setHomePickInPlan: (homePickInPlan: string) => void;
   formClick: string;
   setFormClick: (formClick: string) => void;
+  dataEditAsset: number | null;
+  setDataEditAsset: (dataEditAsset: number | null) => void;
+  stateFutureUse: boolean;
+  setStateFutureUse: (stateFutureUse: boolean) => void;
 
 }
-const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar, homePickInPlan, setHomePickInPlan, formClick, setFormClick}) => {
+const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab, activeTab, setStateNavbar, homePickInPlan, setHomePickInPlan, formClick, setFormClick, dataEditAsset, setDataEditAsset, stateFutureUse, setStateFutureUse }) => {
 
   const formPage = 'calRetirement'
   const [box1Width, setBox1Width] = useState(0);
   const [state, setState] = useState<number | null>(1);
-  const [stateFutureUse, setStateFutureUse] = useState(false);
+  // const [stateFutureUse, setStateFutureUse] = useState(false);
   const widthAnim = useRef(new Animated.Value(0)).current;
   const colorAnim = useRef(new Animated.Value(0)).current;
   const colorAnim2 = useRef(new Animated.Value(0)).current;
@@ -65,6 +69,8 @@ const CalRetirement: React.FC<CalRetirementProps> = ({ isDarkMode, setActiveTab,
     setStateNavbar(false);
     if (formClick === 'pickhome') {
       setState(4);
+    }else if(formClick === 'pickasset'){
+      setState(3);
     }else{
       setState(1); // 1
     }
@@ -152,7 +158,7 @@ const [dataInput, setDataInput] = useState({
 
 const [dataAssetInput, setDataAssetInput] = useState<Asset[]>([])
 const [oldAssetInput, setOldAssetInput] = useState<Asset[]>([])
-const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
+// const [dataEditAsset, setDataEditAsset] = useState<number | null>(null)
 const [havePlant, setHavePlant] = useState(false)
 const [refresh, setRefresh] = useState(false);
 
@@ -240,7 +246,7 @@ useEffect(() => {
         }));
         setOldAssetInput(assets)
         setDataAssetInput(assets);
-      console.log('----------------------------------------------------->>>>>>>>>');
+      console.log('----------------------------------------------------->>>>>>>>>',assets);
 
       }
 

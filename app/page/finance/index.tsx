@@ -85,18 +85,18 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
           </Text>
           <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'finance'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
       </View>
+      <View className='mx-5'>
+        <AssessCard setActiveTab={setActiveTab}/>
+      </View>
+      <TextF className='text-label px-5 mt-5 mb-3'>
+        บทความการเงิน
+      </TextF>
       <ScrollView 
       id='FinanceContainer'
       showsVerticalScrollIndicator={false}
       className='flex-1 bg-neutral w-full'>
-        
-        <View className='mx-5'>
-          <AssessCard setActiveTab={setActiveTab}/>
-        </View>
-        <View className='px-5 mt-8'>
-          <TextF className='text-label'>
-            บทความการเงิน
-          </TextF>
+        <View className='px-5'>
+          
           {news.map((news) => (
           <FinanceCard
             key={news.news_id}

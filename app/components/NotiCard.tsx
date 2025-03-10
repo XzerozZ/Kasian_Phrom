@@ -1,15 +1,26 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Animated , Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { FontAwesome6, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import { useNumberFormat } from "@/app/NumberFormatContext";
 import TextF from './TextF';
 import Mascot from './mascot';
-
+interface messageProp{
+    id: string;
+    message: string;
+    balance: number;
+    is_read: boolean;
+    created_at: string;
+    type: string;
+  }
 interface NotiCardProps {
-    messageNoti: string;
-    setMessageNoti: (message: string) => void;
+    messageNoti: messageProp | undefined;
+    setMessageNoti: (message: any) => void;
     setActiveTab: (tab: string) => void;
 }
 
 const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setActiveTab  }) => {
+      const { addCommatoNumber } = useNumberFormat();
+    
     const scrollViewRef = useRef<ScrollView>(null);
     const [position, setPosition] = useState(0);
     const [countDown, setCountDown] = useState(5);
@@ -59,22 +70,22 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
         }
     }, [position]);
 
-    useEffect(() => {
-        if (countDown === 0) {
-            Animated.timing(opacityAnim, {
-                toValue: 0,
-                duration: 500,
-                useNativeDriver: true,
-            }).start();
-            Animated.timing(translateYAnim, {
-                toValue: -140,
-                duration: 500,
-                useNativeDriver: true,
-            }).start();
-            setMessageNoti('');
-        }
+    // useEffect(() => {
+    //     if (countDown === 0) {
+    //         Animated.timing(opacityAnim, {
+    //             toValue: 0,
+    //             duration: 500,
+    //             useNativeDriver: true,
+    //         }).start();
+    //         Animated.timing(translateYAnim, {
+    //             toValue: -140,
+    //             duration: 500,
+    //             useNativeDriver: true,
+    //         }).start();
+    //         setMessageNoti(undefined);
+    //     }
         
-    }, [countDown]);
+    // }, [countDown]);
 
     const handlePressIn = () => {
         setCountDown(5);
@@ -101,6 +112,7 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
     const handleToNoti = () => {
         setActiveTab('notification');
         setCountDown(0);
+        console.log(typeof(messageNoti))
     }
 
 
@@ -124,7 +136,17 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
                     onPressOut={handlePressOut}
                     className='flex flex-row justify-between items-center h-32 px-5 bg-white rounded-b-2xl border-b border-x border-primary2 relative'>
                     <View style={{position:'absolute', top: 15, right:0}} ><Mascot fromP={'noti'} type={'normal'} isPress={false} className='w-48 h-48 z-50'/></View>
-                    <TextF>{messageNoti}</TextF>
+                    <View className='flex flex-row items-center gap-3'>
+                        <View>
+                            {messageNoti?.type === 'asset' && messageNoti?.balance == 0 
+                            ? <MaterialCommunityIcons name="alert-circle" size={35} color='#FF5449'/>
+                            :<Ionicons name="checkmark-circle" size={35} color='#6780D6'/>}
+                        </View>
+                        <View className='flex flex-col justify-center items-start px-3 gap-3'>
+                            <TextF className='text-lg w-10/12'>{messageNoti?.message}</TextF>
+                            {messageNoti?.type === 'asset' && messageNoti?.balance > 0 &&<TextF className='text-lg '>คุณเก็บเงินได้ {addCommatoNumber(messageNoti?.balance)} บาท</TextF>}
+                        </View>
+                    </View>
                 </TouchableOpacity>
                 <View className='h-40'></View>
             </Animated.ScrollView>

@@ -94,7 +94,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
     
     
     useEffect(() => {
-        // generateRandomNumbers();
+        generateRandomNumbers();
         const fetchData = async () => {
             const token = await AsyncStorage.getItem('token');
             if (token) {
@@ -106,7 +106,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
                     },
                 });
                 const dataPlan = await responsePlan.json();
-                if (dataPlan.result !== null) {
+                if (dataPlan.result !== null && (fromP !== 'babyG' && fromP !== 'babyB' && fromP !== 'lover')) {
                     setIsHavePlan(true);
                     const percentMoney = dataPlan.result.all_money/dataPlan.result.allRequiredFund*100;
                     if (percentMoney > 0 && percentMoney <= 5) {
@@ -122,6 +122,9 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
                             setMascotAccessory([Tier1_2AS1.AS, Tier1_2AS2.AS]);
                         }else{
                             setMascotAccessory([Tier1_2AS1.AS]);
+                            if (Tier1_2AS1.AS === 'AS_fullset') {
+                                setMascotBody('standup')
+                            }
                         }
                     }
                 }
@@ -183,6 +186,19 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             setMascotEye('E_cry');
             setIsCheekPink(true);
             setMascotBody('sitdown');
+        }else if(fromP === 'babyB'){
+            setMascotEye('E_normal');
+            setIsCheekPink(true);
+        }else if(fromP === 'babyG'){
+            setMascotEye('E_eyelash');
+            setIsCheekPink(true);
+        }else if(fromP === 'travel'){
+            setMascotEye('normal');
+            setIsCheekPink(true);
+            onActiveEF_hearts();
+        }else if(fromP === 'lover'){
+            setMascotEye('E_eyelash');
+            setIsCheekPink(true);
         }
 
         
@@ -358,7 +374,7 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }),
         ]).start();
     }
-
+console.log('Mascot',mascotAccessory);
 
     return (
         <TouchableOpacity 
@@ -384,7 +400,6 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
 
 
         {mascotAccessory.map((item: string) => {
-            if (item === 'AS_fullset'){setMascotBody('standup') }
             if (item === 'AS_babyCollar' || item === 'AS_fullset' || item === 'AS_ribbonCollar') {
                 const imageSource = {
                     'AS_babyCollar': AS_babyCollar, //
@@ -395,6 +410,9 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }
             }
         )}
+        
+        {fromP === 'babyB' && <Image source={AS_babyCollar} className="w-full h-full object-contain rounded-md absolute"/>}
+        {fromP === 'babyG' || fromP === 'lover' && <Image source={AS_ribbonCollar} className="w-full h-full object-contain rounded-md absolute"/>}
 
         {mascotBody === 'standup' &&<Image source={M_lineMooStandup} className="w-full h-full object-contain rounded-md absolute"/>}
         
@@ -415,6 +433,8 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }
             }
         )}
+
+        {fromP === 'lover' && <Image source={AS_bow} className="w-full h-full object-contain rounded-md absolute"/>}
         
         
 
@@ -461,6 +481,8 @@ const Mascot: React.FC<MascotProps> = ({className, fromP, type, isPress,  ...res
             }
             }
         )}
+        {fromP === 'babyB'&& <Image source={AS_babyBlue} className="w-full h-full object-contain rounded-md absolute"/>}
+        {fromP === 'babyG'&& <Image source={AS_babyPink} className="w-full h-full object-contain rounded-md absolute"/>}
 
 
         {fromP === 'setting' && <Image source={AS_monocle} className="w-full h-full object-contain rounded-md absolute"/>}
