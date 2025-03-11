@@ -207,7 +207,7 @@ const handleLogin = async () => {
         onPress={handleLogin}
         className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center relative ${ email && password ?'bg-primary':'bg-unselectMenu'} `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
-          <View style={{position:'absolute', bottom: 40, left:20}} className=' w-20 h-12'><Mascot fromP={'login'} type={'normal'} isPress={false} className='w-32 h-32 overflow-hidden'/></View>
+          <View style={{position:'absolute', bottom: 40, left:20}} pointerEvents="none" className=' w-20 h-12'><Mascot fromP={'login'} type={'normal'} isPress={false} className='w-32 h-32 overflow-hidden'/></View>
         </TouchableOpacity>
       </View>
       <View className='w-full items-center px-10 my-5 '>

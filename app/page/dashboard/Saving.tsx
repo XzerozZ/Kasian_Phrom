@@ -154,11 +154,12 @@ console.log(optionsPriority)
 
 
     useEffect(() => {
+      console.log('>?>?>?>?>?-',(!isDiposit || (!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ') || ((infoPlan?.plan_saving ?? 0) >= (infoPlan?.allRequiredFund ?? 0))) ))
       console.log('>?>?>?>?>?',!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ'), infoPlan?.plan_saving, (infoPlan?.allRequiredFund ?? 0))
       if(selectedOption === 'ลงทุน'){
         setSelectedOptionPriority('เงินเกษียณ')
       }else{
-        if(!isDiposit|| (!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ') || (infoPlan?.plan_saving ?? 0 >= (infoPlan?.allRequiredFund ?? 0))) ){
+        if(!isDiposit || (!optionsPriority.some((item) => item.title !== 'เงินเกษียณ' && item.title !== 'อัตโนมัติ') || ((infoPlan?.plan_saving ?? 0) >= (infoPlan?.allRequiredFund ?? 0))) ){
           setSelectedOptionPriority('เงินเกษียณ')
           setOptionsPriority(optionsPriority.filter((item) => item.title !== 'อัตโนมัติ'))
         }else{

@@ -135,16 +135,17 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
                     onPressIn={handlePressIn}   // เริ่มกด
                     onPressOut={handlePressOut}
                     className='flex flex-row justify-between items-center h-32 px-5 bg-white rounded-b-2xl border-b border-x border-primary2 relative'>
-                    <View style={{position:'absolute', top: 15, right:0}} ><Mascot fromP={'noti'} type={'normal'} isPress={false} className='w-48 h-48 z-50'/></View>
+                    <View style={{position:'absolute', top: 20, right:0}} ><Mascot fromP={'noti'} type={'normal'} isPress={false} className='w-48 h-48 z-50'/></View>
                     <View className='flex flex-row items-center gap-3'>
-                        <View>
+                        {/* <View>
                             {messageNoti?.type === 'asset' && messageNoti?.balance == 0 
-                            ? <MaterialCommunityIcons name="alert-circle" size={35} color='#FF5449'/>
-                            :<Ionicons name="checkmark-circle" size={35} color='#6780D6'/>}
-                        </View>
+                            ? <MaterialCommunityIcons name="alert-circle" size={20} color='#FF5449'/>
+                            :<Ionicons name="checkmark-circle" size={20} color='#6780D6'/>}
+                        </View> */}
                         <View className='flex flex-col justify-center items-start px-3 gap-3'>
-                            <TextF className='text-lg w-10/12'>{messageNoti?.message}</TextF>
-                            {messageNoti?.type === 'asset' && messageNoti?.balance > 0 &&<TextF className='text-lg '>คุณเก็บเงินได้ {addCommatoNumber(messageNoti?.balance)} บาท</TextF>}
+                            <TextF  className='text-lg w-9/12 break-words'>{messageNoti?.message}{messageNoti?.type === 'asset' && messageNoti?.balance > 0 && ` คุณเก็บเงินได้ ${addCommatoNumber(messageNoti?.balance)} บาท` }</TextF>
+                            
+                            
                         </View>
                     </View>
                 </TouchableOpacity>

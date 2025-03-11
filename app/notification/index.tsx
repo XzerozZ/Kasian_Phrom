@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Animated, Image } from 'react-native';
-import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, AntDesign} from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, AntDesign, Fontisto } from '@expo/vector-icons';
 import  TextF  from '../components/TextF';
 import Mascot from '../components/mascot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -119,54 +119,59 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
         ]).start();
 
         const handleGetInfo = async () => {
-          if (popupNotiInfo.type === 'asset') {
-            const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`${Port.BASE_URL}/asset/${popupNotiInfo.object_id}`, {
-              method: 'GET',
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${token}`
-              },
-            });
-            const data = await response.json();
-            setAssetInfo(data.result);
-            console.log(data.result)
-          }else if (popupNotiInfo.type === 'loan') {
-            const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`${Port.BASE_URL}/loan/${popupNotiInfo.object_id}`, {
-              method: 'GET',
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${token}`
-              },
-            });
-            const data = await response.json();
-            setLoanInfo(data.result);
-            console.log(data.result)
-          }else if (popupNotiInfo.type === 'retirementplan') {
-            const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`${Port.BASE_URL}/retirement}`, {
-              method: 'GET',
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${token}`
-              },
-            });
-            const data = await response.json();
-            setPlanInfo(data.result);
-            console.log(data.result)
-          }else if (popupNotiInfo.type === 'house') { 
-            const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`${Port.BASE_URL}/nursinghouses/${popupNotiInfo.object_id}`, {
-              method: 'GET',
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${token}`
-              },
-            });
-            const data = await response.json();
-            setHouseInfo(data.result);
-            console.log(data.result)
+          try{
+            if (popupNotiInfo.type === 'asset') {
+              console.log('retirement....................')
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(`${Port.BASE_URL}/asset/${popupNotiInfo.object_id}`, {
+                method: 'GET',
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "Authorization": `Bearer ${token}`
+                },
+              });
+              const data = await response.json();
+              setAssetInfo(data.result);
+              console.log('.................', data.result)
+            }else if (popupNotiInfo.type === 'loan') {
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(`${Port.BASE_URL}/loan/${popupNotiInfo.object_id}`, {
+                method: 'GET',
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "Authorization": `Bearer ${token}`
+                },
+              });
+              const data = await response.json();
+              setLoanInfo(data.result);
+              console.log('.................', data.result)
+            }else if (popupNotiInfo.type === 'retirementplan') {
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(`${Port.BASE_URL}/retirement`, {
+                method: 'GET',
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "Authorization": `Bearer ${token}`
+                },
+              });
+              const data = await response.json();
+              setPlanInfo(data.result.plan);
+              console.log('.................', data.result.plan)
+            }else if (popupNotiInfo.type === 'house') { 
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(`${Port.BASE_URL}/nursinghouses/${popupNotiInfo.object_id}`, {
+                method: 'GET',
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "Authorization": `Bearer ${token}`
+                },
+              });
+              const data = await response.json();
+              setHouseInfo(data.result);
+              console.log('.................', data.result)
+            }
+          }catch (error) {
+            console.error(error);
           }
 
         }
@@ -178,7 +183,7 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
       }
     }, [popupNotiInfo]);
   
-console.log('popupNoti',popupNotiInfo)
+console.log('popupNoti', popupNotiInfo?.type,planInfo)
 
 const onClose = () => {
   Animated.parallel([
@@ -220,7 +225,13 @@ const categories = [
   { id: 6, tag:'emergencyMoney', label: 'เงินฉุกเฉิน' },
   { id: 7, tag:'more', label: 'อื่นๆ'},
 ];
-
+const categoriesDebt = [
+  { id: 1, tag:'home', label: 'บ้าน' },
+  { id: 2, tag:'land', label: 'ที่ดิน'},
+  { id: 3, tag:'car', label: 'รถ' },
+  { id: 4, tag:'card', label: 'บัตรเครดิต'},
+  { id: 5, tag:'more', label: 'อื่นๆ'},
+];
 
 
 
@@ -296,6 +307,18 @@ const categories = [
             <View style={{ position: 'absolute', top:0, transform: [{ translateY: 5 },{ translateX: 30 }]  }}><Image source={T_home} className="w-36 h-44 object-contain z-40"/></View>
             <View style={{ transform: [{ translateY: 25 }, { translateX: -18 }] }}><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
           </>}
+
+          {planInfo !== undefined && 
+          <>
+            <View style={{ position: 'absolute', top:0, transform: [{ translateY: 10 },{ translateX: 40 }]  }}><Image source={T_home} className="w-36 h-44 object-contain z-40"/></View>
+            <View style={{ position: 'absolute', top:0, transform: [{ translateY: -15 },{ translateX: -50 }]  }}><Image source={T_car} className="w-36 h-52 object-contain "/></View>
+            <View style={{ transform: [{ translateY: 35 }, { translateX: 0}] }}><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
+          </>}
+
+          {loanInfo !== undefined && 
+          <>
+            <View style={{ transform: [{ translateY: 20 }, { translateX: 0}] }}><Mascot fromP={'noti'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
+          </>}
           
           
           
@@ -309,7 +332,7 @@ const categories = [
           
           
           
-          <TextF className="text-lg text-primary pl-5 pr-2 ">{popupNotiInfo?.message}</TextF>
+          <TextF className="text-lg text-primary pl-5 pr-2 w-11/12">{popupNotiInfo?.message}</TextF>
           <View className='h-[1] w-10/12 bg-primary'/>
 
           {popupNotiInfo?.type === 'asset' &&
@@ -396,6 +419,76 @@ const categories = [
                 onPress={()=>{setActiveTab('detailnursingHouses'),setHomeSelected(houseInfo?.nh_id)}}>
                 <TextF className="text text-accent py-2 ">ข้อมูลเพิ่มเติม<AntDesign name="caretright" size={12} color="#F68D2B"/></TextF>
               </TouchableOpacity>
+            </View>
+          </View>
+          :<TextF className="text-lg text-label p-2 my-5">ไม่มีข้อมูล</TextF>)}
+
+
+
+          {popupNotiInfo?.type === 'retirementplan'  &&
+          (planInfo !== undefined ?
+          <View className='px-10 py-5 w-full'>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">ชื่อแผน</TextF>
+              <TextF className="text-lg text-primary py-2 ">{planInfo?.planName}</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">คุณเก็บเงินได้</TextF>
+              <TextF className="text-lg text-primary py-2 ">{addCommatoNumber(popupNotiInfo?.balance)} บาท</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">เงินที่ต้องเก็บตามแผน</TextF>
+              <TextF className="text-lg text-primary py-2 ">{addCommatoNumber(planInfo?.last_required_funds)} บาท</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">อัปเดตล่าสุด</TextF>
+              <TextF className="text-lg text-primary py-2 ">{formatData(planInfo?.updated_at)}</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">สถาณะ</TextF>
+              <TextF className="text-lg text-primary py-2 ">{planInfo?.status === 'Completed' ?'สำเร็จ':'ดำเนินการ'}</TextF>
+            </View>
+          </View>
+          :<TextF className="text-lg text-label p-2 my-5">ไม่มีข้อมูล</TextF>)}
+
+
+
+          {popupNotiInfo?.type === 'loan'  &&
+          (loanInfo !== undefined ?
+          <View className='px-10 py-5 w-full'>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">ประเภท</TextF>
+              <View className='flex-row justify-center items-center'>
+                <View className='w-12 justify-center items-center'>
+                  {loanInfo?.type == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#2A4296" /> }
+                  {loanInfo?.type == 'land' && <Fontisto name="map-marker-alt" size={23} color="#2A4296" /> }
+                  {loanInfo?.type == 'car' && <FontAwesome6 name="car" size={18} color="#2A4296" /> }
+                  {loanInfo?.type == 'card' && <FontAwesome6 name="credit-card" size={18} color="#2A4296" /> }
+                </View>
+                {categoriesDebt.some((category) => loanInfo?.type === category.tag) ? (
+                  categoriesDebt.map((category) => (
+                    loanInfo?.type === category.tag && <TextF key={category.id} className=" text-primary text-lg">{category.label}</TextF>
+                  ))
+                ) : (
+                  <TextF className=" text-primary text-lg">{loanInfo?.type}</TextF>
+                )}
+              </View>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">ชื่อหนี้สิน</TextF>
+              <TextF className="text-lg text-primary py-2 ">{loanInfo?.name}</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">ชำระต่อเดือน</TextF>
+              <TextF className="text-lg text-primary py-2 ">{addCommatoNumber(loanInfo?.monthly_expenses)} บาท</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">หนี้สินถูกสร้างเมื่อ</TextF>
+              <TextF className="text-lg text-primary py-2 ">{formatData(loanInfo?.CreatedAt)}</TextF>
+            </View>
+            <View className='flex flex-row items-center justify-between'>
+              <TextF className="text-lg text-label py-2 ">สถาณะ</TextF>
+              <TextF className="text-lg text-primary py-2 ">{loanInfo?.status === 'Completed' ?'สำเร็จ':'ดำเนินการ'}</TextF>
             </View>
           </View>
           :<TextF className="text-lg text-label p-2 my-5">ไม่มีข้อมูล</TextF>)}

@@ -323,7 +323,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
           onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
           className={`flex-1 h-14 rounded-lg justify-center items-center relative ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
-            <View style={{position:'absolute', top:-90, right:-30 }}><Mascot fromP={'addDept'} type={'normal'} isPress={false} className='w-48 h-40 z-50'/></View>
+            <View style={{position:'absolute', top:-90, right:-30 }} pointerEvents="none"><Mascot fromP={'addDept'} type={'normal'} isPress={false} className='w-48 h-40 z-50'/></View>
           </TouchableOpacity>
            
         </View>
