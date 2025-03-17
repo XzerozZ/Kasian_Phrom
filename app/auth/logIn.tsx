@@ -4,6 +4,7 @@ import  TextF  from '../components/TextF';
 import { FontAwesome6, FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Mascot from '../components/mascot';
 // import {
 //   GoogleSignin,
 //   statusCodes,
@@ -108,13 +109,21 @@ const handleLogin = async () => {
 
     const data = await response.json();
     await AsyncStorage.setItem('token', data.result.token);
+    await AsyncStorage.setItem('u_id', data.result.u_id);
     console.log("Login Success:", data);
 
     setActiveTab('main');
   } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    } else {
+      console.log(error);
+    }
     if (error instanceof Error && error.message === "invalid email") {
       setTypePopup("emailIsInvalid");
-    } else if (error instanceof Error && error.message === "invalid password") {
+    }else if (error instanceof Error && error.message === "invalid email format") {
+      setTypePopup("emailFormatIsInvalid");
+    }else if (error instanceof Error && error.message === "invalid password") {
       setTypePopup("passIsInvalid");
     }else{
       throw new Error( error as string);
@@ -192,11 +201,13 @@ const handleLogin = async () => {
         className='w-96  items-end px-10 mt-3'>
           <TextF className='text-primary'>ลืมรหัสผ่าน</TextF>
         </TouchableOpacity>
+        
         <TouchableOpacity
         activeOpacity={1}
         onPress={handleLogin}
-        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center ${ email && password ?'bg-primary':'bg-unselectMenu'}  `}>
+        className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center relative ${ email && password ?'bg-primary':'bg-unselectMenu'} `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
+          <View style={{position:'absolute', bottom: 40, left:20}} pointerEvents="none" className=' w-20 h-12'><Mascot fromP={'login'} type={'normal'} isPress={false} className='w-32 h-32 overflow-hidden'/></View>
         </TouchableOpacity>
       </View>
       <View className='w-full items-center px-10 my-5 '>
@@ -206,8 +217,8 @@ const handleLogin = async () => {
         activeOpacity={1}
         // onPress={googleSignIn}
         className={`h-14 px-10 mx-5 rounded-full justify-center items-center bg-neutral flex flex-row gap-3`}>
-          <Image 
-          source={google} 
+          <Image
+          source={google}
           style={outStyles.imageGoogle}
           className='h-10 w-10'/><TextF className='text-normalText text-lg'>เข้าสู่ระบบด้วย Google</TextF>
       </TouchableOpacity>

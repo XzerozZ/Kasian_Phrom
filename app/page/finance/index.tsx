@@ -5,15 +5,15 @@ import AssessCard from '@/app/components/AssessCard';
 import FinanceCard from '@/app/components/FinArticleCard';
 import Port from '@/Port';
 import FinanceDetail from '@/app/financeDetail/index';
+import Mascot from '@/app/components/mascot';
 
 interface FinanceProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
-  setGoAuth: (auth: boolean) => void;
 }
 
-const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setGoAuth }) => {
+const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
 
   const [news, setNews] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState(0);
@@ -77,25 +77,26 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
   } 
 
   return (
-    <>
-      <ScrollView 
-      id='FinanceContainer'
-      showsVerticalScrollIndicator={false}
-      className='flex-1 bg-neutral w-full'>
-        <View className='flex-row mt-3 ml-5 h-14 items-center bg-neutral1'>
+    <View className='flex-1 bg-neutral w-full relative'>
+      <View className='flex-row mt-3 ml-5 h-14 items-center bg-neutral1 justify-between'>
           <Text 
             style={{ fontFamily: 'SarabunBold'}}
             className=' text-normalText text-2xl ml-3 h-12 pt-2'>คู่มือการเงิน
           </Text>
+          <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'finance'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
+      </View>
+      <View className='mx-5'>
+        <AssessCard setActiveTab={setActiveTab}/>
+      </View>
+      <TextF className='text-label px-5 mt-5 mb-3'>
+        บทความการเงิน
+      </TextF>
+      <ScrollView 
+      id='FinanceContainer'
+      showsVerticalScrollIndicator={false}
+      className='flex-1 bg-neutral w-full'>
+        <View className='px-5'>
           
-        </View>
-        <View className='mx-5'>
-          <AssessCard setActiveTab={setActiveTab} setGoAuth={setGoAuth}/>
-        </View>
-        <View className='px-5 mt-8'>
-          <TextF className='text-label'>
-            บทความการเงิน
-          </TextF>
           {news.map((news) => (
           <FinanceCard
             key={news.news_id}
@@ -109,7 +110,8 @@ const Finance: React.FC<FinanceProps> = ({ isDarkMode, setActiveTab, setStateNav
         </View>
         <View className='h-40'></View>
       </ScrollView>
-    </>
+      
+    </View>
   )
 }
 

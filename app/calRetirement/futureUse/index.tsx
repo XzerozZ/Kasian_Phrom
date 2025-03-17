@@ -67,18 +67,43 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
 
 
   useEffect(() => {
-    if (dataEditAsset !== null) {
-      const assetData = dataAssetInput[dataEditAsset];
-      setNewDataAssetInput(assetData);
-  
-      if (!assetData.hasOwnProperty("asset_id")) {
-        setIsNewAsset(true);
-      } else {
-        setIsNewAsset(false);
-      }
-    }
-  }, [dataEditAsset,dataAssetInput]);
+    const fetchData = async () => {
+      if (dataEditAsset !== null) {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${Port.BASE_URL}/asset/${dataEditAsset}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        const data = await response.json();
+        const assetData = data.result;
 
+        // const assetData = dataAssetInput.find((asset:any ) => asset.asset_id === dataEditAsset);
+        setNewDataAssetInput({
+          Name: assetData.name,
+          Total_money: assetData.total_cost.toString(),
+          End_year: (parseInt(assetData.end_year) + 543).toString(),
+          type: assetData.type,
+          Status: assetData.status,
+          current_money: assetData.current_money,
+        });
+        if (assetData.type !== 'home' && assetData.type !== 'child' && assetData.type !== 'car' && assetData.type !== 'travel' && assetData.type !== 'marry' && assetData.type !== 'emergencyMoney') {
+          setType(assetData.type);
+        }
+
+        if (!assetData.hasOwnProperty("asset_id")) {
+          setIsNewAsset(true);
+        } else {
+          setIsNewAsset(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dataEditAsset, dataAssetInput]);
+  console.log('dataEditAssetOOOOOOOOOOOOOOOOOOOOOOOOOO',newDataAssetInput)
 
   useEffect(() => {
     if (newDataAssetInput.Name !== '' && newDataAssetInput.Total_money !== '' && newDataAssetInput.End_year !== '' && newDataAssetInput.type !== '' ) {
@@ -120,7 +145,6 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       type: 'home',
       Status: 'In_Progress',
       current_money: 0,
-
     });
   
     setType('');
@@ -242,13 +266,19 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
       const deleteAsset = async () => {
         const token = await AsyncStorage.getItem('token');
         const formData = new FormData();
-        delToAsset.forEach((item) => {
-          formData.append("type", item.giveTo.name !== 'เงินเกษียณ' ? item.giveTo.name !== 'บ้านพักคนชรา' ?  'asset' : 'house' : 'retirementplan');
-          formData.append("name", item.giveTo.name);
-          formData.append("amount", item.giveTo.amount.toString());
-        });
-        console.log(formData)
-        const response = await fetch(`${Port.BASE_URL}/asset/${delToAsset[0].asset_id}`, {
+        if (delToAsset.length !== 0) {
+          delToAsset.forEach((item) => {
+            formData.append("type", item.giveTo.name !== 'เงินเกษียณ' ? item.giveTo.name !== 'บ้านพักคนชรา' ?  'asset' : 'house' : 'retirementplan');
+            formData.append("name", item.giveTo.name);
+            formData.append("amount", item.giveTo.amount.toString());
+          });
+        }else{
+          formData.append("type", 'delAsset');
+          formData.append("name", 'delAsset');
+          formData.append("amount", '0');
+        }
+        console.log('///////////////formData',formData)
+        const response = await fetch(`${Port.BASE_URL}/asset/${dataEditAsset}`, {
           method: 'DELETE',
           headers: {
             "Content-Type": "multipart/form-data",
@@ -271,15 +301,105 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
         });
         setType('');
         setStateFutureUse(false);
+        setRefresh(!refresh);
       };
       deleteAsset();
-      setRefresh(!refresh);
+      
     }
     catch (e) {
       console.log(e);
     }
   }
 
+  
+const handleAddAsset = async (): Promise<void> => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const formData = new FormData();
+    formData.append("name", newDataAssetInput.Name);
+    formData.append("type", newDataAssetInput.type);
+    formData.append("totalcost", newDataAssetInput.Total_money);
+    formData.append("endyear", (parseInt(newDataAssetInput.End_year) - 543).toString());
+
+    const response = await fetch(`${Port.BASE_URL}/asset`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+     
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Network response was not ok");
+    }
+
+    const data = await response.json();
+    setNewDataAssetInput({
+      Name: '',
+      Total_money: '',
+      End_year: '',
+      type: 'home',
+      Status: 'In_Progress',
+      current_money: 0,
+
+    });
+  
+    setType('');
+    setStateFutureUse(false);
+    setRefresh(!refresh);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+console.log('dataEditAsset',dataEditAsset)
+
+const handleUpdateAsset = async (): Promise<void> => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const formData = new FormData();
+    formData.append("name", newDataAssetInput.Name);
+    formData.append("type", newDataAssetInput.type);
+    formData.append("totalcost", newDataAssetInput.Total_money);
+    formData.append("endyear", (parseInt(newDataAssetInput.End_year) - 543).toString());
+    formData.append("status", newDataAssetInput.Status);
+    
+    const response = await fetch(`${Port.BASE_URL}/asset/${dataEditAsset}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+     
+      const errorData = await response.json();
+      console.log('errorDataAsset',errorData)
+      throw new Error(errorData.message || "Network response was not ok");
+    }
+
+    const data = await response.json();
+    setNewDataAssetInput({
+      Name: '',
+      Total_money: '',
+      End_year: '',
+      type: 'home',
+      Status: 'In_Progress',
+      current_money: 0,
+
+    });
+  
+    setType('');
+    setStateFutureUse(false);
+    setRefresh(!refresh);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
 
   return (
     <>
@@ -550,7 +670,7 @@ const futureUse: React.FC<futureUseProps> = ({ isDarkMode, setStateFutureUse, da
           </TouchableOpacity>
           <TouchableOpacity 
           id='BtnSaveFutureUse'
-          onPress={() => { if (isFully) { dataEditAsset !== null ? handleSaveEdit() : handleSave(); } }}
+          onPress={() => { if (isFully) { dataEditAsset !== null ? handleUpdateAsset() : handleAddAsset(); } }}
           className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>บันทึก</TextF>
           </TouchableOpacity>

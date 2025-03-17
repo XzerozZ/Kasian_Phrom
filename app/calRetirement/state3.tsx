@@ -57,11 +57,11 @@ const state3: React.FC<stateProps> = ({ isDarkMode, setState, dataAssetInput, se
   };
 
   const handleEditAsset = (item: AssetItem) => {
-    const assetIndex = dataAssetInput.findIndex((asset: AssetItem) => asset.Name === item.Name);
-    console.log(assetIndex)
-    if (assetIndex !== -1) {
+    const assetIndex = dataAssetInput.find((asset: AssetItem) => asset.Name === item.Name);
+    console.log('assetIndex*****************',assetIndex)
+    if (assetIndex) {
       setStateFutureUse(true);
-      setDataEditAsset(assetIndex);
+      setDataEditAsset(assetIndex.asset_id);
     }
   };
 

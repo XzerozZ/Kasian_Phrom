@@ -52,6 +52,12 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
             'Content-Type': 'application/json',
           },
         })
+        const responseRecommend = await fetch(`${Port.BASE_URL}/nursinghouses/recommend/cosine`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -59,11 +65,12 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           throw new Error(errorData.message || "Network response was not ok");
         }
         const data = await response.json();
+        const dataRecommend = await responseRecommend.json();
         
         if (isAllHouses === false) {
           setAllHouses(data.result);
         } else if (isAllHouses === true) {
-          setAllHouses(data.result.slice(0, 1));
+          setAllHouses(dataRecommend.result);
         }
 
         if (token !== null) {

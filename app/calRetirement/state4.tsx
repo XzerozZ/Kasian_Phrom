@@ -99,37 +99,37 @@ const resetCommato = (text: string) => {
 
 
 
-const handleAddAsset = async (dataAsset: DataAsset, token:String): Promise<void> => {
-  try {
-    const formData = new FormData();
-    formData.append("name", dataAsset.Name);
-    formData.append("type", dataAsset.type);
-    formData.append("totalcost", dataAsset.Total_money);
-    formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
+// const handleAddAsset = async (dataAsset: DataAsset, token:String): Promise<void> => {
+//   try {
+//     const formData = new FormData();
+//     formData.append("name", dataAsset.Name);
+//     formData.append("type", dataAsset.type);
+//     formData.append("totalcost", dataAsset.Total_money);
+//     formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
 
-    // console.log('formDataAsset:', formData);
-    const response = await fetch(`${Port.BASE_URL}/asset`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData,
-    });
+//     // console.log('formDataAsset:', formData);
+//     const response = await fetch(`${Port.BASE_URL}/asset`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//         "Authorization": `Bearer ${token}`
+//       },
+//       body: formData,
+//     });
 
-    if (!response.ok) {
+//     if (!response.ok) {
      
-      const errorData = await response.json();
-      // console.log('errorDataAsset',errorData)
-      throw new Error(errorData.message || "Network response was not ok");
-    }
+//       const errorData = await response.json();
+//       // console.log('errorDataAsset',errorData)
+//       throw new Error(errorData.message || "Network response was not ok");
+//     }
 
-    const data = await response.json();
-    // console.log('addAssetSuccess:', data);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-};
+//     const data = await response.json();
+//     // console.log('addAssetSuccess:', data);
+//   } catch (error) {
+//     throw new Error(error as string);
+//   }
+// };
 
 
 
@@ -176,12 +176,12 @@ const handleCreatePlan = async () => {
       throw new Error(errorData.message || "Network response was not ok");
     }
 
-    if (dataAssetInput.length !== 0) {
-      for (let i = 0; i < dataAssetInput.length; i++) {
-        // console.log('dataAssetInput----:', dataAssetInput[i]);
-        handleAddAsset(dataAssetInput[i], token);
-      }
-    }
+    // if (dataAssetInput.length !== 0) {
+    //   for (let i = 0; i < dataAssetInput.length; i++) {
+    //     // console.log('dataAssetInput----:', dataAssetInput[i]);
+    //     handleAddAsset(dataAssetInput[i], token);
+    //   }
+    // }
     
     const data = await response.json();
     // console.log('++data++',data)
@@ -200,38 +200,38 @@ const handleCreatePlan = async () => {
   }
 };
 
-const handleUpdateAsset = async (dataAsset: DataAsset, token:String): Promise<void> => {
-  try {
-    const formData = new FormData();
-    formData.append("name", dataAsset.Name);
-    formData.append("type", dataAsset.type);
-    formData.append("totalcost", dataAsset.Total_money);
-    formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
-    formData.append("status", dataAsset.Status);
+// const handleUpdateAsset = async (dataAsset: DataAsset, token:String): Promise<void> => {
+//   try {
+//     const formData = new FormData();
+//     formData.append("name", dataAsset.Name);
+//     formData.append("type", dataAsset.type);
+//     formData.append("totalcost", dataAsset.Total_money);
+//     formData.append("endyear", (parseInt(dataAsset.End_year) - 543).toString());
+//     formData.append("status", dataAsset.Status);
     
-    // console.log('formDataAsset:', formData);
-    const response = await fetch(`${Port.BASE_URL}/asset/${dataAsset.asset_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData,
-    });
+//     // console.log('formDataAsset:', formData);
+//     const response = await fetch(`${Port.BASE_URL}/asset/${dataAsset.asset_id}`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//         "Authorization": `Bearer ${token}`
+//       },
+//       body: formData,
+//     });
 
-    if (!response.ok) {
+//     if (!response.ok) {
      
-      const errorData = await response.json();
-      console.log('errorDataAsset',errorData)
-      throw new Error(errorData.message || "Network response was not ok");
-    }
+//       const errorData = await response.json();
+//       console.log('errorDataAsset',errorData)
+//       throw new Error(errorData.message || "Network response was not ok");
+//     }
 
-    const data = await response.json();
-    // console.log('addAssetSuccess:', data);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-};
+//     const data = await response.json();
+//     // console.log('addAssetSuccess:', data);
+//   } catch (error) {
+//     throw new Error(error as string);
+//   }
+// };
 
 
 
@@ -253,8 +253,8 @@ const handleSaveEditPlant = async () => {
     formData.append("currentsavingsreturns", resetCommato(dataInput.Current_savings_returns));
     formData.append("monthlyincome", resetCommato(dataInput.Monthly_income));
     formData.append("monthlyexpenses", resetCommato(dataInput.Monthly_expenses)); //
-    // formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
-    formData.append("investmentreturn", resetCommato(dataInput.Investment_return));
+    formData.append("currenttotalinvestment", resetCommato(dataInput.Current_total_investment));
+    formData.append("investmentreturn", resetCommato(dataInput.Investment_return)); //-
     formData.append("expectedinflation", resetCommato(dataInput.Expected_inflation));
     formData.append("expectedmonthlyexpenses", resetCommato(dataInput.Expected_monthly_expenses)); //
     formData.append("annualexpenseincrease", resetCommato(dataInput.Annual_expense_increase));
@@ -278,21 +278,21 @@ const handleSaveEditPlant = async () => {
       throw new Error(errorData.message || "Network response was not ok");
     }
 
-    if (oldAssetInput !== dataAssetInput) {
-      for (let i = 0; i < dataAssetInput.length; i++) {
-        console.log('dataAssetInput----:', dataAssetInput[i]);
+    // if (oldAssetInput !== dataAssetInput) {
+    //   for (let i = 0; i < dataAssetInput.length; i++) {
+    //     console.log('dataAssetInput----:', dataAssetInput[i]);
     
-        const existingAsset: DataAsset | undefined = oldAssetInput.find((asset: DataAsset) => asset.asset_id === dataAssetInput[i].asset_id);
+    //     const existingAsset: DataAsset | undefined = oldAssetInput.find((asset: DataAsset) => asset.asset_id === dataAssetInput[i].asset_id);
     
-        if (existingAsset) {
-          handleUpdateAsset(dataAssetInput[i], token);
-        } else {
-          handleAddAsset(dataAssetInput[i], token);
-        }
-      }
+    //     if (existingAsset) {
+    //       handleUpdateAsset(dataAssetInput[i], token);
+    //     } else {
+    //       handleAddAsset(dataAssetInput[i], token);
+    //     }
+    //   }
     
       
-    }
+    // }
     
     const responseAddHouse = await fetch(`${Port.BASE_URL}/user/${homePickInPlan}`, {
       method: "PUT",
@@ -341,7 +341,6 @@ const handleSaveEditPlant = async () => {
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   useEffect(() => {
     if (statePopupMoveMoney) {
-      // แสดง Popup (fade-in + scale-up)
       Animated.parallel([
         Animated.timing(opacityAnim, {
           toValue: 1,

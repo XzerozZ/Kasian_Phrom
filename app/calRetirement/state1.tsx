@@ -38,7 +38,7 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
   };
 
   useEffect(() => {
-    if (subDate.day && subDate.month && subDate.year) {
+    if (subDate.day && subDate.month && subDate.year && subDate.year.length === 4) {
       const christYear = Number(subDate.year) - 543
       const formattedDate = (subDate.day+'-'+subDate.month+'-'+christYear)
       setDataInput({ ...dataInput, Birth_date: formattedDate });
@@ -131,10 +131,10 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                       maxLength={4}
                       onChangeText={(text) => {
                         const numericText = text.replace(/[^0-9]/g, ''); 
-                      
+                        console.log('numericText', numericText);
                         const fullYear = new Date().getFullYear() +543;
                         const validatedValue = parseInt(numericText, 10);
-                        const finalValue = !isNaN(validatedValue) && validatedValue > fullYear ? String(fullYear) : numericText;
+                        const finalValue = !isNaN(validatedValue) && validatedValue > fullYear ? String(fullYear-1) : numericText;
                       
                         setSubDate({ ...subDate, year: finalValue });
                       }}
@@ -175,10 +175,16 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                         setDataInput({ ...dataInput, Retirement_age: text });
                       }}
                       onBlur={() => {
-                        if (!dataInput.Retirement_age) {
-                          setDataInput({ ...dataInput, Retirement_age: '65' });
-                        }}
-                      }
+                        setDataInput((prev: typeof dataInput) => {
+                          let retirementAge: string = prev.Retirement_age || '65';
+                        
+                          if (subDate.year && parseInt(retirementAge) <=  (new Date().getFullYear() + 543) - parseInt(subDate.year)) {
+                            retirementAge = ((new Date().getFullYear() + 543) - parseInt(subDate.year) + 1).toString() ;
+                          }
+                        
+                          return { ...prev, Retirement_age: retirementAge };
+                        });
+                      }}
                       className={` text-end text-lg text-primary pr-2`}/>
                       <TextF className={` text-lg text-primary`}>ปี</TextF>
                 </View>
@@ -201,9 +207,15 @@ const state1: React.FC<stateProps> = ({ isDarkMode, setState, dataInput, setData
                         setDataInput({ ...dataInput, Exp_lifespan: text });
                       }}
                       onBlur={() => {
-                        if (!dataInput.Exp_lifespan) {
-                          setDataInput({ ...dataInput, Exp_lifespan: '80' });
-                        }
+                        setDataInput((prev: typeof dataInput) => {
+                          let exp_lifespan: string = prev.Exp_lifespan || '80';
+                        
+                          if (subDate.year && parseInt(exp_lifespan) <=  parseInt(dataInput.Retirement_age)) {
+                            exp_lifespan = (parseInt(dataInput.Retirement_age) + 1).toString() ;
+                          }
+                        
+                          return { ...prev, Exp_lifespan: exp_lifespan };
+                        });
                       }}
                       className={` text-end text-lg text-primary pr-2`}/>
                       <TextF className={` text-lg text-primary`}>ปี</TextF>

@@ -11,11 +11,12 @@ interface NavbarProps {
   isDarkMode: boolean;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  setFormPage: (page: string) => void;
 }
 
 
   
-const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) => {
+const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab, setFormPage }) => {
 
   const styles = isDarkMode ? theme.dark : theme.light;
 
@@ -37,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
         <TouchableOpacity  
         id='NavBtnGoMain'
-        onPress={() => setActiveTab('main')}
+        onPress={() =>{ setActiveTab('main'), setFormPage('index')}}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1 active:none">
           <FontAwesome6 name="house" size={23} color={getIconColor('main')} />
@@ -46,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
         <TouchableOpacity  
         id='NavBtnGoNursingHouses'
-        onPress={() => setActiveTab('nursingHouses')}
+        onPress={() => {setActiveTab('nursingHouses'), setFormPage('index')}}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="person-cane" size={25} color={getIconColor('nursingHouses')} />
@@ -55,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
         <TouchableOpacity  
         id='NavBtnGoDashboard'
-        onPress={() => setActiveTab('dashboard')}
+        onPress={() => {setActiveTab('dashboard'), setFormPage('dashboard')}}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <MaterialIcons name="dashboard" size={35} color={getIconColor('dashboard')} />
@@ -64,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
         <TouchableOpacity 
         id='NavBtnGoFinance'
-        onPress={() => setActiveTab('finance')} 
+        onPress={() => {setActiveTab('finance'), setFormPage('index')}} 
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="chart-line" size={23} color={getIconColor('finance')} />
@@ -73,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, activeTab, setActiveTab }) 
 
         <TouchableOpacity  
         id='NavBtnGoProfile'
-        onPress={() => setActiveTab('profile')}
+        onPress={() => {setActiveTab('profile'), setFormPage('index')}}
         activeOpacity={1}
         className="flex-1 flex flex-col justify-center items-center gap-1">
           <FontAwesome6 name="user-large" size={23} color={getIconColor('profile')} />

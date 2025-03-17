@@ -39,6 +39,64 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
     className='flex-1'>
         <View className='bg-neutral2 rounded-3xl pb-10 px-5 mb-5'>
           <View className='flex mt-5'>
+            
+          <TextF className='text-normalText text-lg mt-5'>ข้อมูลการเงินในปัจจุบัน</TextF>
+            <View className='flex mt-5 bg-neutral rounded-xl px-3'>
+              <View className='flex flex-row  justify-between items-center h-16'>
+                <View> 
+                  <TextF className='text-lg text-normalText'>รายรับต่อเดือน</TextF>
+                </View>
+                <View className='w-18 flex flex-row justify-center items-center'>
+                    <TextInput
+                      id='Monthly_incomeInput'
+                      placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
+                      value={addCommatoNumber(dataInput.Monthly_income)}
+                      keyboardType='numeric'
+                      onChangeText={(text) => {
+                        setDataInput({ ...dataInput, Monthly_income: text.replace(/,/g, '') });
+                      }}
+                      onFocus={() => {
+                        scrollViewRef.current?.scrollTo({
+                              y: 100,
+                              animated: true,
+                          });
+                      }}
+                      className={`h-16 text-end text-lg text-primary pr-2`}/>
+                      <TextF className={` text-lg text-primary`}>บาท</TextF>
+                </View>
+              </View>
+            </View>
+            <View className='flex mt-5 bg-neutral rounded-xl px-3'>
+              <View className='flex flex-row  justify-between items-center h-16'>
+                <View> 
+                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดือน</TextF>
+                </View>
+                <View className='w-18 flex flex-row justify-center items-center'>
+                    <TextInput
+                      id='Monthly_expensesInput'
+                      placeholder='ใส่จำนวนเงิน'
+                      placeholderTextColor={'#B0B0B0'}
+                      value={addCommatoNumber(dataInput.Monthly_expenses)}
+                      keyboardType='numeric'
+                      onChangeText={(text) => {
+                        setDataInput({ ...dataInput, Monthly_expenses: text.replace(/,/g, '') });
+                      }}
+                      onFocus={() => {
+                        scrollViewRef.current?.scrollTo({
+                              y: 150,
+                              animated: true,
+                          });
+                      }}
+                      className={`h-16 text-end text-lg text-primary pr-2`}/>
+                      <TextF className={` text-lg text-primary`}>บาท</TextF>
+                </View>
+              </View>
+            </View>
+
+
+
+
             <TextF className='text-normalText text-lg mt-5'>เงินออมในปัจจุบัน</TextF>
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
@@ -103,67 +161,6 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
 
 
 
-
-
-            <TextF className='text-normalText text-lg mt-5'>ข้อมูลการเงินในปัจจุบัน</TextF>
-            <View className='flex mt-5 bg-neutral rounded-xl px-3'>
-              <View className='flex flex-row  justify-between items-center h-16'>
-                <View> 
-                  <TextF className='text-lg text-normalText'>รายรับต่อเดือน</TextF>
-                </View>
-                <View className='w-18 flex flex-row justify-center items-center'>
-                    <TextInput
-                      id='Monthly_incomeInput'
-                      placeholder='ใส่จำนวนเงิน'
-                      placeholderTextColor={'#B0B0B0'}
-                      value={addCommatoNumber(dataInput.Monthly_income)}
-                      keyboardType='numeric'
-                      onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Monthly_income: text.replace(/,/g, '') });
-                      }}
-                      onFocus={() => {
-                        scrollViewRef.current?.scrollTo({
-                              y: 100,
-                              animated: true,
-                          });
-                      }}
-                      className={`h-16 text-end text-lg text-primary pr-2`}/>
-                      <TextF className={` text-lg text-primary`}>บาท</TextF>
-                </View>
-              </View>
-            </View>
-            <View className='flex mt-5 bg-neutral rounded-xl px-3'>
-              <View className='flex flex-row  justify-between items-center h-16'>
-                <View> 
-                  <TextF className='text-lg text-normalText'>รายจ่ายต่อเดือน</TextF>
-                </View>
-                <View className='w-18 flex flex-row justify-center items-center'>
-                    <TextInput
-                      id='Monthly_expensesInput'
-                      placeholder='ใส่จำนวนเงิน'
-                      placeholderTextColor={'#B0B0B0'}
-                      value={addCommatoNumber(dataInput.Monthly_expenses)}
-                      keyboardType='numeric'
-                      onChangeText={(text) => {
-                        setDataInput({ ...dataInput, Monthly_expenses: text.replace(/,/g, '') });
-                      }}
-                      onFocus={() => {
-                        scrollViewRef.current?.scrollTo({
-                              y: 150,
-                              animated: true,
-                          });
-                      }}
-                      className={`h-16 text-end text-lg text-primary pr-2`}/>
-                      <TextF className={` text-lg text-primary`}>บาท</TextF>
-                </View>
-              </View>
-            </View>
-
-
-
-
-
-
             <TextF className='text-normalText text-lg mt-5'>เงินลงทุนทั้งหมดในปัจจุบัน</TextF>
             <View className='flex mt-5 bg-neutral rounded-xl px-3'>
               <View className='flex flex-row  justify-between items-center h-16'>
@@ -177,7 +174,6 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                       placeholderTextColor={'#B0B0B0'}
                       value={addCommatoNumber(dataInput.Current_total_investment)}
                       keyboardType='numeric'
-                      readOnly={havePlant}
                       onChangeText={(text) => {
                         setDataInput({ ...dataInput, Current_total_investment: text.replace(/,/g, '') });
                       }}
@@ -187,8 +183,8 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                               animated: true,
                           });
                       }}
-                      className={`h-16 text-end text-lg pr-2 ${havePlant ? 'text-label': 'text-primary'}`}/>
-                      <TextF className={` text-lg ${havePlant ? 'text-label': 'text-primary'}`}>บาท</TextF>
+                      className={`h-16 text-end text-lg pr-2 text-primary`}/>
+                      <TextF className={` text-lg text-primary`}>บาท</TextF>
                 </View>
               </View>
 
@@ -230,12 +226,6 @@ const state2: React.FC<stateProps> = ({ isDarkMode, setState, scrollViewRef, dat
                 </View>
               </View>
             </View>
-
-
-
-
-
-
 
 
 

@@ -8,6 +8,7 @@ import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import ImagePicker from 'react-native-image-crop-picker';
+import Mascot from '../components/mascot';
 // import {
 //     GoogleSignin,
 //     statusCodes,
@@ -77,9 +78,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
+
             // await AsyncStorage.removeItem('token');
-            
+            // AsyncStorage.removeItem('u_id');
             // setActiveTab('main');
+
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",
@@ -91,8 +94,13 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             
             // GoogleSignin.signOut();
             AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
             setActiveTab('main');
         } catch (error) {
+            // GoogleSignin.signOut();
+            AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
+            setActiveTab('main');
             throw new Error( error as string);
         }
     };
@@ -278,11 +286,14 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
 
     return (
         <> 
-            <HeadTitle 
-            id='HeadTitleSetting'
-            setActiveTab={setActiveTab} 
-            onPress={() => setActiveTab('profile')}
-            title='ตั้งค่า'/>
+            <View className='w-full flex flex-row items-center justify-between h-16 pr-20 relative'>
+                <HeadTitle 
+                id='HeadTitleSetting'
+                setActiveTab={setActiveTab} 
+                onPress={() => setActiveTab('profile')}
+                title='ตั้งค่า'/>
+                <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'setting'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
+            </View>
             <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
             <ScrollView 
             id='ProfileContainer'
@@ -421,7 +432,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                         <TextF className=' text-label pt-2'>ตั้งค่าแอป</TextF>
                     </View>
                     <View className='gap-5 mt-5'>
-                        <View className='flex flex-row justify-between mt-5'>
+                        {/* <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>สกุลเงินหลัก</TextF>
                             <View className='w-1/2'>
                                 <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
@@ -434,7 +445,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                             className=' absolute w-1/2'>
                                 <DropdownCustom options={optionsLanguage} selectedOption={selectedLanguage} setSelectedOption={setSelectedLanguage}/>
                             </View>
-                        </View>
+                        </View> */}
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>ธีม</TextF>
                             <View className='flex flex-row gap-5'>
