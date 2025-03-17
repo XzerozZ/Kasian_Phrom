@@ -316,9 +316,13 @@ const categoriesDebt = [
           </>}
 
           {loanInfo !== undefined && 
+          (popupNotiInfo && popupNotiInfo.balance > 0 ?
           <>
+            <View style={{ transform: [{ translateY: 20 }, { translateX: 0}] }}><Mascot fromP={'dashboardPopup_Insufficient'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
+          </>
+          :<>
             <View style={{ transform: [{ translateY: 20 }, { translateX: 0}] }}><Mascot fromP={'noti'} type={'normal'} isPress={true} className='w-32 h-40 z-50'/></View>
-          </>}
+          </>)}
           
           
           
@@ -488,8 +492,16 @@ const categoriesDebt = [
             </View>
             <View className='flex flex-row items-center justify-between'>
               <TextF className="text-lg text-label py-2 ">สถาณะ</TextF>
-              <TextF className="text-lg text-primary py-2 ">{loanInfo?.status === 'Completed' ?'สำเร็จ':'ดำเนินการ'}</TextF>
+              <TextF className="text-lg text-primary py-2 ">{loanInfo?.status === 'Completed' ?'สำเร็จ':loanInfo?.status === 'In_Progress' ?'ดำเนินการ':'หยุดพัก'}</TextF>
             </View>
+            {popupNotiInfo.balance > 0 &&
+            <View className='w-full items-end'>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={()=>{setActiveTab('debtManagement')}}>
+                <TextF className="text text-err py-2 ">จัดการ<AntDesign name="caretright" size={12} color="#FF5449"/></TextF>
+              </TouchableOpacity>
+            </View>}
           </View>
           :<TextF className="text-lg text-label p-2 my-5">ไม่มีข้อมูล</TextF>)}
           
@@ -539,18 +551,24 @@ const categoriesDebt = [
               className="w-3 h-3 rounded-full mr-4 mt-2"
               style={{
                 backgroundColor:
-                notiInfo?.balance > 0
+                (notiInfo?.balance > 0 && notiInfo?.type !== 'loan')
                     ? '#4CAF50'
                     : notiInfo?.type === 'loan'
-                    ? '#6780D6'
-                    : '#FFC107',
+                    ? notiInfo?.balance > 0 
+                    ? '#FF5449'
+                    : '#6780D6'
+                    : '#F68D2B',
               }}
             />
             <View className="flex-1">
               <TextF className=" text-normalText text-lg">{notiInfo.message}</TextF>
-              {notiInfo.balance > 0 && (
+              {(notiInfo?.balance > 0) && 
+              (notiInfo?.type !== 'loan' ?
                 <TextF className="text-lg text-normalText">
                   คุณเก็บเงินได้ <TextF className="text-xl text-primary">{addCommatoNumber(notiInfo.balance)}</TextF> บาท
+                </TextF>
+                :<TextF className="text-lg text-normalText">
+                  จำนวน <TextF className="text-xl text-primary">{addCommatoNumber(notiInfo.balance)}</TextF> บาท
                 </TextF>
               )}
             </View>

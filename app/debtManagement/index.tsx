@@ -77,7 +77,7 @@ const DebtManagement: React.FC<DebtManagementProps> = ({ isDarkMode, setActiveTa
     });
     const data = await response.json();
     const dataTransaction = await responseTransaction.json();
-    setInfoDebt(data.result);
+    setInfoDebt(data.result.summary);
     // console.log('Fetched debt:', JSON.stringify(data.result, null, 2));
 
     setDataDebt(dataTransaction.result.map((item: DebtItem, index:number) => ({

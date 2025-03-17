@@ -62,8 +62,9 @@ interface ProfileProps{
   isDarkMode: boolean;
   setActiveTab: (tab: string) => void;
   setStateNavbar: (state: boolean) => void;
+  setFormPage: (page: string) => void;
 }
-const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNavbar }) => {
+const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setFormPage }) => {
     const[userProfile, setUserProfile] = useState<Profile>();
     const[userMoney, setUserMoney] = useState<MoneyProfile>();
     const [dataProfile, setDataProfile] = useState<{ title: string; detail: string }[]>([]);
@@ -78,6 +79,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
 
     useEffect(() =>{
       setStateNavbar(true)
+      setFormPage('profile')
       const detailProfile = async() => {
         try {
 
@@ -206,7 +208,7 @@ console.log('dataProfile',dataProfile)
         <TouchableOpacity 
         id='BtnFavorite'
         activeOpacity={1}
-        // onPress={() => router.push('/favorite')}
+        onPress={() => setActiveTab('favnursingHouses')}
         className='w-44 h-10 bg-primary ml-5 mt-12 rounded-lg justify-center items-center flex flex-row gap-2'>
           <Ionicons name="heart" size={22} color='#fff'/>
           <TextF className=' text-white pt-1'>บ้านพักที่ชื่นชอบ</TextF>
@@ -218,7 +220,7 @@ console.log('dataProfile',dataProfile)
           <View className='flex flex-row justify-between mt-8'>
             <TextF className=' text-label'>การลงทุนที่เหมาะกับคุณ</TextF>
           </View>
-          <AssessCard setActiveTab={setActiveTab} setGoAuth={()=>{}}/>
+          <AssessCard setActiveTab={setActiveTab}/>
         {dataProfile.length > 0 && havePlan && <View>
           <View className='flex flex-row justify-between mt-8'>
             <TextF className=' text-label'>ข้อมูล</TextF>
