@@ -243,7 +243,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ isDarkMode, setStatePageForgotP
         </>}
         {stateForgotPage === 2 &&
         <View className='flex-1 justify-between items-center py-8'>
-          <TextF className='text-normalText text-2xl'>ใส่หรัสผ่านใหม่ของคุณ</TextF>
+          <TextF className='text-normalText text-2xl'>ใส่รหัสผ่านใหม่ของคุณ</TextF>
           <View>
             {sameOldPassword &&<View className=' flex justify-end items-end pr-5'>
               <TextF className='text-err'>รหัสของคุณไม่สามารถซ้ำกับรหัสเดิมได้</TextF>

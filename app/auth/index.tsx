@@ -25,6 +25,7 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
   const translateYPasswordInvalid = useRef(new Animated.Value(-130)).current;
   const translateYRegisterSuccess = useRef(new Animated.Value(-130)).current;
   const translateYChangePassword = useRef(new Animated.Value(-130)).current;
+  const translateYEmailFormatIsInvalid = useRef(new Animated.Value(-130)).current;
 
   console.log(statePageForgotPass)
   useEffect(() => {
@@ -120,6 +121,25 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
         setTypePopup(""); // ตั้งค่า typePopup เป็นค่าว่าง
       }, 2000);
     }
+    if (typePopup === 'emailFormatIsInvalid') {
+      Animated.timing(translateYEmailFormatIsInvalid, {
+        toValue: 64,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
+
+      setTimeout(() => {
+        Animated.timing(translateYEmailFormatIsInvalid, {
+          toValue: -130,
+          duration: 400,
+          useNativeDriver: true,
+        }).start();
+
+        setTypePopup(""); // ตั้งค่า typePopup เป็นค่าว่าง
+      }, 2000);
+    }
+
+    
   }, [typePopup]);
 
   return (
@@ -177,6 +197,15 @@ const Auth: React.FC<AuthProps> = ({ isDarkMode, setActiveTab, setStateNavbar}) 
         className="absolute flex justify-center items-center w-full "
       >
         <View className='flex justify-center items-center w-96 h-20 bg-neutral shadow-sm rounded-2xl'><TextF className="text-lg py-2 text-primary">เปลี่ยนรหัสผ่านสำเร็จ</TextF></View>
+      </Animated.View>
+
+      <Animated.View
+        style={{
+          transform: [{ translateY: translateYEmailFormatIsInvalid }],
+        }}
+        className="absolute flex justify-center items-center w-full "
+      >
+        <View className='flex justify-center items-center w-96 h-20 bg-neutral shadow-sm rounded-2xl'><TextF className="text-lg py-2 text-err">อีเมลไม่ถูกต้อง</TextF></View>
       </Animated.View>
       </View>
     </>

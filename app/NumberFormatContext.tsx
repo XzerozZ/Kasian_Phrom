@@ -5,6 +5,9 @@ const NumberFormatContext = createContext<{ addCommatoNumber: (num: any) => stri
 
 // ฟังก์ชันเพิ่มเครื่องหมายจุลภาค (,) ให้ตัวเลข
 const addCommatoNumber = (num: any, decimalPlaces: number = 0) => {
+  if (num === ''){
+    return "";
+  }
   if (num === undefined || num === null || isNaN(Number(num))) {
     return "0";
   }

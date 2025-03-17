@@ -18,6 +18,7 @@ interface infoHistoryProp{
   category: string,
   money: number,
   track_at: string
+  TransferFrom: string,
 }
 interface RecordProps{
   isDarkMode: boolean;
@@ -109,10 +110,10 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
                   ? <TextF className="text-label text-lg py-2">เดือนนี้ {toThaiMonth(month)}</TextF>
                   : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
                 }
-                <TextF className={`text-lg ${items.reduce((sum, item) => sum + item.money, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
-                  {items.reduce((sum, item) => sum + item.money, 0) > 0 ?`${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`
-                  :items.reduce((sum, item) => sum + item.money, 0) > 0 ?  `+ ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}` 
-                  : `- ${addCommatoNumber(items.reduce((sum, item) => sum + item.money, 0))}`}
+                <TextF className={`text-lg ${items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
+                  {items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) == 0 ?`${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
+                  :items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? `+ ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
+                  : `- ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`}
                 </TextF>
               </View>
               {items.map((data, index) => (

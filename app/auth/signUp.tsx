@@ -47,8 +47,11 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
       });
       if (!response.ok) {
         const errorData = await response.json();
-        if (errorData.message && errorData.message.includes('uni_users_email')) {
+        console.log(errorData)
+        if (errorData.message && errorData.message.includes('this email already have account')) {
             setTypePopup("emailIsRegister");
+        }else if (errorData.message && errorData.message.includes('invalid email format')) {
+          setTypePopup("emailFormatIsInvalid");
         }else{
             throw new Error('Network response was not ok');
         }
@@ -60,9 +63,7 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
 
       setStateLogin(true)
     } catch (error) {
-      throw new Error( error as string);
-      
-      
+      throw error;
     }
   };
   

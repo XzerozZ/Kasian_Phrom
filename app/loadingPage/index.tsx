@@ -3,6 +3,7 @@ import { View, Text, Button, Image, StyleSheet, Animated } from 'react-native';
 import React, { useEffect, useState, useRef } from 'react';
 import { theme } from '../../globalStyle';
 const Logo = require('../../assets/images/logo.png')
+import { useNumbers } from "../NumberProvider";
 
 interface LoadingPageProps{
   stateLoading: boolean;
@@ -15,8 +16,9 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
   const [stateLogo, setStateLogo] = useState(true);
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(1)).current;
-
+  const { numbers, generateRandomNumbers } = useNumbers();
   useEffect(() => {
+    
     if (!stateLoading) {
       
       setTimeout(() => {
@@ -32,7 +34,7 @@ const LoadingPage:React.FC<LoadingPageProps> = ({stateLoading, setStateLoading, 
     }
 
     setTimeout(() => {
-
+      generateRandomNumbers();
     }, 2500);
   }, []);
 

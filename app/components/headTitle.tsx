@@ -28,7 +28,7 @@ const headTitle: React.FC<headTitleProps> = ({ setActiveTab, title, ...prop }) =
             style={{ fontFamily: 'SarabunBold'}}
             className=' text-normalText text-2xl ml-3 h-12 pt-2'>{title}</Text>
         </View>
-        <View className='w-full px-5 mt-3'></View>
+        {/* <View className='w-full px-5 mt-3'></View> */}
         </>
     )
 }

@@ -4,7 +4,7 @@ import { FontAwesome6, FontAwesome, Fontisto, Ionicons, FontAwesome5 } from "@ex
 import TextF from "../components/TextF";
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Clipboard from '@react-native-clipboard/clipboard';
+// import Clipboard from '@react-native-clipboard/clipboard';
 
 interface Home {
   nh_id: string,
@@ -33,6 +33,7 @@ interface DetailNursingHousesProps {
   homeSelected: string;
   setHomeSelected: (home: any) => void;
   formPage: string;
+  formPage2: string;
   state: number | null;
   homePickInPlan: string;
   setHomePickInPlan: (home: string) => void;
@@ -46,6 +47,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
   homeSelected,
   setHomeSelected,
   formPage,
+  formPage2,
   state,
   homePickInPlan,
   setHomePickInPlan,
@@ -98,11 +100,11 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
           setHavePlan(true)
         }
 
-        const response = await fetch(`${Port.BASE_URL}/nursinghouses/${homeSelected}`, {
+        const response = await fetch(`${Port.BASE_URL}/nursinghouses/user/${homeSelected}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
-            // "Authorization": Bearer ${token}
+            "Authorization": `Bearer ${token}`
           },
         });
         if (!response.ok) {
@@ -273,7 +275,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
     <>
       {/* Header */}
       <View className="flex-row items-center p-4">
-        <TouchableOpacity onPress={() => formPage==='index'? setActiveTab("nursingHouses"):setHomeSelected('')}>
+        <TouchableOpacity onPress={() => formPage2==='favnursingHouses'?setActiveTab("favnursingHouses"):formPage==='index'? setActiveTab("nursingHouses"): formPage==='dashboard'?setActiveTab("dashboard"):  setHomeSelected('')}>
           <FontAwesome6 name="angle-left" size={28} color="#070F2D" />
         </TouchableOpacity>
         <Text 
@@ -361,7 +363,7 @@ const DetailNursingHouses: React.FC<DetailNursingHousesProps> = ({
               name="copy-outline" 
               size={25} 
               color="#979797" 
-              onPress={() => Clipboard.setString(detailHouses?.phone_number || '')}
+              // onPress={() => Clipboard.setString(detailHouses?.phone_number || '')}
             />
             <FontAwesome 
               name="phone" size={25} color="#979797" className="mx-4" 

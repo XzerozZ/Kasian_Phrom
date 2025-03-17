@@ -8,10 +8,9 @@ import TextF from './TextF';
 
 interface AssessCardProps {
   setActiveTab: (tab: string) => void;
-  setGoAuth: (state: boolean) => void;
 };
 
-const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab, setGoAuth }) => {
+const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab }) => {
   const [riskId, setRiskId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const fadeAnim = useRef(new Animated.Value(0)).current; // สร้างค่าเริ่มต้น opacity = 0
@@ -97,7 +96,7 @@ const AssessCard: React.FC<AssessCardProps> = ({ setActiveTab, setGoAuth }) => {
         <TouchableOpacity  
           id='BtnCardNoRisk'
           activeOpacity={1}
-          onPress={() => isAuth?setActiveTab('assessmentRisk'):setGoAuth(true)}
+          onPress={() => isAuth? setActiveTab('assessmentRisk'): setActiveTab('auth')}
 
         >
           <View className='flex h-32 justify-center gap-1 px-5'>

@@ -7,11 +7,12 @@ import CheckBox from '../components/checkBox';
 import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImagePicker from 'react-native-image-crop-picker';
-import {
-    GoogleSignin,
-    statusCodes,
-  } from "@react-native-google-signin/google-signin";
+// import ImagePicker from 'react-native-image-crop-picker';
+import Mascot from '../components/mascot';
+// import {
+//     GoogleSignin,
+//     statusCodes,
+//   } from "@react-native-google-signin/google-signin";
 
 const Logo = require('../../assets/images/logo.png')
 
@@ -77,9 +78,11 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
     const handleLogout = async () => {
         try {
+
             // await AsyncStorage.removeItem('token');
-            
+            // AsyncStorage.removeItem('u_id');
             // setActiveTab('main');
+
             const token = await AsyncStorage.getItem('token');
             const response = await fetch(`${Port.BASE_URL}/auth/logout`, {
             method: "POST",
@@ -89,10 +92,15 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             },
             });
             
-            GoogleSignin.signOut();
+            // GoogleSignin.signOut();
             AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
             setActiveTab('main');
         } catch (error) {
+            // GoogleSignin.signOut();
+            AsyncStorage.removeItem('token');
+            AsyncStorage.removeItem('u_id');
+            setActiveTab('main');
             throw new Error( error as string);
         }
     };
@@ -227,54 +235,54 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
         }
     };
 
-    const handleChangeImg = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            if (!token) {
-                console.error("Token not found");
-                return;
-            }
-            ImagePicker.openPicker({
-                width: 300,
-                height: 300,
-                cropping: true
-            }).then(async image => {
+    // const handleChangeImg = async () => {
+    //     try {
+    //         const token = await AsyncStorage.getItem('token');
+    //         if (!token) {
+    //             console.error("Token not found");
+    //             return;
+    //         }
+    //         ImagePicker.openPicker({
+    //             width: 300,
+    //             height: 300,
+    //             cropping: true
+    //         }).then(async image => {
                 
-                const formData = new FormData();
-                console.log('image:', JSON.stringify(image, null, 2));
+    //             const formData = new FormData();
+    //             console.log('image:', JSON.stringify(image, null, 2));
 
-                const photo = {
-                    uri: image.path,
-                    type: image.mime,
-                    name: image.filename || `photo.${image.mime.split('/')[1]}`
-                };
-                formData.append('images', photo as any);
-                console.log(formData)
+    //             const photo = {
+    //                 uri: image.path,
+    //                 type: image.mime,
+    //                 name: image.filename || `photo.${image.mime.split('/')[1]}`
+    //             };
+    //             formData.append('images', photo as any);
+    //             console.log(formData)
             
-                const response = await fetch(`${Port.BASE_URL}/user`, {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "multipart/form-data"
-                    },
-                    body: formData
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.log('errorDataAsset', errorData);
-                    throw new Error(errorData.message || "Network response was not ok");
-                }
-                const data = await response.json();
-                console.log('data', data);
-                setImgProfile(data.result.image_link); 
-                setRefresh(!refresh);
-            });
+    //             const response = await fetch(`${Port.BASE_URL}/user`, {
+    //                 method: "PUT",
+    //                 headers: {
+    //                     "Authorization": `Bearer ${token}`,
+    //                     "Content-Type": "multipart/form-data"
+    //                 },
+    //                 body: formData
+    //             });
+    //             if (!response.ok) {
+    //                 const errorData = await response.json();
+    //                 console.log('errorDataAsset', errorData);
+    //                 throw new Error(errorData.message || "Network response was not ok");
+    //             }
+    //             const data = await response.json();
+    //             console.log('data', data);
+    //             setImgProfile(data.result.image_link); 
+    //             setRefresh(!refresh);
+    //         });
             
             
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error("Error:", error);
+    //     }
+    // }
 
 console.log('imgInput', JSON.stringify(imgInput, null, 2));
     
@@ -283,11 +291,14 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
 
     return (
         <> 
-            <HeadTitle 
-            id='HeadTitleSetting'
-            setActiveTab={setActiveTab} 
-            onPress={() => setActiveTab('profile')}
-            title='ตั้งค่า'/>
+            <View className='w-full flex flex-row items-center justify-between h-16 pr-20 relative'>
+                <HeadTitle 
+                id='HeadTitleSetting'
+                setActiveTab={setActiveTab} 
+                onPress={() => setActiveTab('profile')}
+                title='ตั้งค่า'/>
+                <View style={{position:'absolute', top: -35, right:20}} ><Mascot fromP={'setting'} type={'normal'} isPress={true} className='w-32 h-44 z-50'/></View>
+            </View>
             <View className='w-full px-5 mt-3 border-b border-unselectInput'></View>
             <ScrollView 
             id='ProfileContainer'
@@ -300,7 +311,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                         <TouchableOpacity 
                         id=' BtnSettingChangeImg'
                         // activeOpacity={1}
-                        onPress={handleChangeImg}
+                        // onPress={handleChangeImg}
                         style={{position:'relative', borderWidth: 3}}
                         className='w-32 h-32 rounded-full border-primary'>
                             {imgProfile ? <Image 
@@ -426,7 +437,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                         <TextF className=' text-label pt-2'>ตั้งค่าแอป</TextF>
                     </View>
                     <View className='gap-5 mt-5'>
-                        <View className='flex flex-row justify-between mt-5'>
+                        {/* <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>สกุลเงินหลัก</TextF>
                             <View className='w-1/2'>
                                 <DropdownCustom options={options} selectedOption={selectedOption} setSelectedOption={setSelectedOption}/>
@@ -439,7 +450,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                             className=' absolute w-1/2'>
                                 <DropdownCustom options={optionsLanguage} selectedOption={selectedLanguage} setSelectedOption={setSelectedLanguage}/>
                             </View>
-                        </View>
+                        </View> */}
                         <View className='flex flex-row justify-between mt-5'>
                             <TextF className=' text-normalText text-lg'>ธีม</TextF>
                             <View className='flex flex-row gap-5'>

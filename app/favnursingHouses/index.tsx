@@ -32,10 +32,11 @@ interface FavNursingHousesProps {
   setStateNavbar: (state: boolean) => void;
   setHomeSelected: (home: any) => void;
   formPage: string;
+  setFormPage2: (page: string) => void;
   setState: (state: number) => void;
 }
 
-const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setState }) => {
+const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setHomeSelected, formPage, setFormPage2, setState }) => {
   // const favoriteHomes = [
   //   {
   //     id: "1",
@@ -66,12 +67,13 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
   // }, [query]);
   const [favHouses, setFavHouses] = useState<Home[]>([]);
   useEffect(() => {
-    if (formPage === 'index') {
-      setStateNavbar(true);
-    }else{
-      setStateNavbar(false);
-    }
-  }, [setStateNavbar]);
+    // if (formPage === 'index') {
+    //   setStateNavbar(true);
+    // }else{
+    //   setStateNavbar(false);
+    // }
+    setStateNavbar(false);
+  }, []);
 
   useEffect(() => {
     
@@ -109,7 +111,7 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
     <View className="flex-1 px-5">
       {/* Header */}
       <View className="flex-row items-center p-4">
-        <TouchableOpacity onPress={() => formPage === 'index' ? setActiveTab("nursingHouses") : setState(5)}>
+        <TouchableOpacity onPress={() => formPage === 'index' ? setActiveTab("nursingHouses") :formPage === 'profile' ? setActiveTab("profile") : setState(5)}>
           <FontAwesome6 name="angle-left" size={28} color="#070F2D" />
         </TouchableOpacity>
         <Text 
@@ -141,10 +143,10 @@ const FavNursingHouses: React.FC<FavNursingHousesProps> = ({ isDarkMode, setActi
                 key={index}
                 activeOpacity={1}
                 onPress={() => {
-                  (formPage === 'index' && setActiveTab('detailnursingHouses'),setHomeSelected(Home.NursingHouse.nh_id),console.log('idh',Home.NursingHouse.nh_id))
+                  (formPage === 'index' && setActiveTab('detailnursingHouses'),setHomeSelected(Home.NursingHouse.nh_id), setFormPage2('favnursingHouses'))
                 }}
               >
-                {/* <NursingHomeCard datahouse={Home.NursingHouse} /> */}
+                <NursingHomeCard datahouse={Home.NursingHouse} />
                 <View className="flex px-4 my-5 h-[1] bg-unselectInput" />
               </TouchableOpacity>
             ))}

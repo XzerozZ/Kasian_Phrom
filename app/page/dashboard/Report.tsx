@@ -6,6 +6,7 @@ import  TextF  from '../../components/TextF';
 import Port from '@/Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../../components/mascot';
 
 
 interface NursingHouse {
@@ -72,13 +73,15 @@ interface dataPartProp{
 interface ReportProps{
   isDarkMode: boolean;
   reflesh: boolean;
+  setActiveTab: (tab: string) => void;
+  setHomeSelected: (id: string) => void;  
 }
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh }) => {
+const Report: React.FC<ReportProps> = ({ isDarkMode, reflesh, setActiveTab, setHomeSelected }) => {
   const [statePart, setStatePart] = useState(false)
   const [infoPlan, setInfoPlan] = useState<InfoPlanProps>();
   const [dataAsset, setDataAsset] = useState<Asset[]>([])
@@ -220,13 +223,14 @@ console.log('series2:', series2)
           <View className='mt-5 flex justify-center items-center'>
             <TextF className='text-2xl font-bold'>{infoPlan?.plan_name}</TextF>
           </View>
-          <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm'>
+          <View className='mt-5 flex justify-center items-center bg-neutral mx-8 p-4 rounded-3xl shadow-sm relative'>
             <View className='flex w-9/12 max-w-96 max-h-96 my-4 items-center justify-center aspect-square'>
               <ChartCir series={series} series2={series2}/>
             </View>
             <View className='flex w-full items-end '>
               <TextF className='text-label mr-5 text-sm'>กราฟแสดงสัดส่วนจำนวนเงิน</TextF>
             </View>
+            <View style={{position:'absolute', bottom: -20, left:-20}} ><Mascot fromP={'dashboard'} type={'normal'} isPress={true} className='w-48 h-44'/></View>
           </View>
           <View className='px-5 mt-5 gap-3'>
             <View className='flex flex-row justify-between items-center'>
@@ -327,7 +331,7 @@ console.log('series2:', series2)
                   <View 
                   id={'dataAsset'}
                   key={index} 
-                  className={`flex w-56 h-33 rounded-xl border border-neutral2 shadow-sm p-3 justify-between mr-3 ${item.status === 'Paused'?'bg-slate-200' : 'bg-neutral'}`}>
+                  className={`flex w-56 h-33 rounded-xl border shadow-sm p-3 justify-between mr-3 ${item.status === 'Paused'?'bg-slate-200': 'bg-neutral'} ${item.status ==='Completed'?'border-ok':' border-neutral2'}`}>
                     <View className='flex flex-row justify-between items-center'>
                       <View className='flex flex-row gap-2'>
                         {item.type == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" /> }
@@ -338,6 +342,7 @@ console.log('series2:', series2)
                         {item.type == 'emergencyMoney' && <FontAwesome5 name="hospital-alt" size={18} color="#070F2D" /> }
                         <TextF className='text-normalTextF text-lg'>{item.name}</TextF>
                         {item.status === 'Paused' && <TextF className='text-label'>[ หยุดพัก ]</TextF>}
+                        {item.status ==='Completed' && <TextF className='text-oktext'>[ สำเร็จ ]</TextF>}
                       </View>
                       <View 
                       style={{backgroundColor: colorsCat[index % colorsCat.length]}}
@@ -392,10 +397,14 @@ console.log('series2:', series2)
                   <TextF className='text-normalText text-lg'>เงินที่ต้องเก็บ/เดือน</TextF>
                   <TextF className=' text-normalText text-lg'>{addCommatoNumber(dataHouse.monthly_expenses)} บาท</TextF>
                 </View>
-                <View className='w-full flex flex-row gap-1 justify-end'>
+                <TouchableOpacity 
+                onPress={() => {
+                  (setActiveTab('detailnursingHouses'),setHomeSelected(dataHouse?.NursingHouse.nh_id))
+                }}
+                className='w-full flex flex-row gap-1 justify-end'>
                     <TextF className='text-accent'>ดูรายละเอียด</TextF>
                     <FontAwesome6 name="caret-right" size={18} color='#F68D2B'/>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>}

@@ -9,6 +9,7 @@ import Port from '../../Port';
 import HeadTitle from '../components/headTitle';
 import { useMemo } from 'react';
 import { useNumberFormat } from "@/app/NumberFormatContext";
+import Mascot from '../components/mascot';
 
 
 interface AddDebtProps{
@@ -77,6 +78,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       monthAmount: String(data.result.remaining_months),
       type: data.result.type,
     }));
+    setType(data.result.type);
     setIsInstallment(data.result.installment);
   }
   if (debtSelect !== ''){
@@ -84,7 +86,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
   }
   
   }, [debtSelect]);
-  console.log(newDataAssetInput);
+  console.log('newDataAssetInput',newDataAssetInput);
 
 
   const handleSave = async () => {
@@ -307,19 +309,23 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
       </ScrollView>
       </KeyboardAvoidingView>
       <View
-        className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none'>
+        className=' h-14 flex flex-row justify-center items-center mb-20 px-5 gap-2 bg-none relative'>
           <TouchableOpacity
           id='BtnCancelFutureUse'
           onPress={()=>setStatePage('debtManagement')}
           className='flex-1 h-14 rounded-lg border border-err justify-center items-center'>
             <TextF className='text-err text-lg'>ยกเลิก</TextF>
           </TouchableOpacity>
+          
           <TouchableOpacity 
           id='BtnSaveFutureUse'
+          activeOpacity={1}
           onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
-          className={`flex-1 h-14 rounded-lg justify-center items-center ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
+          className={`flex-1 h-14 rounded-lg justify-center items-center relative ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
+            <View style={{position:'absolute', top:-90, right:-30 }} pointerEvents="none"><Mascot fromP={'addDept'} type={'normal'} isPress={false} className='w-48 h-40 z-50'/></View>
           </TouchableOpacity>
+           
         </View>
     </>
   )
