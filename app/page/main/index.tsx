@@ -10,6 +10,10 @@ import Mascot from '../../components/mascot';
 
 const Logo = require('../../../assets/images/logo.png');
 
+interface RecommendImage {
+  nh_id: string;
+  images: { image_link: string }[];
+}
 interface User {
   u_id?: string;
   uname?: string;
@@ -61,9 +65,10 @@ interface MainProps {
   setFormClick: (form: string) => void;
   isAuth: boolean;
   setIsAuth: (auth: boolean) => void;
+  setHomeSelected: (id: string) => void;
 }
 
-const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick, isAuth, setIsAuth }) => {
+const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, setBackto, setFormClick, isAuth, setIsAuth, setHomeSelected }) => {
   
   
   
@@ -75,6 +80,9 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
   const [infoPlan, setInfoPlan] = useState<any>(null);
   const [dataUser, setDataUser] = useState<User>({});
   const [isReadNoti, setIsReadNoti] = useState(false);
+
+  
+  const [linkRecImg, setLinkRecImg] = useState<RecommendImage[]>([]);
 
   useEffect(() => {
     getRandomQuote();
@@ -109,10 +117,20 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             },
           });
 
+          const responseRecommend = await fetch(`${Port.BASE_URL}/nursinghouses/recommend/cosine`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          })
+
 
           const dataPlan = await responsePlan.json();
           const dataUser = await responseUser.json();
           const dataNoti = await responseNoti.json();
+          const dataRecommend = await responseRecommend.json();
+          console.log(JSON.stringify(dataRecommend.result, null, 2))
 
           console.log(dataPlan.result)
           if (dataPlan.result !== null) {
@@ -126,6 +144,10 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
 
           if (dataNoti.result !== null) {
             setIsReadNoti(dataNoti.result.some((noti: any) => noti.is_read === false));
+          }
+
+          if (dataRecommend.result !== null) {
+            setLinkRecImg(dataRecommend.result)
           }
 
 
@@ -293,7 +315,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                 activeOpacity={1}
                 onPress={() => setActiveTab('dashboard')}
                 className='rounded-xl border border-banner h-28 mt-5 justify-center gap-2'>
-              <TextF className=' ml-6 text-normalText text-lg'>{infoPlan.monthly_expenses < 0 ?'จำนวนเงินที่ต้องเก็บในดือนนี้ครบแล้ว':"จำนวนเงินที่ต้องเก็บในเดือนนี้"}</TextF>
+              <TextF className=' ml-6 text-normalText text-lg'>{infoPlan.monthly_expenses < 0 ?'จำนวนเงินที่ต้องเก็บในเดือนนี้ครบแล้ว':"จำนวนเงินที่ต้องเก็บในเดือนนี้"}</TextF>
               <View className='flex-row justify-between items-end'>
                 <View className='flex-row gap-2 items-end'>
                   <TextF className={`text-3xl ml-6 ${infoPlan.monthly_expenses < 0 ? 'text-oktext' : 'text-primary'}`}>{infoPlan.monthly_expenses < 0 ?  `+ ${addCommatoNumber(Math.abs(infoPlan.monthly_expenses))}` : addCommatoNumber(infoPlan.monthly_expenses)}</TextF>
@@ -376,18 +398,18 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
             <ScrollView 
             horizontal={true}
             className='mt-5 h-[130]'> 
-                <Image
-                source={{ uri: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg" }}
-                style={styles_pic.image}
-                />
-                <Image
-                source={{ uri: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg" }}
-                style={styles_pic.image}
-                />
-                <Image
-                source={{ uri: "https://www.therichnursing.com/wp-content/uploads/2024/01/%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%9E%E0%B8%B1%E0%B8%81-%E0%B8%84%E0%B8%99%E0%B8%8A%E0%B8%A3%E0%B8%B2-%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.jpg" }}
-                style={styles_pic.image}
-                /> 
+                {linkRecImg && linkRecImg.map((link, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={1}
+                    onPress={() => {setActiveTab('detailnursingHouses'),setHomeSelected(link.nh_id)}}>
+                    <Image
+                    source={{ uri: link.images[0]?.image_link }}
+                    style={styles_pic.image}
+                    className='bg-gray-300'
+                    />
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
           </View>
         </View>
@@ -405,6 +427,7 @@ const styles_pic = StyleSheet.create({
     height: 120,
     borderRadius: 13,
     marginRight: 15,
+    
   },
   logo: {
     width: 70,
