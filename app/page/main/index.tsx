@@ -275,8 +275,8 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   <>
                     <TextF className='text-2xl text-primary py-2 px-5'>สวัสดี, คุณ {dataUser?.uname}</TextF>
                     <TextF className='text-2xl text-primary py-2 px-5'>{DateThai}</TextF>
+                    <View className='flex-row gap-2 px-5 w-[400]'><FontAwesome6 name="quote-left" size={12} color="#6780D6"/><TextF className='py-1 text-xl text-primary2'>{quotes}</TextF><FontAwesome6 name="quote-right" size={12} color="#6780D6"/></View>
                   </>:<TextF className='text-2xl text-primary py-2 px-5 my-5'>ยินดีต้อนรับสู่เกษียณพร้อม</TextF>}
-                  <View className='flex-row gap-2 px-5'><FontAwesome6 name="quote-left" size={12} color="#6780D6"/><TextF className='py-1 text-xl text-primary2 w-80'>{quotes}</TextF><FontAwesome6 name="quote-right" size={12} color="#6780D6"/></View>
                 </View>
               </View>
             <View style={{position:'absolute', top: -10, right:-30}} className='' ><Mascot fromP={'main'} type={'normal'} isPress={true} className='w-44 h-40 overflow-hidden'/></View>
