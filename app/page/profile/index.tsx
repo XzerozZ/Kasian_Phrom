@@ -74,6 +74,7 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
     const [textIsAuth, setTextIsAuth] = useState<string>('');
     const [havePlan, setHavePlan] = useState<boolean>(false);
     const [textHavePlan, setTextHavePlan] = useState<string>('');
+    const [userAge, setUserAge] = useState<number | null>(null);
     
 
 
@@ -92,12 +93,6 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           setIsAuth(true)
 
           console.log('token:', token);
-          const responsePlan = await fetch(`${Port.BASE_URL}/user/plan`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
           
 
           const response = await fetch(`${Port.BASE_URL}/user`, {
@@ -122,8 +117,8 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
             console.log('errorDataAsset',errorData)
             throw new Error(errorData.message || "Network response was not ok");
           }
-          const data = await responsePlan.json();
-          if (data.result === null) {
+          const dataMoney = await responseMoney.json();
+          if (dataMoney.result === null) {
             setHavePlan(false)
             setTextHavePlan('คุณยังไม่มีแผนการเงิน')
           }else{
@@ -132,8 +127,9 @@ const Profile: React.FC<ProfileProps> = ({ isDarkMode, setActiveTab, setStateNav
           }
           
           const dataUser = await response.json();
-          const dataMoney = await responseMoney.json();
+          
           setUserProfile(dataUser.result)
+          setUserAge(dataUser.result.retirement?.birth_date ? new Date().getFullYear() - new Date(dataUser.result.retirement?.birth_date.replace(/(\d{2})-(\d{2})-(\d{4})/, '$3-$2-$1')).getFullYear() : null)
           setUserMoney(dataMoney.result)
           console.log('----------------------a',JSON.stringify(dataUser.result, null, 2));
           console.log('----------------------a',JSON.stringify(dataMoney.result, null, 2));
@@ -201,7 +197,7 @@ console.log('dataProfile',dataProfile)
             <View className='flex justify-between'>
               <TextF className='text-lg text-normalText'> {userProfile?.uname}</TextF>
               <TextF className='text-lg text-normalText'> {userProfile?.fname} {userProfile?.lname}</TextF>
-              <TextF className='text-lg text-normalText'> {userProfile?.age}</TextF>
+              <TextF className='text-lg text-normalText'> {userAge}</TextF>
             </View>
           </View>
         </View>
