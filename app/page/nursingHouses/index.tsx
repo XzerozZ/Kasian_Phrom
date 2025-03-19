@@ -56,6 +56,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
         })
 
@@ -70,6 +71,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
         if (isAllHouses === false) {
           setAllHouses(data.result);
         } else if (isAllHouses === true) {
+          console.log(',dataRecommend.result,,,,,,,,,,,,,,,,,,,,,',dataRecommend.result);
           setAllHouses(dataRecommend.result);
         }
 
@@ -378,7 +380,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
 
           </View>
           <View className='h-5'></View>
-          {searchQuery.map((Home, index) => (
+          {searchQuery && searchQuery.length > 0 && searchQuery.map((Home, index) => (
             <TouchableOpacity
               id='recommendNursingHomes'
               key={index}
