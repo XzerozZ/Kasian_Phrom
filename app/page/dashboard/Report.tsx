@@ -349,7 +349,7 @@ console.log('series2:', series2)
                       className={`w-5 h-5 rounded `}></View>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
-                      <TextF className='text-normalTextF text-sm py-1'>ซื้อตอนปี {item.end_year}</TextF>
+                      <TextF className='text-normalTextF text-sm py-1'>ซื้อตอนปี {parseInt(item.end_year)+543}</TextF>
                     </View>
                     <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text'>ต้องเก็บ/เดือน</TextF>

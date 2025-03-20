@@ -75,6 +75,7 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
     ];
     return thaiMonth[monthNumber - 1];
   }
+
   const groupedByMonth = infoHistory.reduce((acc: { [key: string]: typeof infoHistory }, item) => {
     const monthKey = item.track_at.slice(0, 7); // ตัดเอาแค่ YYYY-MM (เช่น "2025-02")
     
@@ -102,28 +103,31 @@ const Record: React.FC<RecordProps> = ({ isDarkMode, reflesh }) => {
         <View className='px-5 mt-5 gap-3'>
           <TextF className=' text-normalText text-lg'>ประวัติการออม</TextF>
         </View>
-        {Object.entries(groupedByMonth).map(([month, items], index) => (
-          <View id="HistoryCard" key={month}>
-            <View className="px-5 mt-5 mb-2">
-              <View className="flex flex-row justify-between items-center mb-5">
-                {index === 0
-                  ? <TextF className="text-label text-lg py-2">เดือนนี้ {toThaiMonth(month)}</TextF>
-                  : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
-                }
-                <TextF className={`text-lg ${items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
-                  {items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) == 0 ?`${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
-                  :items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? `+ ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
-                  : `- ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`}
-                </TextF>
-              </View>
-              {items.map((data, index) => (
-                <View key={index}>
-                  <HistoryCard data={data} />
+        {Object.entries(groupedByMonth)
+          .sort(([a], [b]) => b.localeCompare(a)) // เรียงจากปีน้อยไปมาก และเดือนน้อยไปมาก
+          .map(([month, items], index) => (
+            <View id="HistoryCard" key={month}>
+              <View className="px-5 mt-5 mb-2">
+                <View className="flex flex-row justify-between items-center mb-5">
+                  {index === 0
+                    ? <TextF className="text-label text-lg py-2">เดือนนี้ {toThaiMonth(month)}</TextF>
+                    : <TextF className="text-label text-lg py-2">เดือน {toThaiMonth(month)}</TextF>
+                  }
+                  <TextF className={`text-lg ${items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? ' text-oktext' : 'text-err'}`}>
+                    {items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) == 0 ?`${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
+                    :items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0) > 0 ? `+ ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`
+                    : `- ${addCommatoNumber(items.reduce((sum, item) => {return sum + (item.TransferFrom !=='' ? 0 :item.method === "deposit" ? item.money : -item.money);}, 0))}`}
+                  </TextF>
                 </View>
-              ))}
+                {items.map((data, index) => (
+                  <View key={index}>
+                    <HistoryCard data={data} />
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+
         
       </View>
       <View className='h-32'></View>

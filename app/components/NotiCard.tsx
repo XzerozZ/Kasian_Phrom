@@ -27,7 +27,7 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const opacityAnim = useRef(new Animated.Value(0)).current;
-    const translateYAnim = useRef(new Animated.Value(-140)).current; //-140
+    const translateYAnim = useRef(new Animated.Value(-120)).current; //-140
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y;
@@ -57,7 +57,7 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
                 useNativeDriver: true,
             }).start();
             Animated.timing(translateYAnim, {
-                toValue: -140,
+                toValue: -120,
                 duration: 500,
                 useNativeDriver: true,
             }).start();
@@ -70,22 +70,22 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
         }
     }, [position]);
 
-    // useEffect(() => {
-    //     if (countDown === 0) {
-    //         Animated.timing(opacityAnim, {
-    //             toValue: 0,
-    //             duration: 500,
-    //             useNativeDriver: true,
-    //         }).start();
-    //         Animated.timing(translateYAnim, {
-    //             toValue: -140,
-    //             duration: 500,
-    //             useNativeDriver: true,
-    //         }).start();
-    //         setMessageNoti(undefined);
-    //     }
+    useEffect(() => {
+        if (countDown === 0) {
+            Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+            Animated.timing(translateYAnim, {
+                toValue: -120,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+            setMessageNoti(undefined);
+        }
         
-    // }, [countDown]);
+    }, [countDown]);
 
     const handlePressIn = () => {
         setCountDown(5);
@@ -125,7 +125,7 @@ const NotiCard: React.FC<NotiCardProps> = ({ messageNoti, setMessageNoti, setAct
                 showsVerticalScrollIndicator={false}
                 pagingEnabled={true}
                 snapToInterval={112}
-                style={{ position: 'absolute', top: -140, zIndex: 100000, opacity: opacityAnim, transform: [{ translateY: translateYAnim }] }}
+                style={{ position: 'absolute', top: -120, zIndex: 100000, opacity: opacityAnim, transform: [{ translateY: translateYAnim }] }}
                 className='w-full h-80'
             >
                 <View className='h-40 w-full border-x border-primary2 bg-white'></View>

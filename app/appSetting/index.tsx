@@ -7,6 +7,8 @@ import CheckBox from '../components/checkBox';
 import DropdownCustom from '../components/DropdownCustom';
 import Port from '../../Port';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BlurView } from 'expo-blur';
+
 // import ImagePicker from 'react-native-image-crop-picker';
 import Mascot from '../components/mascot';
 // import {
@@ -56,6 +58,8 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
     const [imgInput, setImgInput] = useState<any | null>(null);
     const [refresh, setRefresh] = useState(false);
     const [isGoogleAccount, setIsGoogleAccount] = useState(false);
+    const [oldPassWrong, setOldPassWrong] = useState(false);
+    const [changePassSuccess, setChangePassSuccess] = useState(false);
 
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -224,14 +228,16 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
             const result = await response.json();  
             console.log("Raw response:", result);
     
-            if (!response.ok) {
-                console.error("Error updating password:", result);
+            if (!response.ok && result.message === 'invalid old password') {
+                setOldPassWrong(true);
                 throw new Error(result.message || "Failed to update password");
             }
-    
+            setOldPassword('');
+            setNewPassword('');
+            setChangePassSuccess(true);
             console.log("Password updated successfully:", result);
         } catch (error) {
-            console.error("Error:", error);
+            throw new Error(error as string);
         }
     };
 
@@ -286,11 +292,49 @@ const appSetting: React.FC<appSettingProps> = ({ isDarkMode, setActiveTab, setSt
 
 console.log('imgInput', JSON.stringify(imgInput, null, 2));
     
+      const opacityAnim = useRef(new Animated.Value(0)).current;
+      const scaleAnim = useRef(new Animated.Value(0.8)).current;
     
+      useEffect(() => {
+        if (changePassSuccess) {
+          // แสดง Popup (fade-in + scale-up)
+          Animated.parallel([
+            Animated.timing(opacityAnim, {
+              toValue: 1,
+              duration: 500,
+              useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+              toValue: 1,
+              duration: 500,
+              useNativeDriver: true,
+            }),
+          ]).start();
+    
+          // ซ่อน Popup หลัง 2 วินาที (fade-out + scale-down)
+          setTimeout(() => {
+            Animated.parallel([
+              Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+              }),
+              Animated.timing(scaleAnim, {
+                toValue: 0.8,
+                duration: 500,
+                useNativeDriver: true,
+              }),
+            ]).start(() => {
+                setChangePassSuccess(false)
+            });
+          }, 4000);
+        }
+      }, [changePassSuccess]);
     
 
     return (
         <> 
+            
             <View className='w-full flex flex-row items-center justify-between h-16 pr-20 relative'>
                 <HeadTitle 
                 id='HeadTitleSetting'
@@ -391,7 +435,7 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                     {!isGoogleAccount && <>
                     <View className='flex flex-row justify-between mt-5'>
                         <TextF className=' text-normalText text-lg'>รีเซ็ตรหัสผ่าน</TextF>
-                        <View className='flex gap-8 w-8/12'>
+                        <View className='flex gap-1 w-8/12'>
                             <TextInput
                                 id=' EditInputOldPassword'
                                 onFocus={() => {
@@ -404,8 +448,9 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                                 placeholderTextColor={'#B0B0B0'}
                                 keyboardType='default'
                                 value={oldPassword}
-                                onChangeText={setOldPassword}
-                                className={`text-lg border-b border-unselectInput  w-full`}/>
+                                onChangeText={(text) => { setOldPassword(text); setOldPassWrong(false); }}
+                                className={`text-lg border-b w-full ${oldPassWrong ? 'border-err':'border-unselectInput'}`}/>
+                            <View className='w-full items-end'><TextF  className='text-err'>{oldPassWrong && 'รหัสผ่านเก่าไม่ถูกต้อง'}</TextF></View>
                             <TextInput
                                 id=' EditInputNewPassword'
                                 onFocus={() => {
@@ -420,14 +465,15 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                                 value={newPassword}
                                 onChangeText={setNewPassword}
                                 className={`text-lg border-b border-unselectInput  w-full`}/>
+                            
                         </View>
                     </View>
                     <View className='flex items-end mt-5'>
                         <TouchableOpacity 
                         id=' BtnChangePassword'
                         activeOpacity={1}
-                        onPress={handleChangePass}
-                        className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${newPassword && oldPassword ?'bg-primary':'bg-unselectMenu'}`}>
+                        onPress={newPassword && oldPassword && (newPassword !== oldPassword) ? handleChangePass : () => {}}
+                        className={`w-40 h-10 ml-5 mt-5 rounded-lg justify-center items-center flex flex-row gap-2 ${newPassword && oldPassword && (newPassword !== oldPassword) ?'bg-primary':'bg-unselectMenu'}`}>
                             <TextF className=' text-white'>เปลี่ยน</TextF>
                         </TouchableOpacity>
                     </View>
@@ -487,6 +533,30 @@ console.log('imgInput', JSON.stringify(imgInput, null, 2));
                 </View>
                 
             </ScrollView>
+            {changePassSuccess &&
+                <TouchableOpacity 
+                activeOpacity={1}
+                onPress={() => setChangePassSuccess(false)}
+                className=' absolute flex-1 h-full w-full justify-center items-center' style={{ flex: 1, top: 0, left:0}}>
+                <BlurView
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                  }}
+                  intensity={40}
+                  tint="prominent" // หรือใช้ "dark", "extraLight"
+                />
+                <Animated.View 
+                style={[
+                  { opacity: opacityAnim, transform: [{ scale: scaleAnim }] }
+                ]}
+                className='w-10/12 h-52 bg-neutral rounded-2xl shadow-lg flex justify-center items-center gap-3'>
+                    <TextF className='text-xl text-primary py-2'>เปลี่ยนรหัสผ่านสำเร็จ</TextF>
+                </Animated.View>
+              </TouchableOpacity>}
         </>
     )
 }

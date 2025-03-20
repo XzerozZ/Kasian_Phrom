@@ -381,7 +381,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
               
           </View>
 
-          <View className='flex-row justify-between mt-8'>
+          {isAuth && <><View className='flex-row justify-between mt-8'>
             <TextF className='text-normalText text-lg pt-1'>บ้านพักคนชราแนะนำ</TextF>
             <TouchableOpacity 
               id='BtnAllNursingHouses'
@@ -411,7 +411,7 @@ const Main: React.FC<MainProps> = ({ isDarkMode, setActiveTab, setStateNavbar, s
                   </TouchableOpacity>
                 ))}
             </ScrollView>
-          </View>
+          </View></>}
         </View>
         <View className='h-52'></View>
       </ScrollView>

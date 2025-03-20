@@ -57,6 +57,13 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ setActiveTab, s
             },
           });
 
+          await fetch(`${Port.BASE_URL}/notification`, {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
           const data = await responseNoti.json();
 
             console.log(JSON.stringify(data.result, null, 2));
@@ -546,7 +553,8 @@ const categoriesDebt = [
             activeOpacity={1}
             key={notiInfo.id}
             onPress={()=>{setPopupNoti(true), setPopupNotiInfo(notiInfo)}}
-            className={`flex flex-row p-4 mb-4 rounded-lg border border-neutral2 bg-neutral shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]`}>
+            className={`flex flex-row p-4 mb-4 rounded-lg border border-neutral2 bg-neutral shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] relative`}>
+            {!notiInfo.is_read && <View className=' absolute top-[-10] right-[-8] bg-neutral px-3 border border-primary justify-center items-center rounded-lg z-50'><TextF className=" text-primary">ใหม่</TextF></View>}
             <View
               className="w-3 h-3 rounded-full mr-4 mt-2"
               style={{
