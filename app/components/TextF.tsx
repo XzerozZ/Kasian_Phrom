@@ -8,7 +8,7 @@ interface FoneProps{
 const TextF: React.FC<FoneProps> = ({children,className,  ...rest}) => {
     return (
         <Text 
-        style={{fontFamily: 'SarabunRegular', paddingTop: 1, paddingBottom: 1}} 
+        style={{fontFamily: 'SarabunRegular'}} 
         className={className}
         {...rest}
         >{children}</Text>
