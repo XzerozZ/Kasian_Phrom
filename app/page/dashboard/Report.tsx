@@ -326,13 +326,22 @@ console.log('series2:', series2)
               id='ScrollViewDetail'
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              className='flex flex-row h-36 mt-3'>
+              className='flex flex-row mt-3'>
                 {dataAsset.map((item, index) => (
                   <View 
                   id={'dataAsset'}
                   key={index} 
-                  className={`flex w-56 h-33 rounded-xl border shadow-sm p-3 justify-between mr-3 ${item.status === 'Paused'?'bg-slate-200': 'bg-neutral'} ${item.status ==='Completed'?'border-ok':' border-neutral2'}`}>
-                    <View className='flex flex-row justify-between items-center'>
+                  className={`flex w-56 rounded-xl border shadow-sm p-3 justify-between mr-3 ${item.status === 'Paused'?'bg-slate-200': 'bg-neutral'} ${item.status ==='Completed'?'border-ok':' border-neutral2'}`}>
+                    <View className='flex flex-row items-center justify-between'>
+                        <View>
+                          {item.status === 'Paused' && <TextF className='text-label'>[ หยุดพัก ]</TextF>}
+                          {item.status ==='Completed' && <TextF className='text-oktext'>[ สำเร็จ ]</TextF>}
+                        </View>
+                        <View 
+                        style={{backgroundColor: colorsCat[index % colorsCat.length]}}
+                        className={`w-5 h-5 rounded `}></View>
+                    </View>
+                    <View className='flex flex-row justify-between items-center mt-1'>
                       <View className='flex flex-row gap-2'>
                         {item.type == 'home' && <FontAwesome6 name="house-chimney" size={18} color="#070F2D" /> }
                         {item.type == 'child' && <MaterialIcons name="child-friendly" size={23} color="#070F2D" /> }
@@ -340,17 +349,12 @@ console.log('series2:', series2)
                         {item.type == 'travel' && <FontAwesome6 name="plane-departure" size={18} color="#070F2D" /> }
                         {item.type == 'marry' && <Ionicons name="heart" size={22} color="#070F2D" /> }
                         {item.type == 'emergencyMoney' && <FontAwesome5 name="hospital-alt" size={18} color="#070F2D" /> }
-                        <TextF className='text-normalTextF text-lg'>{item.name}</TextF>
-                        {item.status === 'Paused' && <TextF className='text-label'>[ หยุดพัก ]</TextF>}
-                        {item.status ==='Completed' && <TextF className='text-oktext'>[ สำเร็จ ]</TextF>}
+                        <TextF className='text-normalTextF text-lg break-words w-40'>{item.name}</TextF>
                       </View>
-                      <View 
-                      style={{backgroundColor: colorsCat[index % colorsCat.length]}}
-                      className={`w-5 h-5 rounded `}></View>
                     </View>
-                    <View className='flex flex-row justify-between items-center'>
+                    {/* <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text-sm py-1'>ซื้อตอนปี {parseInt(item.end_year)+543}</TextF>
-                    </View>
+                    </View> */}
                     <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text'>ต้องเก็บ/เดือน</TextF>
                       <TextF className=' text-normalTextF text'>{addCommatoNumber(item.monthly_expenses)}</TextF>
@@ -358,6 +362,10 @@ console.log('series2:', series2)
                     <View className='flex flex-row justify-between items-center'>
                       <TextF className='text-normalTextF text'>ต้องเก็บทั้งหมด</TextF>
                       <TextF className=' text-normalTextF text'>{addCommatoNumber(item.total_cost)}</TextF>
+                    </View>
+                    <View className='flex flex-row justify-between items-center'>
+                      <TextF className='text-normalTextF text'>ซื้อตอนปี</TextF>
+                      <TextF className=' text-normalTextF text'>{parseInt(item.end_year)+543}</TextF>
                     </View>
                   </View>
                 ))}
