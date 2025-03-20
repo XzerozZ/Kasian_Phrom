@@ -32,6 +32,7 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
   })
   const [isInstallment, setIsInstallment] = useState(true);
   const [type, setType] = useState('');
+  const [onFocus, setOnFocus] = useState(false);
   const categories = [
     { id: 1, tag:'home', label: 'บ้าน' },
     { id: 2, tag:'land', label: 'ที่ดิน'},
@@ -276,6 +277,8 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                       setNewDataAssetInput(prev => ({ ...prev, installmentPerMonth: text.replace(/,/g, '') }))
                     }
                     className={`h-16 text-end text-lg pr-2  ${debtSelect !== '' ? 'text-label':'text-primary '}`}
+                    onFocus={() => setOnFocus(true)}
+                    onBlur={() => setOnFocus(false)}
                   />
                     <TextF className={` text-lg text-primary`}>บาท</TextF>
 
@@ -293,11 +296,13 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
                   maxLength={4}
                   keyboardType="numeric"
                   readOnly={debtSelect !== ''}
-                  value={addCommatoNumber(newDataAssetInput.monthAmount)}
+                  value={newDataAssetInput.monthAmount}
                   onChangeText={(text) =>
                     setNewDataAssetInput(prev => ({ ...prev, monthAmount: text.replace(/,/g, '') }))
                   }
                   className={`h-16 text-end text-lg pr-2 ${debtSelect !== '' ? 'text-label':'text-primary '}`}
+                  onFocus={() => setOnFocus(true)}
+                  onBlur={() => setOnFocus(false)}
                   />
                     <TextF className={` text-lg text-primary`}>เดือน</TextF>
               </View>
@@ -323,9 +328,8 @@ const AddDebt: React.FC<AddDebtProps> = ({ isDarkMode, setActiveTab, setStatePag
           onPress={ isFully ? debtSelect !== ''? handleEidt: handleSave : () => {}}
           className={`flex-1 h-14 rounded-lg justify-center items-center relative ${isFully ? 'bg-primary':'bg-unselectMenu'}`}>
             <TextF className='text-neutral text-lg'>{debtSelect !== ''?'แก้ไข':'บันทึก'}</TextF>
-            <View style={{position:'absolute', top:-90, right:-30 }} pointerEvents="none"><Mascot fromP={'addDept'} type={'normal'} isPress={false} className='w-48 h-40 z-50'/></View>
+            {!onFocus && <View style={{position:'absolute', top:-90, right:-30 }} pointerEvents="none"><Mascot fromP={'addDept'} type={'normal'} isPress={false} className='w-48 h-40 z-50'/></View>}
           </TouchableOpacity>
-           
         </View>
     </>
   )
