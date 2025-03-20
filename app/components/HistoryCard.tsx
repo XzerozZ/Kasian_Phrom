@@ -33,7 +33,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ data }) => {
 
     const getDate = (date: string) => {
         const d = new Date(date);
-        return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()+543}`
+        return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()+543}`
     }
     const getTime = (date: string) => {
         const d = new Date(date);

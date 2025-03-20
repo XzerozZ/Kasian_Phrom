@@ -296,7 +296,7 @@ const NursingHouses: React.FC<NursingHousesProps> = ({ isDarkMode, setActiveTab,
           <View className={`flex flex-row mt-4 items-center ${isAuth || !isNoFilter ? 'justify-between' : 'justify-end'}`}>
           { isNoFilter && query === ''
           ? ownHouses === undefined || ownHouses?.nh_id === '00001'
-            ? (
+            ? isAuth &&(
               <View className='flex-row  text-lg justify-between'>
                 <View className='flex-row gap-3'>
                   <TouchableOpacity

@@ -100,6 +100,8 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
         }).start();
     }, [stateUp]);
 
+    console.log('------', queryFilter.startPrice, queryFilter.endPrice);
+
     return (
         <Animated.View
             style={{ position: 'absolute', top: -40, left: 0, zIndex: 50, transform: [{ translateX: startContainer}] }}
@@ -202,7 +204,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                             onChangeText={(text) => setQueryFilter({ ...queryFilter, startPrice: text })}
                                             onBlur={() => {
                                                 setStateUp(true);
-                                                if (queryFilter.startPrice > queryFilter.endPrice && queryFilter.endPrice !== '') {
+                                                if ((parseInt(queryFilter.startPrice) > parseInt(queryFilter.endPrice)) && queryFilter.endPrice !== '') {
                                                     setQueryFilter({ ...queryFilter, endPrice : queryFilter.startPrice.toString() });
                                                 }
                                             }}
@@ -225,7 +227,7 @@ const Filter: React.FC<FilterProps> = ({ stateFilter, setStateFilter, queryFilte
                                             onChangeText={(text) => setQueryFilter({ ...queryFilter, endPrice: text })}
                                             onBlur={() => {
                                                 setStateUp(true);
-                                                if (queryFilter.endPrice < queryFilter.startPrice && queryFilter.startPrice !== '') {
+                                                if ((parseInt(queryFilter.endPrice) < parseInt(queryFilter.startPrice)) && queryFilter.startPrice !== '') {
                                                     setQueryFilter({ ...queryFilter, startPrice : queryFilter.endPrice.toString() });
                                                 }
                                             }}
