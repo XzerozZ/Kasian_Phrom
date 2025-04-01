@@ -21,8 +21,10 @@ const getWebSocketUrl = (): string => {
 };
 
 const Port = {
-  BASE_URL: getBaseUrl(),
-  WebSocket_URL: getWebSocketUrl(),
+  // BASE_URL: getBaseUrl(),
+  // WebSocket_URL: getWebSocketUrl(),
+  BASE_URL: 'http://89.116.122.89:5000',
+  WebSocket_URL: 'ws://89.116.122.89:5000',
 };
 
 export default Port;

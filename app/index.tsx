@@ -174,6 +174,7 @@ function index() {
             {messageNoti !== undefined && <NotiCard messageNoti={messageNoti} setMessageNoti={setMessageNoti} setActiveTab={setActiveTab}/>}
           </View>
           {stateNavbar && !loading &&
+          
           <View className='w-full'>
             <Navbar isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} setFormPage={setFormPage}/>
           </View>}
