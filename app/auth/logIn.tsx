@@ -125,9 +125,8 @@ const handleLogin = async () => {
       setTypePopup("emailFormatIsInvalid");
     }else if (error instanceof Error && error.message === "invalid password") {
       setTypePopup("passIsInvalid");
-    }else{
-      throw new Error( error as string);
     }
+    throw new Error( error as string);
   }
 };
 
@@ -204,7 +203,7 @@ const handleLogin = async () => {
         
         <TouchableOpacity
         activeOpacity={1}
-        onPress={handleLogin}
+        onPress={email && password ?()=> handleLogin():()=>{}}
         className={`h-[45] w-[310] mx-5 pr-14 pl-14 mt-5 rounded-full justify-center items-center relative ${ email && password ?'bg-primary':'bg-unselectMenu'} `}>
           <TextF className='text-white text-lg'>เข้าสู่ระบบ</TextF>
           <View style={{position:'absolute', bottom: 40, left:20}} pointerEvents="none" className=' w-20 h-12'><Mascot fromP={'login'} type={'normal'} isPress={false} className='w-32 h-32 overflow-hidden'/></View>

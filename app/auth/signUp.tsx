@@ -52,9 +52,8 @@ const SignUp: React.FC<SignUpProps> = ({ setStateLogin, setActiveTab, setTypePop
             setTypePopup("emailIsRegister");
         }else if (errorData.message && errorData.message.includes('invalid email format')) {
           setTypePopup("emailFormatIsInvalid");
-        }else{
-            throw new Error('Network response was not ok');
         }
+        throw new Error('Network response was not ok');
       }
   
       const data = await response.json();
