@@ -186,7 +186,7 @@ const WhatKasianPhrom: React.FC<WhatKasianPhromProps> = ({ isDarkMode, setActive
         <View className="bg-white rounded-xl p-4 shadow-sm">
           <View className="flex-row items-center">
             <Image 
-              source={require('../../assets/picTeamDev/Champ.jpg')}
+              source={require('../../assets/picTeamDev/Belle.jpg')}
               className="w-20 h-20 rounded-lg"
               alt="รูปผู้จัดทำ 5"
             />

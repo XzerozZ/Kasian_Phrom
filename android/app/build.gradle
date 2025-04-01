@@ -101,6 +101,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file("my-release-key.keystore")
+            storePassword "your-store-password"
+            keyAlias "my-key-alias"
+            keyPassword "your-key-password"
+        }
     }
     buildTypes {
         debug {
@@ -114,6 +120,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
+
         }
     }
     packagingOptions {
